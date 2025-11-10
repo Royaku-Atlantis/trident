@@ -1,0 +1,6 @@
+say "wario kaka" variable "blbl"
+say "wario kaka "
+say " wario kaka"
+say "wario kaka   
+say "end lol"    
+other shit
