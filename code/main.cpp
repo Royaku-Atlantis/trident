@@ -123,7 +123,7 @@ int main()
         filer.open(filename);
         
         string command = "";
-        CodeList lines_of_codes;
+        ListString lines_of_codes;
 
         while (!filer.eof()){
                 getline(filer, command);

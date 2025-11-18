@@ -77,17 +77,17 @@ unsigned int stoi2(std::string text_to_convert, int default_value){
 ////////////////////////////////////////////////////////////////////////
 
 //// CLASS Code List //// 
-CodeList::CodeList () {
+ListString::ListString () {
         ad = new std::string [1];
         capacite = 1;
         str_numb = 0;
 }
 
-CodeList::~CodeList (){
+ListString::~ListString (){
         delete[] ad;
 }
 
-void CodeList::append(std::string e) {
+void ListString::append(std::string e) {
         if (str_numb == capacite) { // tableau plein, on double la capacité
         std::string * temp = ad;
         ad = new std::string [2*capacite];
@@ -99,7 +99,7 @@ void CodeList::append(std::string e) {
         str_numb++;
 }
 
-std::string CodeList::get_line(unsigned int indice) const {
+std::string ListString::get_line(unsigned int indice) const {
         if (str_numb <= indice)
                 return "";
         return ad[indice];

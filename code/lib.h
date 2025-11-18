@@ -6,10 +6,17 @@
 #include <conio.h>
 
 //code ref
+//will print arguments
 #define COMMAND_PRINT "say"         // say ... args
+//will jump the line index to a different line of code
 #define COMMAND_GOTO "jump"         // jump ... args
-#define SUBCOM_GOTO_ABSOLUTE "at"   // jump at <arg>
+//will jump n lines from the current line
 #define SUBCOM_GOTO_RELATIVE "line" // jump <numb> line
+//will jump directly at a given line, either a number, or a label
+#define SUBCOM_GOTO_ABSOLUTE "at"   // jump at <arg>
+//define a line as the label for a jump
+#define COMMAND_LABEL "label"      //  label <name> 
+//will start a comment
 #define COMMENT_CHAR '#'
 
 
@@ -34,14 +41,14 @@ bool is_end_of_line(fileread & filer);
 std::string trim(const std::string& line);
 
 // CLASS
-class CodeList{
+class ListString{
 public:
         unsigned int capacite;
         unsigned int str_numb;
         std::string * ad;
 
-        CodeList ();
-        ~CodeList ();
+        ListString ();
+        ~ListString ();
         void append(std::string e);
         std::string get_line(unsigned int indice) const;
 };
