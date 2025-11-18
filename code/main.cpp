@@ -83,12 +83,6 @@ public:
 };
 
 
-
-
-
-
-
-
 /* string command line to be executed | line index, to change with ifs and jumps*/
 void execute(string command_line, int & line_index)
 {
