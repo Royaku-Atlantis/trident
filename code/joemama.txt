@@ -1,6 +1,19 @@
-say "wario kaka" variable "blbl"
-say "wario kaka "
-say " wario kaka"
-say "wario kaka   
-say "end lol"    
+jump at -26 #if the value is 0 or less, it will set to next line
+say "wario kaka" variable "blbl"#comment
+  say "deuxieme llignnn "
+say " wario kaka" # coomment
+say thatsa var "trwaziem   
+ say "end lol"    
 other shit
+jump 5 line
+
+
+jump at 11
+say "this is skipped"
+say hey "this is not skipped"
+non recognisezd other caca
+say "This is to mark the after jump"
+jump at 13
+say "caca 2"
+
+# comment block

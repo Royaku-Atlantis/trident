@@ -1,10 +1,12 @@
 #include "lib.h"
 #include <iostream>
-#include <conio.h>
+#include <string.h>
+#include <sstream>
 #include <fstream>
 #include <conio.h>
 
 //╚ ╔ ╩ ╦ ╠ ═ ╬ ╣ ║ ╗ ╝
+//commands and parameters definitions
 
 std::ostream& say = std::cout;
 std::istream& input = std::cin;
@@ -12,6 +14,7 @@ std::string nl = "\n";
 
 typedef std::ifstream fileread;
 typedef std::ofstream filewrite;
+
 
 bool is_char_writable(char value){
         return 33<value and value<126;
@@ -32,9 +35,162 @@ bool is_end_of_line(fileread & filer) //detect end of file
         return false;
 }
 
-char last_char(std::string text, int offset){
-        return text[text.length()-1 + offset];
+std::string trim(const std::string& line)
+{
+    const char* WhiteSpace = " \t\v\r\n";
+    std::size_t start = line.find_first_not_of(WhiteSpace);
+    std::size_t end = line.find_last_not_of(WhiteSpace);
+    return start == end ? std::string() : line.substr(start, end - start + 1);
 }
-void rm_last_char(std::string & text, int offset){
-        text[text.length()-1 + offset] = '\0';
+
+unsigned int stoi2(std::string text_to_convert, int default_value){
+        try{
+                return stoi(text_to_convert);
+        }
+        catch(...){
+                return default_value;
+        }
+}
+
+//╚ ╔ ╩ ╦ ╠ ═ ╬ ╣ ║ ╗ ╝
+//vars, structs and classes ///////////////////////////////////////////////////////////
+/*      ╗   ╗   ╔═══╗   ╔═══╗   ══╦══   ╔═══╗   ╦═══╗   ╗       ╔═══╗   ╔═══╗       */
+/*      ║   ║   ║   ║   ║   ║     ║     ║   ║   ║   ║   ║       ║       ║          */
+/*      ║   ║   ╠═══╣   ╠══╦╝     ║     ╠═══╣   ╠══╩╗   ║       ╠═══    ╚═══╗     */
+/*      ╚╗ ╔╝   ║   ║   ║  ╚╗     ║     ║   ║   ║   ║   ║       ║           ║    */
+/*       ╚═╝    ╝   ╝   ╝   ╝   ══╩══   ╝   ╝   ╩═══╝   ╩═══╝   ╚═══╝   ╚═══╝   */
+/////////////////////////////////////////////////////////////////////////////////
+
+
+//class variables
+//class variable list
+//class loops, include a variable list
+//class loop list, [0] is main
+
+//Parsing
+////////////////////////////////////////////////////////////////////////
+/**/
+/**/
+/**/
+/**/
+/**/
+////////////////////////////////////////////////////////////////////////
+
+//// CLASS Code List //// 
+CodeList::CodeList () {
+        ad = new std::string [1];
+        capacite = 1;
+        str_numb = 0;
+}
+
+CodeList::~CodeList (){
+        delete[] ad;
+}
+
+void CodeList::append(std::string e) {
+        if (str_numb == capacite) { // tableau plein, on double la capacité
+        std::string * temp = ad;
+        ad = new std::string [2*capacite];
+        capacite *= 2;
+        for (unsigned int i = 0; i < str_numb; i++) ad[i] = temp[i];
+        delete [] temp;
+        }
+        ad[str_numb] = e;
+        str_numb++;
+}
+
+std::string CodeList::get_line(unsigned int indice) const {
+        if (str_numb <= indice)
+                return "";
+        return ad[indice];
+}
+//// CLASS Code List ////
+
+std::string clean_command(std::string command){
+
+        //if the line has no command
+        if (command.empty() or command[0]==COMMENT_CHAR)
+                return "";
+        
+        //TODO : check if the command is valid (say, for...)
+        int start_of_comment = command.find(COMMENT_CHAR);
+
+        //for command that has a comment
+        if (start_of_comment!=-1){//string::npos) 
+                int length_to_erase = command.length() - start_of_comment;
+                command.erase(start_of_comment,length_to_erase);   
+        }
+
+        //clean start and end whitespace
+        return trim(command);       
+}
+
+
+//executions ////////////////////////////////////////////////////////////////////////
+/*      ╔═══  ╔   ╗   ╔═══   ╔═══   ╗   ╗   ══╦══   ══╦══   ╔═══╗   ╗   ╗         */
+/*      ║      ║ ║    ║      ║      ║   ║     ║       ║     ║   ║   ║║  ║        */
+/*      ╠═══    ╬     ╠═══   ║      ║   ║     ║       ║     ║   ║   ║ ║ ║       */
+/*      ║      ║ ║    ║      ║      ║   ║     ║       ║     ║   ║   ║  ║║      */
+/*      ╚═══  ╚   ╝   ╚═══   ╚═══   ╚═══╝     ╝     ══╩══   ╚═══╝   ╝   ╝     */
+///////////////////////////////////////////////////////////////////////////////
+
+void execution_say(std::stringstream & command)
+{
+        bool stringmode = false;
+        std::string text;
+        
+        do
+        {
+                command >> text;
+                //check if lastchar is ", and not \", but check if only 1 char (no \" possible)
+                if (!stringmode and text[0]=='"')
+                {
+                        stringmode = true;
+                        text[0] = '\0';
+                } 
+                bool this_txt_is_end_of_string = (stringmode) and text.back()=='"' and
+                        (text.length()==1 ? true : text.back()!='\\');
+
+                if (this_txt_is_end_of_string)
+                {
+                        text.pop_back();
+                }                                                   
+
+                //simple write
+                if (stringmode){
+                        say << text;
+                        if (command.peek()==' ' and !this_txt_is_end_of_string){
+                                say << ' ';
+                        }
+                }else
+                {       //write value of variable
+                        say << " -[" << text << "]- ";
+                }
+                
+                if (this_txt_is_end_of_string)
+                        stringmode = false;
+        }
+        while (!command.eof());
+}
+
+void execution_jump(std::stringstream & command, int & line_index)
+{
+        int new_pos = line_index;
+
+        std::string jump_arg1, jump_arg2;
+        command >> jump_arg1 >> jump_arg2;
+
+        if (jump_arg1==SUBCOM_GOTO_ABSOLUTE)
+        {
+                new_pos = stoi2(jump_arg2, line_index)-1;
+        }
+        else if (jump_arg2==SUBCOM_GOTO_RELATIVE)
+        {
+                new_pos = line_index + stoi2(jump_arg1,-1);
+        }
+
+        //a new pos that go too far already end the code ✧ദ്ദി
+        if (0<=new_pos)
+                line_index = new_pos-1;
+        
 }
