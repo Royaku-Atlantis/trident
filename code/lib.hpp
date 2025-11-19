@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <conio.h>
 
 //code ref
@@ -12,13 +13,15 @@
 #define COMMAND_GOTO "jump"         // jump ... args
 //will jump n lines from the current line
 #define SUBCOM_GOTO_RELATIVE "line" // jump <numb> line
-//will jump directly at a given line, either a number, or a label
+//will jump directly at a given line, either a number, or a balise
 #define SUBCOM_GOTO_ABSOLUTE "at"   // jump at <arg>
-//define a line as the label for a jump
-#define COMMAND_LABEL "label"      //  label <name> 
+//define a line as the balise for a jump
+#define COMMAND_BALISE "balise"      //  balise <name> 
 //will start a comment
 #define COMMENT_CHAR '#'
 
+//////////////////////////////
+#define NOLINE -1
 
 extern std::ostream& say;
 extern std::istream& input;
@@ -40,23 +43,15 @@ bool is_end_of_line(fileread & filer);
 
 std::string trim(const std::string& line);
 
-// CLASS
-class ListString{
-public:
-        unsigned int capacite;
-        unsigned int str_numb;
-        std::string * ad;
 
-        ListString ();
-        ~ListString ();
-        void append(std::string e);
-        std::string get_line(unsigned int indice) const;
-};
 
 //parsing
 std::string clean_command(std::string command);
 
+void balise_add_from_command(std::string cleancommand, std::vector<Balise> & balises, int line_index);
+int find_balise(std::string balisename, const std::vector<Balise> & balises);
+
 // EXECUTIONS
 void execution_say(std::stringstream & command);
 
-void execution_jump(std::stringstream & command, int & line_index);
+void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> baliseliste);

@@ -1,8 +1,11 @@
-#include "lib.h"
+#include "classes.hpp"
+#include "lib.hpp"
+
 #include <iostream>
 #include <string.h>
 #include <sstream>
 #include <fstream>
+#include <vector>
 #include <conio.h>
 
 //╚ ╔ ╩ ╦ ╠ ═ ╬ ╣ ║ ╗ ╝
@@ -52,59 +55,6 @@ unsigned int stoi2(std::string text_to_convert, int default_value){
         }
 }
 
-//╚ ╔ ╩ ╦ ╠ ═ ╬ ╣ ║ ╗ ╝
-//vars, structs and classes ///////////////////////////////////////////////////////////
-/*      ╗   ╗   ╔═══╗   ╔═══╗   ══╦══   ╔═══╗   ╦═══╗   ╗       ╔═══╗   ╔═══╗       */
-/*      ║   ║   ║   ║   ║   ║     ║     ║   ║   ║   ║   ║       ║       ║          */
-/*      ║   ║   ╠═══╣   ╠══╦╝     ║     ╠═══╣   ╠══╩╗   ║       ╠═══    ╚═══╗     */
-/*      ╚╗ ╔╝   ║   ║   ║  ╚╗     ║     ║   ║   ║   ║   ║       ║           ║    */
-/*       ╚═╝    ╝   ╝   ╝   ╝   ══╩══   ╝   ╝   ╩═══╝   ╩═══╝   ╚═══╝   ╚═══╝   */
-/////////////////////////////////////////////////////////////////////////////////
-
-
-//class variables
-//class variable list
-//class loops, include a variable list
-//class loop list, [0] is main
-
-//Parsing
-////////////////////////////////////////////////////////////////////////
-/**/
-/**/
-/**/
-/**/
-/**/
-////////////////////////////////////////////////////////////////////////
-
-//// CLASS Code List //// 
-ListString::ListString () {
-        ad = new std::string [1];
-        capacite = 1;
-        str_numb = 0;
-}
-
-ListString::~ListString (){
-        delete[] ad;
-}
-
-void ListString::append(std::string e) {
-        if (str_numb == capacite) { // tableau plein, on double la capacité
-        std::string * temp = ad;
-        ad = new std::string [2*capacite];
-        capacite *= 2;
-        for (unsigned int i = 0; i < str_numb; i++) ad[i] = temp[i];
-        delete [] temp;
-        }
-        ad[str_numb] = e;
-        str_numb++;
-}
-
-std::string ListString::get_line(unsigned int indice) const {
-        if (str_numb <= indice)
-                return "";
-        return ad[indice];
-}
-//// CLASS Code List ////
 
 std::string clean_command(std::string command){
 
@@ -125,14 +75,26 @@ std::string clean_command(std::string command){
         return trim(command);       
 }
 
+void balise_add_from_command(std::string clean_command, std::vector<Balise> & balises, int line_index){
+        std::stringstream command (clean_command);
+        std::string commandtest;
+        command >> commandtest;
 
-//executions ////////////////////////////////////////////////////////////////////////
-/*      ╔═══  ╔   ╗   ╔═══   ╔═══   ╗   ╗   ══╦══   ══╦══   ╔═══╗   ╗   ╗         */
-/*      ║      ║ ║    ║      ║      ║   ║     ║       ║     ║   ║   ║║  ║        */
-/*      ╠═══    ╬     ╠═══   ║      ║   ║     ║       ║     ║   ║   ║ ║ ║       */
-/*      ║      ║ ║    ║      ║      ║   ║     ║       ║     ║   ║   ║  ║║      */
-/*      ╚═══  ╚   ╝   ╚═══   ╚═══   ╚═══╝     ╝     ══╩══   ╚═══╝   ╝   ╝     */
-///////////////////////////////////////////////////////////////////////////////
+        if (!command.eof() and commandtest == COMMAND_BALISE){
+                std::string balisename;
+                command >> balisename;
+                balises.push_back(Balise (balisename, line_index+1));
+        }
+}
+
+int find_balise(std::string balisename,const std::vector<Balise> & balises){
+    for (int i=0; i<balises.size() ; i++){
+        if (balises[i].name == balisename)
+            return balises[i].line_index;
+    }
+    return NOLINE;
+}
+
 
 void execution_say(std::stringstream & command)
 {
@@ -173,7 +135,7 @@ void execution_say(std::stringstream & command)
         while (!command.eof());
 }
 
-void execution_jump(std::stringstream & command, int & line_index)
+void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> baliseliste)
 {
         int new_pos = line_index;
 
@@ -182,7 +144,15 @@ void execution_jump(std::stringstream & command, int & line_index)
 
         if (jump_arg1==SUBCOM_GOTO_ABSOLUTE)
         {
-                new_pos = stoi2(jump_arg2, line_index)-1;
+                int testnewline = stoi2(jump_arg2, NOLINE);
+                if (testnewline==NOLINE)
+                {
+                        new_pos = find_balise(jump_arg2, baliseliste);
+                }
+                else //arg 2 is a number
+                {
+                        new_pos = testnewline -1 ;
+                }
         }
         else if (jump_arg2==SUBCOM_GOTO_RELATIVE)
         {

@@ -1,3 +1,3 @@
-g++ test.cpp
-.\a.exe
+g++ test.cpp -o test
+.\test.exe
 exit

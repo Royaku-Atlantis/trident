@@ -1,6 +1,10 @@
 say "miboup" var "joemama" 
-jump at 4 # caca
-say "text loupe" 
-#balise caca
+jump at apres
+
+balise avant
+say "text loupe"
+say "text juste avant la balise"
+balise apres
 say "text apres le jump"
-say "e acccent é = Þ puis le è = "
+
+jump at avant

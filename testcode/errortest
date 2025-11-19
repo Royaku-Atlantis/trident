@@ -1,0 +1,7 @@
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: C:\Users\DELLPR~1\AppData\Local\Temp\ccdsImKW.o:main.cpp:(.text+0x141): 
+undefined reference to `execution_jump(std::__cxx11::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >&, int&, std::vector<Balise, std::allocator<Balise> >)'
+collect2.exe: error: ld returned 1 exit status
+
+c:\Users\DELL PRT 3\Documents\GitHub\trident\code>.\main.exe
+'.\main.exe' is not recognized as an internal or external command,
+operable program or batch file.
