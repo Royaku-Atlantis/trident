@@ -1,0 +1,4 @@
+there are 8 lines of code 
+first line
+set a varDebug push back of add_default_var undef terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc

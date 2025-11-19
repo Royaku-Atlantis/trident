@@ -5,6 +5,8 @@
 #include <sstream>
 #include <vector>
 #include <conio.h>
+#include "basic_lib.hpp"
+#include "classes.hpp"
 
 //code ref
 //will print arguments
@@ -18,6 +20,7 @@
 //define a line as the balise for a jump
 #define COMMAND_BALISE "balise"      //  balise <name> 
 //will start a comment
+#define COMMAND_SETVAR "set"    //set <nomvar> || set <nomvar>
 #define COMMENT_CHAR '#'
 
 //////////////////////////////
@@ -31,19 +34,7 @@ typedef std::ifstream fileread;
 typedef std::ofstream filewrite;
 
 
-extern std::ostream& say;
-extern std::istream& input;
-extern std::string nl;
-
-typedef std::ifstream fileread;
-typedef std::ofstream filewrite;
-
-bool is_char_writable(char value);
 bool is_end_of_line(fileread & filer);
-
-std::string trim(const std::string& line);
-
-
 
 //parsing
 std::string clean_command(std::string command);
@@ -52,6 +43,8 @@ void balise_add_from_command(std::string cleancommand, std::vector<Balise> & bal
 int find_balise(std::string balisename, const std::vector<Balise> & balises);
 
 // EXECUTIONS
-void execution_say(std::stringstream & command);
+void execution_say(std::stringstream & command, Scope & current_scope);
 
 void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> baliseliste);
+
+void execution_set(std::stringstream & command, Scope & current_scope);

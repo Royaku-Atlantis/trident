@@ -1,10 +1,7 @@
-say "miboup" var "joemama" 
-jump at apres
+say "first line"
 
-balise avant
-say "text loupe"
-say "text juste avant la balise"
-balise apres
-say "text apres le jump"
+set var
 
-jump at avant
+#say "miboup" var "joemama" 
+
+

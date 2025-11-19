@@ -1,3 +1,4 @@
+#include "basic_lib.hpp"
 #include "classes.hpp"
 #include "lib.hpp"
 
@@ -18,10 +19,6 @@ std::string nl = "\n";
 typedef std::ifstream fileread;
 typedef std::ofstream filewrite;
 
-
-bool is_char_writable(char value){
-        return 33<value and value<126;
-}
 bool is_end_of_line(fileread & filer) //detect end of file
 {
         char C, D;
@@ -83,6 +80,7 @@ void balise_add_from_command(std::string clean_command, std::vector<Balise> & ba
         if (!command.eof() and commandtest == COMMAND_BALISE){
                 std::string balisename;
                 command >> balisename;
+                std::cout << "Debug push back of add balise";
                 balises.push_back(Balise (balisename, line_index+1));
         }
 }
@@ -96,7 +94,9 @@ int find_balise(std::string balisename,const std::vector<Balise> & balises){
 }
 
 
-void execution_say(std::stringstream & command)
+///////////////////////////////////
+
+void execution_say(std::stringstream & command,Scope & current_scope)
 {
         bool stringmode = false;
         std::string text;
@@ -126,7 +126,7 @@ void execution_say(std::stringstream & command)
                         }
                 }else
                 {       //write value of variable
-                        say << " -[" << text << "]- ";
+                        say << " [" << current_scope.displayVar(text) << "] ";
                 }
                 
                 if (this_txt_is_end_of_string)
@@ -164,3 +164,18 @@ void execution_jump(std::stringstream & command, int & line_index, std::vector<B
                 line_index = new_pos-1;
         
 }
+
+void execution_set(std::stringstream & command, Scope & current_scope){
+        std::string new_var_name;
+        command >> new_var_name;
+        current_scope.add_default_var(new_var_name);
+}
+
+
+
+
+
+
+
+
+
