@@ -10,7 +10,7 @@ using namespace std;
 #define filename "joemama.txt"
 
 /* string command line to be executed | line index, to change with ifs and jumps*/
-void execute(string command_line, int & line_index, vector<Balise> balise_list, Scope current_scope)
+bool execute(string command_line, int & line_index, vector<Balise> & balise_list, Scope & current_scope)
 {
         if (command_line=="") return;
         
@@ -38,19 +38,24 @@ void execute(string command_line, int & line_index, vector<Balise> balise_list, 
                 execution_set(code_line, current_scope);
                 say << " sucessfully set \n";
         }
+        else if (command_name == COMMAND_STOP)
+        {
+                return false;//out of scope
+        }
         else if (command_name != COMMAND_BALISE)
         {
                 say << "\nError invalid command at line "<< line_index+1 <<": \"" << command_line << " \"\n";
-                return;
         }
         getch();
+
+        return true;//stay in scope
 }
 
 int main()
 {
         fileread filer;
         filer.open(filename);
-        
+        bool stop = false; //yet just stop, but will be used to change 
         string command = "";
         vector<string> lines_of_codes;
         vector<Balise> balise_list;
@@ -60,8 +65,11 @@ int main()
                 getline(filer, command);
                 command = clean_command(command);
                 balise_add_from_command(command, balise_list, lines_of_codes.size());
+
+                if (command!="") std::cout << command<<"\n";
                 lines_of_codes.push_back(command);
         }
+        filer.close();
         cout << "there are "<< lines_of_codes.size() << " lines of code \n";
 
         for (int line_index=0; line_index < lines_of_codes.size() ; line_index++){

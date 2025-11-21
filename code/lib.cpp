@@ -80,13 +80,14 @@ void balise_add_from_command(std::string clean_command, std::vector<Balise> & ba
         if (!command.eof() and commandtest == COMMAND_BALISE){
                 std::string balisename;
                 command >> balisename;
-                std::cout << "Debug push back of add balise";
+                std::cout << "Debug push back of add balise\n";
                 balises.push_back(Balise (balisename, line_index+1));
         }
 }
 
 int find_balise(std::string balisename,const std::vector<Balise> & balises){
     for (int i=0; i<balises.size() ; i++){
+        say<<"have balise named:"<<balises[i].name<<" when checking for balise:"<<balisename<<nl;
         if (balises[i].name == balisename)
             return balises[i].line_index;
     }
@@ -135,7 +136,7 @@ void execution_say(std::stringstream & command,Scope & current_scope)
         while (!command.eof());
 }
 
-void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> baliseliste)
+void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> & baliseliste)
 {
         int new_pos = line_index;
 

@@ -15,13 +15,18 @@
 typedef unsigned char varState;
 
 Variable::Variable (){
-        std::cout << "YEP ITS HERE THE ERROR";
         name = "";
         state = VAR_UNDEF;
+        text_value = "";
+        numeric_value = 0;
 }
 Variable::Variable (std::string varname){
+        std::cout << "YEP ITS HERE THE ERROR";
+
         name = varname;
         state = VAR_UNDEF;
+        text_value = "";
+        numeric_value = 0;
 }
 Variable::Variable (std::string varname, std::string strValue){
         name = varname;
@@ -133,15 +138,15 @@ Variable Scope::add_default_var(std::string varName, varState type){
         switch(type){
         case VAR_UNDEF:
                 std::cout << "undef ";
-                varlist.push_back( Variable (varName));
+                varlist.push_back(Variable (varName)); //ERROR HERE
         break;
         case VAR_NUMBER:
                 std::cout << "number ";
-                varlist.push_back( Variable (varName, (float)0));  
+                varlist.push_back(Variable (varName, (float)0));  
         break;
         case VAR_TEXT:
                 std::cout << "text ";
-                varlist.push_back( Variable (varName, ""));
+                varlist.push_back(Variable (varName, ""));
         break;
         default:
                 throwing("Tried to create a variable, invalide typeState");

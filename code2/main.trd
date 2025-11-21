@@ -1,0 +1,22 @@
+say "blabla" kaku bla 69 + 5 " texte
+
+###
+{
+        command [0] 
+        args 
+                val ["blabla"] 
+                var [0] 
+                var [1]
+                operation [69 5 (0)]
+                val [" texte"]
+}
+###
+
+bla #comment
+
+### all commands
+say val1 val2...
+error val_errormessage #say but "Error: val_errormessage" in red
+set var [val] # var = [val/operation]
+enum mainnom   nom1 nom2 nom3 ... (-> char => stored as value)
+###

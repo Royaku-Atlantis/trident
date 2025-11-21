@@ -21,6 +21,8 @@
 #define COMMAND_BALISE "balise"      //  balise <name> 
 //will start a comment
 #define COMMAND_SETVAR "set"    //set <nomvar> || set <nomvar>
+//stop the program, or function
+#define COMMAND_STOP    "stop" //stop <condition> true by default
 #define COMMENT_CHAR '#'
 
 //////////////////////////////
@@ -45,6 +47,6 @@ int find_balise(std::string balisename, const std::vector<Balise> & balises);
 // EXECUTIONS
 void execution_say(std::stringstream & command, Scope & current_scope);
 
-void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> baliseliste);
+void execution_jump(std::stringstream & command, int & line_index, std::vector<Balise> & baliseliste);
 
 void execution_set(std::stringstream & command, Scope & current_scope);

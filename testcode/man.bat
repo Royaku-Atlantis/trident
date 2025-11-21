@@ -1,3 +1,3 @@
-g++ test.cpp -o test
+g++ test.cpp randomlib.hpp -o test
 .\test.exe
 exit
