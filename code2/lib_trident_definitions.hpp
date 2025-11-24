@@ -5,9 +5,6 @@
 #include <string.h>
 #include <map>
 #include "lib_basic.hpp"
-//typedefs for many states for many elements
-typedef unsigned char BYTE;
-typedef unsigned int INDEX;
 
 //TOKEN INFOS
 #define INVALID_INFO 0
@@ -54,38 +51,55 @@ public:
         float numeric_value = 0;
         std::string string_value = "";
 
+        void printInfo(){
+                std::cout<<"token type:"<<(short int)token_type<<" info:"<<token_info<<" valNumb="<<numeric_value<<" valText=\""<<string_value<<'\"';
+        }
+
         std::string printValue()
         {
-                if (token_type==VALUE){
-                        if (token_info==VALUE_UNDEFINED)
-                                return "undefined";
-                        if (token_info==VALUE_TEXT);
+                switch(token_type){
+                case VALUE:
+                        if (token_info==VALUE_TEXT)
                                 return string_value;
                         if (token_info==VALUE_NUMBER)
                                 return std::to_string(numeric_value);
+                        return "Undefined";
+
+                case VARIABLE_ID:
+                        return '['+string_value+']';
+
+                default:
+                        return "#TokenType" + std::to_string(token_type) + '#';        
                 }
-                return "#UnspecifiedToken#";
+                return "ERROR WTF";
         }
 
         Token(){
+                std::cout<<"Create1 token\n";
                 setval();
         }
-        Token(tokenType _token_type){
-                setval(_token_type);
+        Token(tokenType _token_type, INDEX _token_info, float numbval, std::string strval){
+                std::cout<<"Create2 token\n";
+                setval(token_type, token_info, numbval ,strval);
         }
         Token(tokenType _token_type, INDEX _token_info){
+                std::cout<<"Create3 token\n";
                 setval(_token_type, _token_info);
         }
-        Token(float numbval){
-                setval(VALUE, VALUE_NUMBER, numbval);
-        } 
-        Token(std::string strval){
-                setval(VALUE, VALUE_TEXT,0,strval);
+        
+        Token(float valnumb){
+                std::cout<<"Create4 token\n";
+                setval(VALUE, VALUE_NUMBER, valnumb);
+        }
+        Token(std::string valtext){
+                std::cout<<"Create5 token\n";
+                setval(VALUE, VALUE_TEXT,0, valtext);
         }
 
 private:
         void setval(tokenType _token_type = NOTVALID, INDEX _token_info = INVALID_INFO, float numbval=0, std::string strval = ""){
-                if (TOKEN_TYPE_MAX_INDEX<token_type){
+                if (TOKEN_TYPE_MAX_INDEX<_token_type){
+                        std::cout<<"Tried to create a token with invalid token index : "<<(short int)_token_type<<" which is higher then max : "<<TOKEN_TYPE_MAX_INDEX<<"\n";
                         token_type = NOTVALID;
                         token_info = INVALID_INFO;
                         return;
@@ -109,10 +123,12 @@ private:
                         case VALUE:
                                 switch (_token_info){
                                 case VALUE_TEXT:
+                                        token_info = VALUE_TEXT;
                                         numeric_value = 0;
                                         string_value = strval;
                                 break;
                                 case VALUE_NUMBER:
+                                        token_info = VALUE_NUMBER;
                                         numeric_value = numbval;
                                         string_value = "";
                                 break;
@@ -142,54 +158,28 @@ private:
         }
 };
 
-/*
-class Token_Value : Token{
-public:
-        BYTE state;
-        float numeric_value;
-        std::string string_value;
-
-        Token_Value(){
-                state = VALUE_UNDEFINED;
-                numeric_value = 0;
-                string_value = "";        
-        }
-        Token_Value(float number){
-                state = VALUE_NUMBER;
-                numeric_value = number;
-                string_value = "";        
-        }
-        Token_Value(std::string text){
-                state = VALUE_TEXT;
-                numeric_value = 0;
-                string_value = text;        
-        }
-
-        std::string printValue(){
-                switch (state){
-                        case VALUE_TEXT:
-                                return string_value;
-                        case VALUE_NUMBER:
-                                return std::to_string(numeric_value);
-                        default:
-                                return "-Undefined-";
-                }
-        }
-private:
-};
-
 class Trident_Line{
         std::vector<Token> tokens;
+
 };
 
 class Scope{
-
+public:
+        INDEX reading_line = 0;
+        INDEX number_of_line;
         void add_line(std::string code_line){
+                INDEX reading_char = 0;
 
+                for (INDEX c=0; c<code_line.size(); c++){
+                        std::cout<<read_string_from(code_line,c)<<" - "<<std::endl;
+                }
         }
 
         std::vector<Trident_Line> lines;
-        std::vector<> variables;
-};*/
+        std::vector<Token> variables;
+
+private:
+
+};
 
 #endif

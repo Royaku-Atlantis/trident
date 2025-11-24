@@ -1,8 +1,8 @@
 #include <iostream>
 using namespace std;
 
-enum bar : char {A,B};
+//std::variant<>
 
 struct bipbip{
-        bar foo = A; 
+        int foo = 5; 
 };

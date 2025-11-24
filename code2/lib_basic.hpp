@@ -14,25 +14,27 @@
 /* ╠═╣ ╠═╣ ║   ║ ║ ╠═  ╠═   */
 /* ╝ ╝ ╩═╝ ╚═╝ ╩═╝ ╩═╝ ╝    */
 
+//typedefs for many states for many elements
+typedef unsigned char BYTE;
+typedef unsigned int INDEX;
+
+
 template <typename T>
 bool is_between(T value, T mini,T maxi){
         return mini<=value and value<=maxi;
 }
 
-
-
 ///////// char and string handeling
-
 bool is_char_writable(char value){
         return is_between(value, (char)33, (char)126);
 }
 
 //lowercase + 32 = highercase
 bool is_char_uppercase(char char_to_test){
-        return is_between(char_to_test, (char)65, (char)90);
+        return is_between(char_to_test, 'A', 'Z');
 }
 bool is_char_lowercase(char char_to_test){
-        return is_between(char_to_test, (char)97, (char)122);
+        return is_between(char_to_test, 'a', 'z');
 }
 bool same_char(char charA, char charB, bool upperlowercase){
         bool samechar = charA == charB; 
@@ -63,11 +65,35 @@ bool same_string(std::string strA, std::string strB, bool upperlowercase)
         return true;
 }
 
+bool is_char_acceptable_in_variable_names(char letter){
+        return letter=='-' or letter=='_' or is_between(letter,'0','9') or is_char_uppercase(letter) or is_char_lowercase(letter);
+}
+
 std::string trim(const std::string& line);
 
 unsigned int stoi2(std::string text_to_convert, int default_value);
 
+std::string read_string_from(std::string source, INDEX & reader)
+{        
+        if (source.size()<=reader) return "";
 
+        std::string returnstring;
+        char readingchar = source[reader];
+
+        if (!is_char_acceptable_in_variable_names(readingchar)){
+                reader++;
+                returnstring = " -[" + readingchar ;
+                return returnstring + "]- ";
+        }
+
+        do{
+                returnstring += readingchar;
+                reader++;
+                readingchar = source[reader];
+        }while (is_char_acceptable_in_variable_names(readingchar));
+
+        return " -[" + returnstring + "]- ";
+}
 
 ///// system things
 

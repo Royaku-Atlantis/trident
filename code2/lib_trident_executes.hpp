@@ -12,36 +12,14 @@ typedef unsigned char BYTE;
 
 //command list
 BYTE get_command_id(std::string potential_command){
-        return 0;
+        return 0;//COMMAND_NAMES[];
 }
 
-void say_single_token(Token thisToken)
-{
-        switch (thisToken.token_type)
-        {
-                case VALUE:
-                        thisToken.printValue();
-                break;
-                default:
-                        std::cout << "#unspecified token#";
-                break;                
-        }
-}
 void execute_say(std::vector<Token> saytokens){
         for (Token token : saytokens){
-                say_single_token(token); //then include var list and scope
+                std::cout<<token.printValue()<<" "; //then include var list and scope
         }
-}
-
-void execute_error(){
-
-}
-
-
-
-void execute(){
-        switch(5){
-        }
+        std::cout<<std::endl;
 }
 
 #endif

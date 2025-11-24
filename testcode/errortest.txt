@@ -1,11 +1,1 @@
-c:\Users\DELL PRT 3\Documents\GitHub\trident\code>g++ main.cpp basic_lib.cpp lib.cpp classes.cpp -o main     
-classes.cpp: In member function 'Variable Scope::add_default_var(std::string, varState)':
-classes.cpp:141:37: error: taking address of rvalue [-fpermissive]
-  141 |                 varlist.push_back( &Variable (varName)); //ERROR HERE
-      |                                     ^~~~~~~~~~~~~~~~~~
-classes.cpp:145:37: error: taking address of rvalue [-fpermissive]
-  145 |                 varlist.push_back( &Variable (varName, (float)0));
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-classes.cpp:149:37: error: taking address of rvalue [-fpermissive]
-  149 |                 varlist.push_back( &Variable (varName, ""));
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~
+number s69420 tring caca
