@@ -229,6 +229,8 @@ int main(){
          /*   EXECUTIONS   */
         /*----------------*/
 
+        bool in_if_loop = false;
+
         for (int i=0; i<numb_of_lines; i++)
         {
                 stringstream thisline (codelines[i]);
@@ -317,20 +319,31 @@ int main(){
                 else if (str=="if")
                 {
                         setText(TXT_DEFAULT);
-
+                        bool skipLoop;
                         string str, arg2;
-                        thisline >> str >> arg2;
-                        
-                        bool skipLoop = getvalue(str, variables)==getvalue(arg2, variables);
+                        thisline >> str;
+                        if (!thisline.eof()){
+                                thisline >> arg2;
+                                if (arg2 != "{")
+                                        skipLoop = getvalue(str, variables) != getvalue(arg2, variables);
+                                else
+                                        skipLoop = getvalue(str, variables) == 0;
+                        }
+                        else
+                                skipLoop = getvalue(str, variables) == 0;
 
                         if (skipLoop){
 
-                                bool thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") or (numb_of_lines<=i);
+                                bool thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
+                                                       or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
                                 
                                 while (!thisIsFinalLine){
                                         i++;
-                                        thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") or (numb_of_lines<=i);
+                                        thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
+                                                          or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
                                 }
+                        }else{
+                                in_if_loop = true;
                         }
                 }
                 else if (str=="input"){
@@ -349,7 +362,7 @@ int main(){
                         string varname, arg1, arg2;
                         thisline >> varname >> arg1 >> arg2;
                         float res = getvalue(arg1, variables) + getvalue(arg2, variables);
-                        variables.setvar(true, varname, res);
+                        variables.setvar(true, varname, res, DEF);
                 }
                 else if (str=="subtract"){
                         string varname, arg1, arg2;
@@ -433,13 +446,28 @@ int main(){
                         float res = getvalue(arg1, variables) == getvalue(arg2, variables);
                         variables.setvar(true, varname, res, DEFBOOL);
                 }
-                else if (str=="unequal"){
+                else if (str=="inequal"){
                         string varname, arg1, arg2;
                         thisline >> varname >> arg1 >> arg2;
                         float res = getvalue(arg1, variables) != getvalue(arg2, variables);
                         variables.setvar(true, varname, res, DEFBOOL);
                 }
-                
+                else if (str=="else"){
+                        if (in_if_loop){
+                                in_if_loop = false;
+                                bool thisIsFinalLine=false;
+                                while (!thisIsFinalLine){
+                                        i++;
+                                        thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
+                                                          or (numb_of_lines<=i);
+                                }
+                        }
+                        else{
+                                setText(TXT_DEFAULT,RED);
+                                cout<<"error: else not connected to 'if' at line "<<i<<endl;
+                        }
+                        
+                }
                 else if (str=="endl"){
                         cout<<endl;
                 }

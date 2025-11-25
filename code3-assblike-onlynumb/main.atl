@@ -4,45 +4,89 @@
  CALCULATOR
 ###
 
-say "choose your operator" endl  #input add subtract multip divise modulo and or not max min inferior superior equal
-say "0 add endl 1 subtract endl 2 multip endl 3 divise endl 4 modulo endl 5 and" endl
-say "6 or endl 7 not endl 8 max endl 9 min endl 10 inferior endl 11 superior endl 12 equal endl 13 unequal" endl
+say "choose your operator" endl  #input add subtract multipdivide modulo and or not max min inferior superior equal
+say "0 add endl 1 subtract endl 2 multip endl 3 divide endl 4 modulo endl 5 and" endl
+say "6 or endl 7 not endl 8 max endl 9 min endl 10 inferior endl 11 superior endl 12 equal endl 13 inequal" endl
 
 say "choose your operator :"
 input operator
-say endl "the operator" operator "have been chosen "
+say endl "the operator " operator " have been chosen " endl
 
 set undef_const
 set varA 0
 set varB 1
 
 if operator 7 { #operator not
-        say "input not(";        
+        say "input not("
         input varA
         not res varA
         say varA ") = " res endl
-}
-
-equal doOperatorHaveMoreThenOneInput operator 7
-not doOperatorHaveMoreThenOneInput doOperatorHaveMoreThenOneInput
-if doOperatorHaveMoreThenOneInput {
+else
         input varA varB
 }
 
 if operator 0 { #operator and
-        and res varA varB
+        add res varA varB
         say endl varA " + " varB " = " res endl
 }
+
 if operator 1 { #operator minus
         subtract res varA varB
         say endl varA " - " varB " = " res endl
 }
+
 if operator 2 { #operator times
         multip res varA varB
         say endl varA " x " varB " = " res endl
 }
-if operator 3 { #operator divise
-        multip res varA varB
+
+set dividedbyzero 0
+if operator 3 { #operatordivide
+        divide res varA varB
         say endl varA " / " varB " = " res endl
-        equal dividedbyzero undef_const
+        equal dividedbyzero   res undef_const
+}
+
+if operator 4 { #operator modulo
+        modulo res varA varB
+        say endl varA " % " varB " = " res endl
+        equal dividedbyzero   res undef_const
+}
+if dividedbyzero {
+        say "ho, you divided by zero!
+}
+
+if operator 5 { #operator and
+        and res varA varB
+        say endl varA " and " varB " = " res endl
+}
+
+if operator 6 { #operator or   
+        or res varA varB
+        say endl varA " and " varB " = " res endl
+}
+
+if operator 8 { #operator max
+        max res varA varB
+        say endl "the maximum of" varA " and " varB " is " res endl
+}
+if operator 9 { #operator min
+        min res varA varB
+        say endl "the minimum between" varA " and " varB " is " res endl
+}
+if operator 10 { #operator inferior
+        inferior res varA varB
+        say endl "is " varA " inferior to " varB " ? ->" res endl
+}
+if operator 11 { #operator superior
+        inferior res varA varB
+        say endl "is " varA " inferior to " varB " ? ->" res endl
+}
+if operator 12 { #operator equal
+        equal res varA varB
+        say endl " are " varA " and " varB " the same? ->" res endl
+}
+if operator 13 { #operator inequal
+        inequal res varA varB
+        say endl " are " varA " and " varB " different? ->" res endl
 }
