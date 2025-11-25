@@ -1,2 +1,2 @@
-g++ main.cpp console_graphic.cpp -o main.exe
-.\main.exe
+g++ main.cpp -o trident_alpha3.exe
+.\trident_alpha3.exe

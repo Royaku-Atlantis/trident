@@ -1,12 +1,48 @@
-set testbool 0
-say "testbool=" testbool
+#this is a comment
 
-if testbool {
-        say "THIS SHOULD NOT PRINT"
+###
+ CALCULATOR
+###
+
+say "choose your operator" endl  #input add subtract multip divise modulo and or not max min inferior superior equal
+say "0 add endl 1 subtract endl 2 multip endl 3 divise endl 4 modulo endl 5 and" endl
+say "6 or endl 7 not endl 8 max endl 9 min endl 10 inferior endl 11 superior endl 12 equal endl 13 unequal" endl
+
+say "choose your operator :"
+input operator
+say endl "the operator" operator "have been chosen "
+
+set undef_const
+set varA 0
+set varB 1
+
+if operator 7 { #operator not
+        say "input not(";        
+        input varA
+        not res varA
+        say varA ") = " res endl
 }
 
-set testbool 69420
-if testbool
-        say "shoudl print because testbool =" testbool
-endif
-say "im only computer after all"
+equal doOperatorHaveMoreThenOneInput operator 7
+not doOperatorHaveMoreThenOneInput doOperatorHaveMoreThenOneInput
+if doOperatorHaveMoreThenOneInput {
+        input varA varB
+}
+
+if operator 0 { #operator and
+        and res varA varB
+        say endl varA " + " varB " = " res endl
+}
+if operator 1 { #operator minus
+        subtract res varA varB
+        say endl varA " - " varB " = " res endl
+}
+if operator 2 { #operator times
+        multip res varA varB
+        say endl varA " x " varB " = " res endl
+}
+if operator 3 { #operator divise
+        multip res varA varB
+        say endl varA " / " varB " = " res endl
+        equal dividedbyzero undef_const
+}

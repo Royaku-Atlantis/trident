@@ -1,1 +1,1 @@
-.\main.exe
+.\trident_alpha3.exe
