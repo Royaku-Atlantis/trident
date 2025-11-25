@@ -1,15 +1,12 @@
 all: main.exe
-main.exe: main.o ElementL.o Liste.o
-	g++ -g main.o ElementL.o Liste.o main.exe 
+main.exe: main.o console_graphic.o
+	g++ -g main.o console_graphic.o main.exe 
 
 main.o: main.cpp
-	g++ -g -Wall -c main.cpp
+	g++ -g -Wall main.cpp console_graphic.h -o main.o
 
-ElementL.o: ElementL.cpp
-	g++ -g -Wall ElementL.cpp
-
-Liste.o: Liste.cpp
-	g++ -g -Wall Liste.cpp
+console_graphic.o: console_graphic.cpp
+	g++ -g -Wall console_graphic.cpp console_graphic.h  -o console_graphic.o
 
 clean:
 	rm *.o

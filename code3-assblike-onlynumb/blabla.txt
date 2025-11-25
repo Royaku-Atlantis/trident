@@ -1,6 +1,0 @@
-#say "test" varname
-set varname 69
-set kaku 15
-say "kaku =" kaku "_ and varname = " varname
-set varname kaku
-say " varname = " varname

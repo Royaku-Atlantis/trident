@@ -1,0 +1,12 @@
+set testbool 0
+say "testbool=" testbool
+
+if testbool {
+        say "THIS SHOULD NOT PRINT"
+}
+
+set testbool 69420
+if testbool
+        say "shoudl print because testbool =" testbool
+endif
+say "im only computer after all"
