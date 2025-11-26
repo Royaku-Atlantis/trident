@@ -2,7 +2,6 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
-#include <conio.h>
 #include <tgmath.h> //only for modulo yet lmfao
 
 using namespace std;
@@ -71,23 +70,6 @@ string remove_comment(string codeline){
     /*  ║   ║   ╠═╣ ╚═╗ ╚═╗   ║ ║ ╠═  ╠═   ║  ║ ║  ║   ║   ║  ║ ║ ║ ║ ╚═╗   */
    /*   ╚═╝ ╩═╛ ╝ ╝ ╚═╝ ╚═╝   ╩═╝ ╩═╛ ╝   ╘╩╛ ╩ ╩ ╘╩╛  ╩  ╘╩╛ ╚═╝ ╩ ╩ ╚═╝  */
   /*----------------------------------------------------------------------*/
-
-struct balise{
-        string name;
-        int linetogo;
-
-        balise (string bname,int bline){
-                name = bname; linetogo = bline;
-        }
-};
-
-int search_balise_line(string varname, vector<balise> listofbalise){
-        for (int i=0; i<listofbalise.size(); i++){
-                if (listofbalise[i].name == varname)
-                        return listofbalise[i].linetogo;
-        }
-        return -1;
-}
 
 typedef unsigned char Byte;
 
@@ -218,8 +200,6 @@ int main(){
         int numb_of_lines = 0;
         bool isBigCommentMode = false;
 
-        vector<balise> list_of_balises;
-
           /*---------------*/
          /*   FILE LOOP   */
         /*---------------*/
@@ -230,15 +210,6 @@ int main(){
 
                 if (isBigCommentMode)   codelines.push_back("");
                 else                    codelines.push_back(remove_comment(thisline));
-
-                stringstream thislinestream (thisline);
-                string checkbalise;
-                thislinestream >> checkbalise;
-                if (checkbalise=="balise" and !thislinestream.eof()){
-                        thislinestream >> checkbalise;
-                        if (search_balise_line(checkbalise, list_of_balises) == -1)
-                                list_of_balises.push_back( balise (checkbalise, numb_of_lines) );
-                }
 
                 if (stringcontain(thisline,"###"))
                         isBigCommentMode = !isBigCommentMode;
@@ -387,14 +358,6 @@ int main(){
                                         variables.setvar(false, str, -1,DEF);
                         }
                 }
-                else if (str=="jump"){
-                        if (!thisline.eof()){
-                                thisline >> str;
-                                int linetogo = search_balise_line(str,list_of_balises);
-                                if (linetogo != -1)
-                                        i = linetogo;
-                        }
-                }
                 else if (str=="add"){
                         string varname, arg1, arg2;
                         thisline >> varname >> arg1 >> arg2;
@@ -485,7 +448,7 @@ int main(){
                 }
                 else if (str=="inequal"){
                         string varname, arg1, arg2;
-                        thisline >> varname >> arg1;
+                        thisline >> varname >> arg1 >> arg2;
                         float res = getvalue(arg1, variables) != getvalue(arg2, variables);
                         variables.setvar(true, varname, res, DEFBOOL);
                 }
@@ -505,16 +468,10 @@ int main(){
                         }
                         
                 }
-                else if (str=="round"){
-                        string varname, arg1;
-                        thisline >> varname >> arg1;
-                        float res = getvalue(arg1, variables);
-                        variables.setvar(true, varname, round(res), DEF);   
-                }
                 else if (str=="endl"){
                         cout<<endl;
                 }
-                else if (str!="endif" and str!="}" and str!="{" and str!="balise"){
+                else if (str!="endif" and str!="}" and str!="{"){
                         setText(TXT_DEFAULT,RED);
                         cout<<"Error, command: \"";
                         setText(TXT_STRIKETHROUGH);
@@ -525,6 +482,5 @@ int main(){
         }
         setText(TXT_DEFAULT);
         cout<<"\n end of exectuion";
-        getch();
         return 0;
 }

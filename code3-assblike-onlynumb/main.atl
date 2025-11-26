@@ -8,20 +8,35 @@ say "choose your operator" endl  #input add subtract multipdivide modulo and or 
 say "0 add endl 1 subtract endl 2 multip endl 3 divide endl 4 modulo endl 5 and" endl
 say "6 or endl 7 not endl 8 max endl 9 min endl 10 inferior endl 11 superior endl 12 equal endl 13 inequal" endl
 
+balise startcalculator
+
 say "choose your operator :"
+balise enter_operator
 input operator
+round operator
 say endl "the operator " operator " have been chosen " endl
+
+#test if the player put a number too big
+
+superior optoobig   operator 13
+inferior optoosmall operator 0
+or opnotrightrange  optoobig optoosmall
+if opnotrightrange {
+        say endl "your operator is not between 0 and 13, please try aigain :"
+        jump enter_operator
+}
 
 set undef_const
 set varA 0
 set varB 1
 
 if operator 7 { #operator not
-        say "input not("
+        say "input not: "
         input varA
         not res varA
-        say varA ") = " res endl
+        say "not(" varA ") = " res endl
 else
+        say "inputs :"
         input varA varB
 }
 
@@ -90,3 +105,6 @@ if operator 13 { #operator inequal
         inequal res varA varB
         say endl " are " varA " and " varB " different? ->" res endl
 }
+
+say endl "---lets do this aigain---" endl
+jump startcalculator
