@@ -38,6 +38,25 @@ char getlastchar(string str){
         return str.back();
 }
 
+float randomf_mono(){
+        return (float) rand() / (float) RAND_MAX; 
+}
+template <typename t>
+void swap_direct(t & a, t & b){
+        t c = a;
+        a = b;
+        b = c;
+}
+
+float randrange(float mini, float maxi){
+        if (mini>maxi)
+                swap_direct(maxi, mini);
+        float randrange = (maxi - mini);
+        randrange *= randomf_mono();
+        randrange += mini;
+        return randrange;
+}
+
 bool is_stof_valid(string toconvert){
         try {
                 int res = std::stof(toconvert);
@@ -201,6 +220,19 @@ float getvalue(string strdata, map & variables, bool create_ifnotexist = false, 
 }
 
 
+        //gotonext_endof_loop(i, codelines, numb_of_lines);
+void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_lines){
+        bool thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
+                        or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
+
+        while (!thisIsFinalLine){
+                i++;
+                thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
+                                        or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
+        }
+}
+
+
     /*---------------------------------------------------------*/
    /* ╦╦╗ ╦═╗ ╒╦╕ ╗═╗   ╦═╕ ╗ ╔ ╦═╕ ╔═╗ ╗ ╗ ═╦═ ╒╦╕ ╔═╗ ╗═╗   */
   /*  ║╨║ ╠═╣  ║  ║ ║   ╠═  ╚╪╗ ╠═  ║   ║ ║  ║   ║  ║ ║ ║ ║  */
@@ -259,6 +291,8 @@ int main(){
         /*----------------*/
 
         bool in_if_loop = false;
+        unsigned int iterator = 0;
+        int repeatline = -1;
 
         for (int i=0; i<numb_of_lines; i++)
         {
@@ -362,17 +396,39 @@ int main(){
                                 skipLoop = getvalue(str, variables) == 0;
 
                         if (skipLoop){
-
-                                bool thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
-                                                       or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
-                                
-                                while (!thisIsFinalLine){
-                                        i++;
-                                        thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
-                                                          or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
-                                }
+                                gotonext_endof_loop(i, codelines, numb_of_lines);
                         }else{
                                 in_if_loop = true;
+                        }
+                }
+                else if (str=="repeat"){
+                        string numberofiteration;
+                        thisline >> numberofiteration;
+
+                        float temp = getvalue(numberofiteration, variables);
+                        unsigned int itnumb;
+                        if (temp<=0) itnumb=-1;
+                        else itnumb = temp;
+
+                        if (itnumb!=-1){
+                                iterator = itnumb;
+                                repeatline =  i;
+                        }else{
+                                setText(TXT_DEFAULT,RED);
+                                cout << "error:  repat loop have invalid value (at line "<<i<<")\n";
+                                gotonext_endof_loop(i, codelines, numb_of_lines);
+                        }
+                }
+                else if (str=="continue"){
+                        thisline >> str;
+                        if (getvalue(str,variables) and iterator>0 and repeatline>0)
+                                i=repeatline;
+                }
+                else if (str=="break"){
+                        thisline >> str;
+                        if (getvalue(str,variables) and iterator>0 and repeatline>0){
+                                repeatline = -1;        
+                                gotonext_endof_loop(i, codelines, numb_of_lines);
                         }
                 }
                 else if (str=="input"){
@@ -492,12 +548,7 @@ int main(){
                 else if (str=="else"){
                         if (in_if_loop){
                                 in_if_loop = false;
-                                bool thisIsFinalLine=false;
-                                while (!thisIsFinalLine){
-                                        i++;
-                                        thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
-                                                          or (numb_of_lines<=i);
-                                }
+                                gotonext_endof_loop(i, codelines, numb_of_lines);
                         }
                         else{
                                 setText(TXT_DEFAULT,RED);
@@ -508,13 +559,39 @@ int main(){
                 else if (str=="round"){
                         string varname, arg1;
                         thisline >> varname >> arg1;
+                        thisline >> arg1;
                         float res = getvalue(arg1, variables);
-                        variables.setvar(true, varname, round(res), DEF);   
+                        variables.setvar(true, varname, round(res), DEF);
+                }
+                else if (str=="random"){
+                        string varname, arg1, arg2;
+                        thisline >> varname >> arg1;
+                        if (thisline.eof()){
+                                float res = getvalue(arg1, variables);
+                                res = randrange(0, res);
+                                variables.setvar(true, varname, res, DEF);
+                        }else{
+                                thisline >> arg2;
+                                float mini = getvalue(arg1, variables);
+                                float maxi = getvalue(arg2, variables);
+                                maxi = randrange(mini, maxi);
+                                variables.setvar(true, varname, maxi, DEF);  
+                        }
                 }
                 else if (str=="endl"){
                         cout<<endl;
                 }
-                else if (str!="endif" and str!="}" and str!="{" and str!="balise"){
+                else if (str=="endif" or str=="}"){
+                        
+                        if (iterator>1){
+                                iterator --;
+                                i = repeatline;
+                        }else{
+                                iterator = 0;
+                                repeatline = -1;
+                        }
+                }
+                else if (str!="{" and str!="balise"){
                         setText(TXT_DEFAULT,RED);
                         cout<<"Error, command: \"";
                         setText(TXT_STRIKETHROUGH);
