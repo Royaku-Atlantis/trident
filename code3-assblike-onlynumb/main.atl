@@ -1,21 +1,26 @@
 #this is a comment
 
-repeat 15 {
-        say "say 5 to stop:"
-        input kk
-        equal kk kk 5
-        break kk
-}
+input a b 
+if a {
+        say "a is not 0 : " a endl
 
-repeat 15 {
-        say "say 5 to avoid annoying message:"
-        input kk
-        equal kk kk 5
-        continue kk
-        say "haha this message is annoying" endl
+        if b {
+                say "b is not 0 : " b
+        }
 }
 
 ###
+set x 0
+set y 0
+repeat 5 {
+        say endl y ":"
+        repeat 5 {
+                add x x 1
+                say "[" x "]"
+        }
+        add y y 1
+}
+
  CALCULATOR
 
 say "choose your operator" endl  #input add subtract multipdivide modulo and or not max min inferior superior equal

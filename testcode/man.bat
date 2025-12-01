@@ -1,2 +1,2 @@
-g++ test.cpp -o test
+make
 .\test.exe

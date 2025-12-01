@@ -222,6 +222,18 @@ float getvalue(string strdata, map & variables, bool create_ifnotexist = false, 
 
         //gotonext_endof_loop(i, codelines, numb_of_lines);
 void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_lines){
+        unsigned int withinloop = 1;
+        while (!withinloop and i<numb_of_lines){
+                i++;
+                if (stringcontain(codelines[i],"{"))
+                        withinloop ++;
+                if (stringcontain(codelines[i],"}"))
+                        withinloop --;
+        }
+}
+/*
+        //gotonext_endof_loop(i, codelines, numb_of_lines);
+void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_lines){
         bool thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
                         or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
 
@@ -231,6 +243,7 @@ void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_l
                                         or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
         }
 }
+*/
 
 
     /*---------------------------------------------------------*/
@@ -434,7 +447,9 @@ int main(){
                 else if (str=="input"){
                         setText(TXT_BOLD,GREEN);
                         while (!thisline.eof()){
+                                cout<<"LASTREAD:"<<str<<"_eof:"<<thisline.eof();
                                 thisline >> str;
+                                cout<<"_NOWREAD:"<<str<<"_eof:"<<thisline.eof()<<endl;
                                 string newval;
                                 cin >> newval;
                                 if (is_stof_valid(newval))

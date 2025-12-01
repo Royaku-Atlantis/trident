@@ -1,8 +1,17 @@
-#include <iostream>
+#pragma once
+
 using namespace std;
 
 //std::variant<>
 
-struct bipbip{
-        int foo = 5; 
+class foo{
+public:
+        void dothing();
+};
+
+class bar : public foo{
+public:
+        void dothing();
+private:
+        int val;
 };
