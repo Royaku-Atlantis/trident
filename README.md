@@ -5,15 +5,20 @@ its objective is to be simple to use for anyone
 should the extention be .atl or .trd?
 
 # __documentation:__
-put the ``trident.exe`` in your project folder
-Put your main code in a file called ``main.atl/.trd``
-
+Put the `trident.exe` in your project folder
+Put your main code in a file called `main.atl/.trd`
 
 ## __commands :__
+### set
+Let's explicitly declare two variables:
+```
+set foo 2.5
+set bar "blah blah"
+```
 ### say
-exemple, with two variable
-- ``foo`` = ``2.5``
-- ``bar`` = ``"blah blah"``
-``say "the result is :" foo bar "text missing a quote, but its ok ``
-- it will return :
+Exemple with two variable. Let foo = 2.5 and bar = "blah blah":
+```
+say "the result is :" foo bar "text missing a quote, but its ok
+```
+It will print :
 **the result is : 2.5 blah blah text missing a quote, but its ok**
