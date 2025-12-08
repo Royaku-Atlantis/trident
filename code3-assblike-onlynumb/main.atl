@@ -1,5 +1,5 @@
 #this is a comment
-
+###
 input a b 
 if a {
         say "a is not 0 : " a endl
@@ -9,7 +9,6 @@ if a {
         }
 }
 
-###
 set x 0
 set y 0
 repeat 5 {
@@ -20,6 +19,7 @@ repeat 5 {
         }
         add y y 1
 }
+###
 
  CALCULATOR
 
@@ -32,12 +32,11 @@ balise startcalculator
 say "choose your operator :"
 balise enter_operator
 input operator
-say "debug: before operator rounded : " operator endl
 round operator operator
-say endl "the operator " operator " have been chosen " endl
 
 #test if the player put a number too big
 
+###
 superior optoobig   operator 13
 inferior optoosmall operator 0
 or opnotrightrange  optoobig optoosmall
@@ -45,6 +44,7 @@ if opnotrightrange {
         say endl "your operator is not between 0 and 13, please try aigain :"
         jump enter_operator
 }
+###
 
 set undef_const
 set varA 0
