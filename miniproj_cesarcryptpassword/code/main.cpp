@@ -34,13 +34,12 @@ int periodichar(int source, int offset){
     return source;
 }
 
-#define NLCHAR '\0'
 char encode(char data, char encode){
-    if (data=='\n' or data=='\r') return NLCHAR;
+    if (data=='\n' or data=='\r') return data;
     return periodichar(data,encode);
 }
 char decode(char data, char encode){
-    if (data==NLCHAR) return '\n';
+    if (data=='\n' or data=='\r') return data;
     return periodichar(data,-encode);
 }
 
@@ -68,14 +67,13 @@ string decodeTxt(const string & codedtext, const string & key){
 }
 
 void get_file_text(string & filedata, string filename){
-    ifstream file(filename, fstream::binary);
-
+    ifstream file(filename);
     //read raw file and store in filedata
     filedata = "";
     string intxt = "";
     while (!file.eof()){
         getline(file,intxt);
-        //if (!file.eof()) intxt += '\n';
+        if (!file.eof()) intxt += '\n';
         filedata += intxt;
     }
     file.close();
@@ -124,15 +122,11 @@ int main(){
         }while (whatToDo!="R" and whatToDo!="W");
 
         //get file data to read or encode
+        string fullfile = "";
+        get_file_text(fullfile, filename);
         
         if (whatToDo=="R")
         {
-
-            string fullfile = "";
-            ifstream file(filename);
-            getline(file,fullfile);
-            file.close();
-
             string password;
             for (int i=5; -1<=i ; i--)
             {
@@ -142,8 +136,7 @@ int main(){
                 //if the password accurately decode itself
                 if (is_password_correct(password,fullfile))
                 {
-                    fullfile = decodeTxt(fullfile,password);                    
-                    //show without the password header
+                    fullfile = decodeTxt(fullfile,password);
                     cout<<STR_SEPARATOR1<<endl<<"\033[33m"<< fullfile.erase(0,password.length())<<endl<<STR_SEPARATOR1;
                     break;
                 }
@@ -151,11 +144,8 @@ int main(){
             }            
         }
         else
-        if (whatToDo=="W"){
-
-            string fullfile = "";
-            get_file_text(fullfile, filename);
-
+        if (whatToDo=="W")
+        {
             string password = input("create the password");
             string newfile = password + fullfile;
             newfile = encodeTxt(newfile,password);
@@ -171,6 +161,7 @@ int main(){
         cout<<endl<<STR_SEPARATOR2;
     
     }while(filename!="stop");
+    
     cout<<endl<<STR_SEPARATOR2;
     cout<<"end of the program";
     cout<<endl<<STR_SEPARATOR1;
