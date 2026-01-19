@@ -1,5 +1,5 @@
 #include <iostream>
-//#include <sstream> 
+#include <sstream> 
 #include <fstream>
 #include <vector>
 #include "base_lib.hpp"
@@ -11,17 +11,18 @@ using namespace std;
  /*   ╩═╝ ╩═╛ ╝   ╘╩╛ ╩ ╩ ╘╩╛  ╩  ╘╩╛ ╚═╝ ╩ ╩ ╚═╝ */
 /*-----------------------------------------------*/
 //variable types as an enum
-enum VarType : char {VARIABLE_REF, NUMBER, STRINGPTR, BOOL, COORD, LIST, UNDEFINED};
+enum VarType : char {VARIABLE_REF, OPERATOR, NUMBER, STRINGPTR, BOOL, COORD, LIST, UNDEFINED};
 
 struct Variable{
         VarType type;
         union Union_Value
         {
-                double number;                
+                double number;            
                 bool boolean;
                 float coord[2];
-                unsigned int list_ptrs[2]; //start and end ptrs in global variable pool
-                unsigned int stringptr[2]; //start and end ptrs in global char pool
+                int index;
+                unsigned int list_ptrs[2]; //start ptrs and lenght in global list variable pool
+                unsigned int stringptr[2]; //start ptrs and lenght in global char pool
         } value;
 
         Variable (){
@@ -44,6 +45,15 @@ struct Variable{
         Variable (const string & intext){
                 type = STRINGPTR;
                 setstring(intext);
+        }
+
+        Variable (VarType _type, double n_value){
+                type = _type;
+                switch (type){
+                        case VARIABLE_REF:
+                                value.index = (int)(n_value);
+                }
+                
         }
 
         void setstring(const string & intext);//global.string_pool.add_string(intext, value.stringptr[0], value.stringptr[1]);
@@ -69,7 +79,6 @@ struct Variable{
         }
 };
 
-
 //varpool
 
 enum CommandType : char {PRINT, STOP, INPUT, SETVAR, PROCEDURECALL, UNKNOWNCOMMAND};
@@ -93,9 +102,11 @@ struct Command{
                 type = intype;
                 args.push_back(inarg);
         }
-        Command(CommandType intype, vector<Variable> & inargs){
+        Command(CommandType intype, const vector<Variable> & inargs){
                 type = intype;
-                args = inargs;
+                for (Variable v : inargs){
+                        args.push_back(v);
+                }                
         }
 
         void add_arg(Variable && inarg){
@@ -128,6 +139,8 @@ struct Global{
         } string_pool;
 
         vector<Command> program;
+
+        vector<Variable> variable_pool; 
 
         void add_program_command(Command && cmd){
                 cout<<"2- adding command to program: "<<cmd.args[0].display()<<"\n";
@@ -194,17 +207,35 @@ void get_file_text(vector<string> & filetext, string filename, string COMMENT, s
 	file.close();
 }
 
+int get_var_index(const string & vartext){
+        if (!start_with(vartext,"var[")) return -1;
+        if (!end_with(vartext,"]")) return -2;
+        string strnumber = "";
+        //3 is the start of the number: v0 a1 r2 [3 --variable index-- ..]n
+        for (int i=4; i<vartext.length()-1; i++){
+                strnumber += vartext[i];
+        }
+        return stoi2(strnumber, -3);
+}
+
+//
 void create_command(const string & commandline){
         string commandname = commandline.substr(0, commandline.find(" "));
-        string allargs = commandline.substr(commandline.find(" ")+1, commandline.length());
-
-        cout<<"decomposition:{\""<<commandname<<"\";\""<<allargs<<"\"}\n";
-
+        stringstream allargstr (commandline.substr(commandline.find(" ")+1, commandline.length()));
+        string thisstr = "";
+        vector<Variable> allargs;
         //Command cmd = ;//getCommand(commandname);
         //cmd.add_arg(Variable(allargs));
-        cout<<"1- about to add command : "<<allargs<<"\n";
-        global.add_program_command(Command(UNKNOWNCOMMAND,Variable(allargs)));
-        cout<<"4- added command to program\n";
+        //loop throug all arguments
+        while (!allargstr.eof()){
+                allargstr >> thisstr;
+                int varindex = get_var_index(thisstr);
+                if (0<=varindex){
+                        allargs.push_back();
+                }
+        }
+
+        global.add_program_command(Command(UNKNOWNCOMMAND,));
 }
 
     /*-----------------------------------*/
@@ -213,15 +244,22 @@ void create_command(const string & commandline){
  /*   ╚═╝ ╚═╝ ╩ ╩ ╩ ╩ ╝ ╝ ╩ ╩ ╩═╝ ╚═╝ */
 /*-----------------------------------*/
 
-void command_print(Command & cmd){
+void command_print(Command & cmd)
+{
         for (Variable & var : cmd.args){
                 cout << var.display() << " ";
         }
         cout << endl;
 }
 
-void command_error(Command & cmd){
+void command_error(Command & cmd)
+{
        cout<<"\033[12m"<< cmd.args[0].display() <<"\033[0m"<<endl;
+}
+
+void command_setvar(Command & cmd)
+{
+
 }
 
 void Command::execute()
@@ -242,6 +280,7 @@ void Command::execute()
  /*   ╩ ╩ ╝ ╝ ╘╩╛ ╩ ╩   ╩═╛ ╝ ╝ ╩═╛ ╚═╝ ╚═╝  ╩  ╘╩╛ ╚═╝ ╩ ╩ */
 /*---------------------------------------------------------*/
 int main(){
+        /*
 	vector<string> filetext;
 	get_file_text(filetext, "main.atl", "#", "###");
 
@@ -259,7 +298,7 @@ int main(){
                 i++;
 	}
         cout << "---- execution ----" << endl;
-        global.execute_program();
+        global.execute_program();//*/
 
         return 0;
 }

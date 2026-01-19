@@ -1,14 +1,3 @@
-yesyes1
-print fqvsd
-yesyes2 ### nonono
-nonono
-nonono ###
+let var[0] = 5
 
-       yesyes3
-yesyes4 # nonono
-        yesyes5
-#nonono
-yes6#nono
-yes7###nonono
-nonono
-no###yes8yes
+print var[0]
