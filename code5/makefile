@@ -10,6 +10,9 @@ obj\basiclib.o: src\basiclib.cpp
 obj\trident.o: src\trident.cpp
 	g++ -c src\trident.cpp -o obj\trident.o
 
+run: all
+	.\trident.exe
+
 clean:
 	del obj\*.o
 
