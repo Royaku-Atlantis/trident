@@ -52,6 +52,8 @@ struct Variable{
                 switch (type){
                         case VARIABLE_REF:
                                 value.index = (int)(n_value);
+                        case OPERATOR:
+                                
                 }
                 
         }
