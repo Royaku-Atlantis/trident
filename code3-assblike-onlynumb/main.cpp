@@ -143,6 +143,7 @@ struct vardata{
                         cout<<value;
                 }
         }
+
 };
 
 string clean_varname(string varname){
@@ -166,6 +167,7 @@ struct map{
                         return varlist[index];
                 return vardata (varname, 0, UNDEF);
         }
+
         void setvar(bool create_if_dont_exist, string varname, float value, Byte status=DEF)
         {
                 int index = search_index(varname);
@@ -182,9 +184,11 @@ struct map{
                 vardata vartoget = getvar(varname,create_if_dont_exist);
                 vartoget.printval();
         }
+
         bool var_exist(string varname){
                 return search_index(varname)!=-1;
         }
+
         bool var_index_is_valid(int varindex){
                 return varindex!=-1 and varindex < varlist.size();
         }
@@ -204,8 +208,6 @@ private:
         }
 };
 
-
-
 float getvalue(string strdata, map & variables, bool create_ifnotexist = false, float default_value=0){
         if (is_stof_valid(strdata)){
                 return (float) stof(strdata);
@@ -219,11 +221,10 @@ float getvalue(string strdata, map & variables, bool create_ifnotexist = false, 
         }
 }
 
-
-        //gotonext_endof_loop(i, codelines, numb_of_lines);
+/*        //gotonext_endof_loop(i, codelines, numb_of_lines);
 void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_lines){
         unsigned int withinloop = 1;
-        while (!withinloop and i<numb_of_lines){
+        while (withinloop and i<numb_of_lines){
                 i++;
                 if (stringcontain(codelines[i],"{"))
                         withinloop ++;
@@ -231,7 +232,7 @@ void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_l
                         withinloop --;
         }
 }
-/*
+*/
         //gotonext_endof_loop(i, codelines, numb_of_lines);
 void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_lines){
         bool thisIsFinalLine = stringcontain(codelines[i],"}") or stringcontain(codelines[i],"endif") 
@@ -243,7 +244,7 @@ void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_l
                                         or stringcontain(codelines[i],"else") or (numb_of_lines<=i);
         }
 }
-*/
+
 
 
     /*---------------------------------------------------------*/
@@ -253,7 +254,6 @@ void gotonext_endof_loop(int & i,const vector<string> & codelines, int numb_of_l
 /*---------------------------------------------------------*/
 
 int main(){
-
         setText(TXT_DEFAULT);
         ifstream file;
         vector<string> codelines;
@@ -410,8 +410,10 @@ int main(){
 
                         if (skipLoop){
                                 gotonext_endof_loop(i, codelines, numb_of_lines);
+                                cout<<"\ndebug:skiploop\n";
                         }else{
                                 in_if_loop = true;
+                                cout<<"\ndebug: no skiploop\n";
                         }
                 }
                 else if (str=="repeat"){
@@ -428,7 +430,7 @@ int main(){
                                 repeatline =  i;
                         }else{
                                 setText(TXT_DEFAULT,RED);
-                                cout << "error:  repat loop have invalid value (at line "<<i<<")\n";
+                                cout << "error:  repeat loop have invalid value (at line "<<i<<")\n";
                                 gotonext_endof_loop(i, codelines, numb_of_lines);
                         }
                 }
@@ -447,9 +449,9 @@ int main(){
                 else if (str=="input"){
                         setText(TXT_BOLD,GREEN);
                         while (!thisline.eof()){
-                                cout<<"LASTREAD:"<<str<<"_eof:"<<thisline.eof();
+                                //cout<<"LASTREAD:"<<str<<"_eof:"<<thisline.eof();
                                 thisline >> str;
-                                cout<<"_NOWREAD:"<<str<<"_eof:"<<thisline.eof()<<endl;
+                                //cout<<"_NOWREAD:"<<str<<"_eof:"<<thisline.eof()<<endl;
                                 string newval;
                                 cin >> newval;
                                 if (is_stof_valid(newval))
@@ -539,13 +541,13 @@ int main(){
                 else if (str=="inferior"){
                         string varname, arg1, arg2;
                         thisline >> varname >> arg1 >> arg2;
-                        float res = getvalue(arg1, variables) < getvalue(arg2, variables);
+                        float res = getvalue(arg1, variables) > getvalue(arg2, variables);
                         variables.setvar(true, varname, res, DEFBOOL);
                 }
                 else if (str=="superior"){
                         string varname, arg1, arg2;
                         thisline >> varname >> arg1 >> arg2;
-                        float res = getvalue(arg1, variables) > getvalue(arg2, variables);
+                        float res = getvalue(arg1, variables) < getvalue(arg2, variables);
                         variables.setvar(true, varname, res, DEFBOOL);
                 }
                 else if (str=="equal"){
@@ -564,12 +566,7 @@ int main(){
                         if (in_if_loop){
                                 in_if_loop = false;
                                 gotonext_endof_loop(i, codelines, numb_of_lines);
-                        }
-                        else{
-                                setText(TXT_DEFAULT,RED);
-                                cout<<"error: else not connected to 'if' at line "<<i<<endl;
-                        }
-                        
+                        }                        
                 }
                 else if (str=="round"){
                         string varname, arg1;
@@ -582,6 +579,7 @@ int main(){
                         string varname, arg1, arg2;
                         thisline >> varname >> arg1;
                         if (thisline.eof()){
+                                //arg1 = max
                                 float res = getvalue(arg1, variables);
                                 res = randrange(0, res);
                                 variables.setvar(true, varname, res, DEF);
