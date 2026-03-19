@@ -3,13 +3,24 @@
 #include <vector>
 
 //trident settings
-#define TRIDENT_DEBUGINFO
-//#define TRIDENT_DEBUGINFO_DEEP
+
+extern bool GLOBAL_ErrorTellProgrammer;
+
+//#define DEBUGINFO
+//#define DEBUGINFO_DEEP
+
+void print_error(const std::string & errortext); //GLOBAL_ErrorTellProgrammer
 
 //constants & enums
-enum ValueType : char {VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT};
-enum OperatorType : char {OP_EMPTY, OPn_ADD='+', OPn_MUL='*', OPn_DIV='/', OPn_SUB='-', OPn_MOD='%', OPl_GET='.', OPb_AND='&',OPb_OR='|',OPb_NOT='!',OPb_XOR='^', OPb_COND = '?'};
+enum ValueType : unsigned char {VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT};
+enum OperatorType : unsigned char {OP_EMPTY, OPn_ADD, OPn_MUL, OPn_DIV, OPn_SUB, OPn_MOD, OPl_GET, OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, OPb_COND};
 #define Index int 
+
+
+// enum OperatorType : unsigned char {OP_EMPTY, OPn_ADD, OPn_MUL, OPn_DIV, OPn_SUB, OPn_MOD, OPl_GET, OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, OPb_COND};
+std::string get_OperatorString(OperatorType c_operator);
+
+int get_value_color(ValueType vtype); //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
 
 struct Value{
         union {
@@ -38,20 +49,28 @@ struct Value{
         //void setTo (Index value_variable);
         //void setTo (OperatorType value_operator);
 
+        //Value as (Value type) -> switch
+        //use it in operator overloads, with a new function AnyValueHaveValueType(VALUETYPECONSTANTE, VAL1, VAL2)
+
         std::string string();
 };
 
+//Value operators overloading
+Value operator + (Value Val1, Value Val2);
+Value operator - (Value Val1, Value Val2);
+
 class ArgumentList{
 protected: 
-        Value pop();
-        Value get();
         std::vector<Value> arguments;
+
+        Value pop_last_arg();
+        Value get_arg_from_tail(int location);
+        bool do_operation(OperatorType operation_type);
 public:
-        template <class T>
-        void add_val(T t_val) {arguments.push_back(Value(t_val));}
+
+        void add_val(const Value & newval);
 
         std::string string();
-        void calculate();
 };
 
 enum CommandType : char {CMD_EMPTY, CMD_PRINT, CMD_SET};
