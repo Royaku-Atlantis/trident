@@ -1,0 +1,33 @@
+{
+
+  "customFileOrder.rules": {
+    "src": {
+      "order": [
+        "definitions",
+
+        "main.cpp",
+        "general.hpp",
+        "trident.hpp",
+        "values.hpp",
+        "expressions.hpp",
+        "arguments.hpp",
+        "commands.hpp",
+        "functions.hpp",
+        "scopes.hpp",
+        "executer.hpp"
+      ]
+    },
+  "definitions":{
+    "order" : [
+        "general.cpp",
+        "values.cpp",
+        "expressions.cpp",
+        "arguments.cpp",
+        "commands.cpp",
+        "functions.cpp",
+        "scopes.cpp",
+        "executer.cpp",
+      ]
+    }
+  }
+}

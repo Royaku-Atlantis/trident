@@ -1,14 +1,5 @@
+#include "../trident.hpp"
 #include "../values.hpp"
-#include "../general.hpp"
-#include <iostream>
-
-bool GLOBAL_ErrorTellProgrammer = true;
-
-void print_error(const std::string & errortext)
-{
-        if (GLOBAL_ErrorTellProgrammer)
-                std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
-}
 
 Value::Value() : val_bool(false)
 {
@@ -92,7 +83,7 @@ Value::Value (std::string value_string)
         #endif
 }
 
-Value::Value (Index value_variable)
+Value::Value (int value_variable)
 {
         val_type = VALUE_VARIABLE;
         val_variable = value_variable;
@@ -201,131 +192,6 @@ Value operator - (Value Val1, Value Val2){
         }
 }
 
-
-/* CLASS ARG/EXPRESSION ELEMENT LIST */
-ExpressionElement::ExpressionElement(const Value & val)
-{
-        value = val;
-        ptr_next = nullptr;
-}
-ExpressionElement::~ExpressionElement()
-{
-        if (ptr_next!=nullptr)
-        {
-                delete ptr_next;
-        }
-}
-
-ExpressionElement * ExpressionElement::append_expressionelement(const Value & new_value)
-{
-        //create the new expression element
-        ExpressionElement * new_expression_element_ptr = new ExpressionElement(new_value);
-
-        //add it to the current expression element
-        if (ptr_next != nullptr)
-        {
-                say("ho no! this element is not the tail:", value.string());
-                delete ptr_next;
-        }
-        ptr_next = new_expression_element_ptr;
-
-        //return the pointer of the new tail element we just created
-        return new_expression_element_ptr;
-}
-
-/* CLASS ARGUMENT EXECUTER*/
-
-Value ArgumentExecuter::pop_last_arg()
-{
-        //if there is nothing do pop, return the Undefined Value
-        if (arguments.size()==0) return Value();
-
-        Value back_value = arguments.back();
-
-        arguments.pop_back();
-        #ifdef DEBUGINFO
-        say("Popped tail value = ",back_value.string());
-        #endif
-        return back_value;
-}
-
-void ArgumentExecuter::add_val(const Value & newval) 
-{
-        bool is_an_operation = newval.val_type == VALUE_OPERATOR;//check_operation(newval);
-        
-        if (is_an_operation)
-                do_operation(newval.val_operator);
-        else
-                arguments.push_back(newval);
-}
-
-bool ArgumentExecuter::do_operation(OperatorType operation_type)
-{
-        switch (operation_type)
-        {
-                //classic number operations
-                case OPn_ADD :
-                        add_val(pop_last_arg() + pop_last_arg());
-                        break;
-
-                case OPn_SUB :
-                        add_val(pop_last_arg() - pop_last_arg());
-                        break;
-
-                case OPn_MUL :  
-                case OPn_DIV :
-
-                case OPn_MOD : 
-
-                //bolean operations
-                case OPb_AND :    
-                case OPb_OR :     
-                case OPb_NOT :    
-                case OPb_XOR : 
-
-                //comparaters
-
-                //special
-                case OPb_COND :
-
-                case OPl_GET :  
-                case OP_EMPTY :
-                default:
-                        break;  
-        }
-        //return the fact that it was an operation
-        return true;
-}
-
-void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & argument_output)
-{
-        // loop trhough all the expression, 
-        // the expression is a chained list of expr_elements 
-        while (expr_element != nullptr)
-        {
-                say(" add val with element ",expr_element->value);
-                argument_output.add_val(expr_element->value);
-
-                expr_element = expr_element->ptr_next;
-        }
-}
-
-
-
- /* ---------------------------------- */
-/* ----- Debug Display Functions ---- */
-
-std::string ArgumentExecuter::string()
-{
-        std::string res = "{ ";
-        for (Value arg : arguments)
-        {
-                std::string color_change = textFormat(get_value_color(arg.val_type));
-                res += color_change + arg.string() + textFormat() + ", ";
-        }            
-        return res + '}';
-}
-
 std::string get_OperatorString(OperatorType c_operator)
 {
         switch (c_operator)
@@ -359,3 +225,12 @@ int get_value_color(ValueType vtype)
                 default: return 0;
         }
 }; //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
+
+//overload to be display with cout
+std::ostream& operator<<(std::ostream& out, Value thisval)
+{
+        return out << thisval.string();
+}
+
+
+

@@ -1,45 +1,27 @@
 #pragma once
+
+//external library that might be useful
 #include <iostream>
-#include "values.hpp"
+#include <string>
+#include <vector>
 
 // global "variable"
 #define DEBUG true
+extern bool GLOBAL_ErrorTellProgrammer;
 
 // - PRINT FUNCTIONS - //
 #pragma region "print functions"
 
 //print one single txt
 void say(const std::string & text);
-//print text + value
-void say(const std::string & text, const Value & val);
 //say with any type after
 template <class T>
 void say(const std::string & text, const T & txt2)
 {std::cout<<text<<txt2<<'\n';}
 
-/*very simple print, no external weird libraryvoid print(){std::cout<<std::endl;} //to properly end the variadic
-template <typename Type1, typename... Types2>
-void print(Type1 arg1, Types2... args2){
-	std::cout << arg1 ;
-	print(args2...);
-}*/
-// To handle base case of below recursive
-// Variadic function Template
-//define print function
-/*void myprint());
-template <typename T, typename... Types>
-void myprint(T var1, Types... var2) //variadic core
-{
-        std::cout << var1;
-        myprint(var2...);
-}
-void myprint() //variadic terminator
-{
-        std::cout << std::endl;
-}*/
-
-
 #define debug(txt,txt2) { if (DEBUG){say(textFormat(RED) + txt, txt2); std::cout << textFormat(0);}}
+
+void print_error(const std::string & errortext); //GLOBAL_ErrorTellProgrammer
 
 #pragma endregion
 #pragma region "color printing"

@@ -1,17 +1,21 @@
+#include "../trident.hpp"
 #include "../general.hpp"
-#include <iostream>
-#include "../values.hpp"
+
+bool GLOBAL_ErrorTellProgrammer = false;
 
 std::string textFormat(int fontcolor)
 {
 	return "\033[" + std::to_string(fontcolor) + "m";
 }
 
+void print_error(const std::string & errortext)
+{
+        if (GLOBAL_ErrorTellProgrammer)
+                std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
+}
 
 void say(const std::string & text)
 {std::cout<<text<<std::endl;}
-void say(const std::string & text, const Value & val)
-{std::cout<<text<<val.string()<<std::endl;}
 
 std::string double_to_trimmed_string(double value)
 {
