@@ -1,30 +1,44 @@
 #include <iostream>
 #include "general.hpp"
 using namespace std;
-#include "trident.hpp"
+#include "executer.hpp"
+#include "values.hpp"
+
+/*
+╦═╗ ╦═╗ ╔═╗ ╦═╗ ╦═╕ ╦═╕ ╔═╗ ╗ ╗ ╒╦╕ ║ ╔ ╦   ╦╦╗ ╗═╗ ╔═╗ ╦═╗ ╔═╗ ╦═╗ ╔═╗ ═╦═ ╗ ╗ ╗ ╗ ╗ ╗ ╗ ╔ ╗ ╗ ══╦
+╠═╣ ╠═╣ ║   ║ ║ ╠═  ╠═  ║ ╥ ╠═╣  ║  ╠═╗ ║   ║╨║ ║ ║ ║ ║ ╠═╝ ║ ║ ╠═╝ ╚═╗  ║  ║ ║ ║ ║ ║╥║ ╚╪╗ ╚╦╝  /
+╝ ╝ ╩═╝ ╚═╝ ╩═╝ ╩═╛ ╝   ╚═╝ ╝ ╝ ╘╩╛ ╝ ╚ ╩═╛ ╩ ╩ ╩ ╩ ╚═╝ ╝   ╚═╣ ╝ ╚ ╚═╝  ╩  ╚═╝  V  ╚╩╝ ╝ ╚  ╩  ╩══
+╔═╗╔╗ ╔═╗╔═╗╓ ╓╔═╕╔═╗╔═╗╔═╗╔═╗
+║ ║ ║  /  ═╣╚═╣╚═╗╠═╗  ║╠═╣╚═╣
+╚═╝╘╩╛╩═╛╚═╝  ╩╚═╝╚═╝  ╜╚═╝╚═╝
+*/
 
 int main(){
 
-        ArgumentList args;
+        
+
         //ValueType : VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR
-        
-        args.add_val(Value(true));
-        args.add_val(Value(15.0));
-        args.add_val(Value(OPn_ADD));
-        
-        args.add_val(Value(1.0));
-        args.add_val(Value(2.0));
-        args.add_val(Value(OPn_SUB));
+        Command test_cmd (CMD_PRINT, Value(true));
+        test_cmd.append_expression(Value(15.0));
+        test_cmd.append_expression(Value(OPn_ADD));
+        test_cmd.append_expression(Value(1.0));
+        test_cmd.append_expression(Value(2.0));
+        test_cmd.append_expression(Value(OPn_SUB));
+        test_cmd.append_expression(Value((std::string)"jaime manger du"));//j'aime manger du 
+        test_cmd.append_expression(Value((std::string)"PAIN"));
+        test_cmd.append_expression(Value(OPn_ADD));
+        test_cmd.append_expression(Value(OPn_ADD));
+        test_cmd.append_expression(Value());
 
-        args.add_val(Value((std::string)"j'aime manger du "));
-        args.add_val(Value((std::string)"PAIN"));
-        args.add_val(Value(OPn_ADD));
+        ArgumentExecuter exe;
+        calculate_arguments(test_cmd.get_expressionstart(), exe);
 
-        args.add_val(Value(OPn_ADD));
+        cout << exe.string() ;
 
-        args.add_val(Value());
+        ArgumentExecuter exe2;
+        calculate_arguments(test_cmd.get_expressionstart(), exe2);
 
-        cout << args.string() ;
+        cout << "\n lets try aigain : " << exe2.string() ;
         
         return 0;
 }

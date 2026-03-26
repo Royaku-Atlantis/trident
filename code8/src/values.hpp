@@ -52,27 +52,39 @@ struct Value{
         //Value as (Value type) -> switch
         //use it in operator overloads, with a new function AnyValueHaveValueType(VALUETYPECONSTANTE, VAL1, VAL2)
 
-        std::string string();
+        std::string string() const;
 };
 
 //Value operators overloading
 Value operator + (Value Val1, Value Val2);
 Value operator - (Value Val1, Value Val2);
 
-class ArgumentList{
+/* CLASS ARG ELEMENT LIST */
+struct ExpressionElement
+{
+        Value value;
+        ExpressionElement * ptr_next = nullptr;
+
+
+        ExpressionElement(const Value & val);
+
+        //delete recurcively the rest of the expression, from this
+        ~ ExpressionElement();
+        ExpressionElement * append_expressionelement(const Value & new_value);
+};
+
+class ArgumentExecuter
+{
 protected: 
         std::vector<Value> arguments;
-
         Value pop_last_arg();
         Value get_arg_from_tail(int location);
         bool do_operation(OperatorType operation_type);
 public:
-
         void add_val(const Value & newval);
-
         std::string string();
 };
 
-enum CommandType : char {CMD_EMPTY, CMD_PRINT, CMD_SET};
+void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & argument_output);
 
-class Command{};
+

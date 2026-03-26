@@ -1,7 +1,6 @@
-#include "trident.hpp"
-#include "general.hpp"
+#include "../values.hpp"
+#include "../general.hpp"
 #include <iostream>
-#include <memory>
 
 bool GLOBAL_ErrorTellProgrammer = true;
 
@@ -113,7 +112,7 @@ Value::Value (OperatorType value_operator)
 
 //to display the Value
 
-std::string Value::string()
+std::string Value::string() const
 {
         //if (val_type==VALUE_OPERATOR) return "OPERATOR";
         switch(val_type)
@@ -202,9 +201,41 @@ Value operator - (Value Val1, Value Val2){
         }
 }
 
-/* CLASS ARGUMENT LIST*/
 
-Value ArgumentList::pop_last_arg()
+/* CLASS ARG/EXPRESSION ELEMENT LIST */
+ExpressionElement::ExpressionElement(const Value & val)
+{
+        value = val;
+        ptr_next = nullptr;
+}
+ExpressionElement::~ExpressionElement()
+{
+        if (ptr_next!=nullptr)
+        {
+                delete ptr_next;
+        }
+}
+
+ExpressionElement * ExpressionElement::append_expressionelement(const Value & new_value)
+{
+        //create the new expression element
+        ExpressionElement * new_expression_element_ptr = new ExpressionElement(new_value);
+
+        //add it to the current expression element
+        if (ptr_next != nullptr)
+        {
+                say("ho no! this element is not the tail:", value.string());
+                delete ptr_next;
+        }
+        ptr_next = new_expression_element_ptr;
+
+        //return the pointer of the new tail element we just created
+        return new_expression_element_ptr;
+}
+
+/* CLASS ARGUMENT EXECUTER*/
+
+Value ArgumentExecuter::pop_last_arg()
 {
         //if there is nothing do pop, return the Undefined Value
         if (arguments.size()==0) return Value();
@@ -217,17 +248,8 @@ Value ArgumentList::pop_last_arg()
         #endif
         return back_value;
 }
-Value ArgumentList::get_arg_from_tail(int location)
-{
-        if (location < 0 or arguments.size() <= location)
-        {
-                print_error("Tried to get Value from ArgumentList with an index out of bound, returned Undefined value");
-                return Value();//undefined value
-        }
-        return arguments[location];
-}
 
-void ArgumentList::add_val(const Value & newval) 
+void ArgumentExecuter::add_val(const Value & newval) 
 {
         bool is_an_operation = newval.val_type == VALUE_OPERATOR;//check_operation(newval);
         
@@ -237,7 +259,7 @@ void ArgumentList::add_val(const Value & newval)
                 arguments.push_back(newval);
 }
 
-bool ArgumentList::do_operation(OperatorType operation_type)
+bool ArgumentExecuter::do_operation(OperatorType operation_type)
 {
         switch (operation_type)
         {
@@ -275,22 +297,34 @@ bool ArgumentList::do_operation(OperatorType operation_type)
         return true;
 }
 
-std::string ArgumentList::string()
+void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & argument_output)
+{
+        // loop trhough all the expression, 
+        // the expression is a chained list of expr_elements 
+        while (expr_element != nullptr)
+        {
+                say(" add val with element ",expr_element->value);
+                argument_output.add_val(expr_element->value);
+
+                expr_element = expr_element->ptr_next;
+        }
+}
+
+
+
+ /* ---------------------------------- */
+/* ----- Debug Display Functions ---- */
+
+std::string ArgumentExecuter::string()
 {
         std::string res = "{ ";
-
         for (Value arg : arguments)
         {
                 std::string color_change = textFormat(get_value_color(arg.val_type));
-
                 res += color_change + arg.string() + textFormat() + ", ";
         }            
-
         return res + '}';
 }
-
-/* ---------------------------------- */
-/* ----- Debug Display Functions ---- */
 
 std::string get_OperatorString(OperatorType c_operator)
 {

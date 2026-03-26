@@ -1,2 +1,3 @@
-g++ src/main.cpp src/trident.cpp src/general.cpp -g -o bin\trident.exe -std=c++20 -O0
+rm bin\trident.exe
+g++ src/main.cpp src/definitions/values.cpp src/definitions/general.cpp src/definitions/executer.cpp -g -o bin\trident.exe -std=c++20
 .\exe.bat
