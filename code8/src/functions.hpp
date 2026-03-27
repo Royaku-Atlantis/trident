@@ -2,11 +2,16 @@
 #include "trident.hpp"
 
 
-/*
-class function {
-        Octet * code; //dont change once created
-        unsigned int codesize;
 
-        Octet * calculstack;
-        //Octet * 
-};*/
+class Functions
+{
+private:        
+        std::vector<Command> code; //dont change once created
+        int code_size;
+        int number_of_variables;
+
+public:
+        int get_number_of_variable();
+        int get_code_size();
+        //methodes for the scope to navigate between brackets
+};

@@ -86,10 +86,13 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
 std::string ArgumentExecuter::string() const
 {
         std::string res = "{ ";
+        bool firstelem = true;
         for (Value arg : arguments)
         {
+                if (!firstelem) res += ", "; else firstelem=false; //to have only "," in between parenthesis
+
                 std::string color_change = textFormat(get_value_color(arg.val_type));
-                res += color_change + arg.string() + textFormat() + ", ";
+                res += color_change + arg.string() + textFormat();
         }            
-        return res + '}';
+        return res + "}\n";
 }
