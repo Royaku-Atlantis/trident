@@ -30,3 +30,16 @@ std::string double_to_trimmed_string(double value)
 	return str;
 }
 
+std::string string_multip(const std::string & str, int number)
+{
+	if (number <= 0) return "";
+	if (number == 1) return str;
+
+	std::string text = "";
+	text.reserve( str.size() * number );
+
+	for (int i=0; i<number; i++)
+		text += str;
+
+	return text;
+}

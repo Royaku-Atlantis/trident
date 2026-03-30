@@ -51,3 +51,5 @@ constexpr int AND(char c1, char c2, char c3=0, char c4=0)
 
 // double print as 6.900000 by default, this fix it
 std::string double_to_trimmed_string(double value);
+
+std::string string_multip(const std::string & str, int value);

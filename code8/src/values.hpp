@@ -43,6 +43,7 @@ struct Value{
         //use it in operator overloads, with a new function AnyValueHaveValueType(VALUETYPECONSTANTE, VAL1, VAL2)
 
         std::string string() const;
+        double get_asnumber();
 };
 
 std::ostream& operator<<(std::ostream& out, Value thisval);

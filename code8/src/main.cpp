@@ -1,4 +1,4 @@
-#include "trident.hpp"
+#include "general.hpp"
 using namespace std;
 
 /*
@@ -11,9 +11,7 @@ using namespace std;
 */
 
 int main(){
-
-        
-
+        /*
         //ValueType : VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR
         Command test_cmd (CMD_PRINT, Value(true));
         test_cmd.append_expression(Value(15.0));
@@ -35,7 +33,7 @@ int main(){
         ArgumentExecuter exe2;
         calculate_arguments(test_cmd.get_expressionstart(), exe2);
 
-        cout << "\n lets try aigain : " << exe2.string() ;
+        cout << "\n lets try aigain : " << exe2.string() ; //*/
         
         return 0;
 }

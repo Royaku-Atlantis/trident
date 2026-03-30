@@ -131,6 +131,14 @@ std::string Value::string() const
         }
 }
 
+double Value::get_asnumber()
+{
+        if (val_type==VALUE_BOOL) return (double) val_bool;
+        if (val_type==VALUE_NUMB) return val_numb;
+        if (val_type==VALUE_STRING) return val_string->size();
+        return 0;
+}
+
 //operation overloading
 Value operator + (Value Val1, Value Val2)
 {
@@ -138,15 +146,10 @@ Value operator + (Value Val1, Value Val2)
         {
                 //regular addition
                 case AND(VALUE_NUMB,VALUE_NUMB):
-                        return Value(Val1.val_numb + Val2.val_numb);
-                
-                //bool and number additioning
                 case AND(VALUE_NUMB,VALUE_BOOL):
-                        return Value( (double)Val1.val_numb + Val2.val_bool );
                 case AND(VALUE_BOOL,VALUE_NUMB):
-                        return Value( Val1.val_bool + (double)Val2.val_numb );
                 case AND(VALUE_BOOL,VALUE_BOOL):
-                        return Value( (double)Val1.val_bool + (double)Val2.val_bool );
+                        return Value(Val1.get_asnumber() + Val2.get_asnumber());
 
                 //easy string case
                 case AND(VALUE_STRING,VALUE_STRING):
@@ -168,29 +171,78 @@ Value operator + (Value Val1, Value Val2)
         }
 }
 
-Value operator - (Value Val1, Value Val2){
+Value operator - (Value Val1, Value Val2)
+{
         switch(AND(Val1.val_type, Val2.val_type))
         {
                 //regular substraction
                 case AND(VALUE_NUMB,VALUE_NUMB):
-                        return Value(Val1.val_numb - Val2.val_numb);
-                
-                //bool and number substraction
-                case AND(VALUE_BOOL,VALUE_NUMB):
-                        return Value( (double)Val1.val_bool - Val2.val_numb );
                 case AND(VALUE_NUMB,VALUE_BOOL):
-                        return Value( Val1.val_numb - (double)Val2.val_bool);
+                case AND(VALUE_BOOL,VALUE_NUMB):
                 case AND(VALUE_BOOL,VALUE_BOOL):
-                        return Value( (double)Val1.val_bool - (double)Val2.val_bool );
+                        return Value(Val1.get_asnumber() - Val2.get_asnumber());
                 
                 //like subtracting with a string, or something
                 default:
                         //because variables are yet to be supported
                         if (Val1.val_type == VALUE_VARIABLE or Val2.val_type == VALUE_VARIABLE)
                                 print_error("variable addition not yet supported");
+
+                        //undefined
                         return Value();
         }
 }
+
+Value operator / (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular division
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        if (Val2.get_asnumber() == 0)
+                                return Value(); //cant have division by 0, return Undefined Value if its the case
+                        return Value(Val1.get_asnumber() / Val2.get_asnumber());
+
+                default:
+                        return Value();
+        }
+}
+Value operator *        (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular multiplications
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value(Val1.get_asnumber() * Val2.get_asnumber());
+                
+                // multiply string : "ca" * 2 = "caca"
+                case AND(VALUE_NUMB, VALUE_STRING):
+                case AND(VALUE_BOOL, VALUE_STRING):
+                        string_multip(*Val2.val_string, Val1.get_asnumber());
+                case AND(VALUE_STRING, VALUE_NUMB):
+                case AND(VALUE_STRING, VALUE_BOOL):
+                        string_multip(*Val1.val_string, Val2.get_asnumber());
+
+                default:
+                        return Value();
+        }
+}
+
+Value operator or       (Value Val1, Value Val2);
+Value operator and      (Value Val1, Value Val2);
+Value operator xor      (Value Val1, Value Val2);
+Value operator ==       (Value Val1, Value Val2);
+Value operator >=       (Value Val1, Value Val2);
+Value operator <=       (Value Val1, Value Val2);
+Value operator >        (Value Val1, Value Val2);
+Value operator <        (Value Val1, Value Val2);
+
 
 std::string get_OperatorString(OperatorType c_operator)
 {
