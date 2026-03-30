@@ -1,5 +1,5 @@
 all: bin/main.o bin/general.o bin/values.o bin/expressions.o bin/arguments.o bin/commands.o bin/functions.o bin/scopes.o bin/executer.o
-	g++ bin/main.o bin/general.o bin/values.o bin/expressions.o bin/arguments.o bin/commands.o bin/functions.o bin/scopes.o bin/executer.o -g -o bin/trident.exe -std=c++20
+	g++ src/trident.cpp bin/main.o bin/general.o bin/values.o bin/expressions.o bin/arguments.o bin/commands.o bin/functions.o bin/scopes.o bin/executer.o -g -o bin/trident.exe -std=c++20
 
 bin/main.o: src/main.cpp
 	g++ -c src/main.cpp -g -o bin/main.o

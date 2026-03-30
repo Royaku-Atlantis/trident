@@ -44,6 +44,7 @@ struct Value{
 
         std::string string() const;
         double get_asnumber();
+        bool get_asbool();
 };
 
 std::ostream& operator<<(std::ostream& out, Value thisval);
@@ -53,11 +54,16 @@ Value operator +        (Value Val1, Value Val2);
 Value operator -        (Value Val1, Value Val2);
 Value operator /        (Value Val1, Value Val2);
 Value operator *        (Value Val1, Value Val2);
+Value operator %        (Value Val1, Value Val2);
 Value operator or       (Value Val1, Value Val2);
 Value operator and      (Value Val1, Value Val2);
 Value operator xor      (Value Val1, Value Val2);
+Value operator !        (Value Val1);
 Value operator ==       (Value Val1, Value Val2);
+Value operator !=       (Value Val1, Value Val2);
 Value operator >=       (Value Val1, Value Val2);
 Value operator <=       (Value Val1, Value Val2);
 Value operator >        (Value Val1, Value Val2);
 Value operator <        (Value Val1, Value Val2);
+
+Value round_equal(Value Val1, Value Val2);

@@ -8,10 +8,36 @@ std::string textFormat(int fontcolor)
 	return "\033[" + std::to_string(fontcolor) + "m";
 }
 
+void get_file(const std::string & filepath, std::vector<std::string> & file_text)
+{
+	//initialisation
+	std::ifstream filedata (filepath);
+	if(filedata.fail()){
+		print_error("There wa an error trying to read the file : \"" + filepath + '"');
+		return;
+	}
+	file_text.clear();
+	//read the file
+	std::string txtline;
+	while (!filedata.eof())
+	{
+		std::getline(filedata, txtline);
+		file_text.push_back(txtline);
+	}
+}
+
+std::string to_string(const std::vector<std::string> & file_text)
+{
+	std::string printable = "";
+	for (std::string line : file_text)
+		printable += line + '\n';
+	
+	return printable;
+}
+
 void print_error(const std::string & errortext)
 {
-        if (GLOBAL_ErrorTellProgrammer)
-                std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
+    std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
 }
 
 void say(const std::string & text)
@@ -42,4 +68,14 @@ std::string string_multip(const std::string & str, int number)
 		text += str;
 
 	return text;
+}
+
+double modulo(double numb, double div)
+{
+	if (div==0) return 0;
+
+	double hres = numb / div;
+	hres -= std::floor(hres);
+	hres *= div;
+	return hres;
 }

@@ -15,6 +15,8 @@ Value ArgumentExecuter::pop_last_arg()
         #ifdef DEBUGINFO
         say("Popped tail value = ",back_value.string());
         #endif
+
+        // VARIABLE --- change back_value into a pure Value if variable
         return back_value;
 }
 
@@ -30,38 +32,54 @@ void ArgumentExecuter::add_val(const Value & newval)
 
 bool ArgumentExecuter::do_operation(OperatorType operation_type)
 {
+        #define OPERATOR(opvalue, operator) opvalue:add_val(pop_last_arg() operator pop_last_arg()); break;
+
         switch (operation_type)
         {
                 //classic number operations
-                case OPn_ADD :
-                        add_val(pop_last_arg() + pop_last_arg());
-                        break;
-
-                case OPn_SUB :
-                        add_val(pop_last_arg() - pop_last_arg());
-                        break;
-
-                case OPn_MUL :  
-                case OPn_DIV :
-
-                case OPn_MOD : 
+                case OPERATOR(OPn_ADD, +);
+                case OPERATOR(OPn_SUB, -);
+                case OPERATOR(OPn_MUL, *);
+                case OPERATOR(OPn_DIV, /);
+                case OPERATOR(OPn_MOD, %);
 
                 //bolean operations
-                case OPb_AND :    
-                case OPb_OR :     
-                case OPb_NOT :    
-                case OPb_XOR : 
+                case OPERATOR(OPb_AND, and);
+                case OPERATOR(OPb_OR, or);
+                case OPERATOR(OPb_XOR, xor);
+                case OPb_NOT:
+                        add_val(!pop_last_arg());
+                        break;
 
-                //comparaters
+                //comparators
+                case OPERATOR(OPc_equalINF, <=);
+                case OPERATOR(OPc_equalSUP, >=);
+                case OPERATOR(OPc_strictINF, <);
+                case OPERATOR(OPc_strictSUP, >);
+                case OPERATOR(OPc_EQUAL, ==);
+                case OPERATOR(OPc_UNEQUAL, !=);
+                case OPc_roundEQUAL:
+                        add_val( round_equal(pop_last_arg(), pop_last_arg())); 
+                        break;
 
                 //special
                 case OPb_COND :
-
-                case OPl_GET :  
+                        add_val(
+                                pop_last_arg().get_asbool() ?
+                                pop_last_arg() : 
+                                pop_last_arg()
+                        );
+                        break;
+                case OPl_GET :
+                        //for lists, does nothing yet
                 case OP_EMPTY :
                 default:
                         break;  
+        
         }
+
+        #undef OPERATOR
+
         //return the fact that it was an operation
         return true;
 }
@@ -78,7 +96,6 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
                 expr_element = expr_element->ptr_next;
         }
 }
-
 
  /* ---------------------------------- */
 /* ----- Debug Display Functions ---- */

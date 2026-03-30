@@ -136,7 +136,18 @@ double Value::get_asnumber()
         if (val_type==VALUE_BOOL) return (double) val_bool;
         if (val_type==VALUE_NUMB) return val_numb;
         if (val_type==VALUE_STRING) return val_string->size();
+        //get from Variable
+
         return 0;
+}
+bool Value::get_asbool()
+{
+        if (val_type==VALUE_BOOL) return val_bool;
+        if (val_type==VALUE_NUMB) return val_numb <= 0;
+        if (val_type==VALUE_STRING) return 0 < val_string->size();
+        //get from Variable
+
+        return false;
 }
 
 //operation overloading
@@ -149,18 +160,12 @@ Value operator + (Value Val1, Value Val2)
                 case AND(VALUE_NUMB,VALUE_BOOL):
                 case AND(VALUE_BOOL,VALUE_NUMB):
                 case AND(VALUE_BOOL,VALUE_BOOL):
-                        return Value(Val1.get_asnumber() + Val2.get_asnumber());
-
-                //easy string case
-                case AND(VALUE_STRING,VALUE_STRING):
-                        return Val1.string() + Val2.string();
+                        return Value((double)(Val1.get_asnumber() + Val2.get_asnumber()));
 
                 default:
                         //concatanate if any of them is a string
-                        if (Val2.val_type == VALUE_STRING)
-                                return Val1.string() + (* Val2.val_string);
-                        else if (Val1.val_type == VALUE_STRING)
-                                return Val1.string() + (* Val2.val_string);
+                        if (Val1.val_type == VALUE_STRING or Val2.val_type == VALUE_STRING)
+                                return Val1.string() + Val2.string();
                         
                         //because variables are yet to be supported
                         if (Val1.val_type == VALUE_VARIABLE or Val2.val_type == VALUE_VARIABLE)
@@ -180,7 +185,7 @@ Value operator - (Value Val1, Value Val2)
                 case AND(VALUE_NUMB,VALUE_BOOL):
                 case AND(VALUE_BOOL,VALUE_NUMB):
                 case AND(VALUE_BOOL,VALUE_BOOL):
-                        return Value(Val1.get_asnumber() - Val2.get_asnumber());
+                        return Value((double)(Val1.get_asnumber() - Val2.get_asnumber()));
                 
                 //like subtracting with a string, or something
                 default:
@@ -204,13 +209,14 @@ Value operator / (Value Val1, Value Val2)
                 case AND(VALUE_BOOL, VALUE_BOOL):
                         if (Val2.get_asnumber() == 0)
                                 return Value(); //cant have division by 0, return Undefined Value if its the case
-                        return Value(Val1.get_asnumber() / Val2.get_asnumber());
+                        return Value((double)(Val1.get_asnumber() / Val2.get_asnumber()));
 
                 default:
                         return Value();
         }
 }
-Value operator *        (Value Val1, Value Val2)
+
+Value operator * (Value Val1, Value Val2)
 {
         switch (AND(Val1.val_type, Val2.val_type))
         {
@@ -219,29 +225,201 @@ Value operator *        (Value Val1, Value Val2)
                 case AND(VALUE_NUMB, VALUE_BOOL):
                 case AND(VALUE_BOOL, VALUE_NUMB):
                 case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value(Val1.get_asnumber() * Val2.get_asnumber());
+                        return Value((double)(Val1.get_asnumber() * Val2.get_asnumber()));
                 
                 // multiply string : "ca" * 2 = "caca"
                 case AND(VALUE_NUMB, VALUE_STRING):
                 case AND(VALUE_BOOL, VALUE_STRING):
-                        string_multip(*Val2.val_string, Val1.get_asnumber());
+                        return string_multip(*Val2.val_string, Val1.get_asnumber());
                 case AND(VALUE_STRING, VALUE_NUMB):
                 case AND(VALUE_STRING, VALUE_BOOL):
-                        string_multip(*Val1.val_string, Val2.get_asnumber());
+                        return string_multip(*Val1.val_string, Val2.get_asnumber());
 
                 default:
+                        //undefined
                         return Value();
         }
 }
 
-Value operator or       (Value Val1, Value Val2);
-Value operator and      (Value Val1, Value Val2);
-Value operator xor      (Value Val1, Value Val2);
-Value operator ==       (Value Val1, Value Val2);
-Value operator >=       (Value Val1, Value Val2);
-Value operator <=       (Value Val1, Value Val2);
-Value operator >        (Value Val1, Value Val2);
-Value operator <        (Value Val1, Value Val2);
+Value operator % (Value Val1, Value Val2)
+{
+        return Value();
+
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular multiplications
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value((double)(modulo(Val1.get_asnumber(), Val2.get_asnumber())) );
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator or (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value((bool)(Val1.get_asbool() || Val2.get_asbool()));
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator and (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value((bool)(Val1.get_asbool() and Val2.get_asbool()));
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator xor (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value((bool)(Val1.get_asbool() xor Val2.get_asbool()));
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator ! (Value Val1)
+{
+        if (Val1.val_type == VALUE_NUMB or Val1.val_type == VALUE_BOOL)
+                return Value((bool)(!Val1.get_asbool()));
+        return Value();
+}
+
+Value operator == (Value Val1, Value Val2)
+{
+        //Val 1 = get value from variable
+        //Val 2 = get value from variable
+
+        if (Val1.val_type != Val2.val_type) return Value(false);
+
+        switch (Val1.val_type)
+        {
+                case VALUE_UNDEF:
+                        return true; //they both 
+                case VALUE_NUMB:
+                        return Val1.val_numb == Val2.val_numb ; 
+                case VALUE_BOOL:
+                        return Val1.val_bool == Val2.val_bool ; 
+                case VALUE_STRING:
+                        return (* Val1.val_string) == (* Val2.val_string); 
+                case VALUE_VARIABLE:
+                        //VARIABLE not yet Implemented
+                case VALUE_OPERATOR:
+                default :
+                        return Value ();
+        }
+}
+
+Value operator != (Value Val1, Value Val2)
+{
+        //Val 1 = get value from variable
+        //Val 2 = get value from variable
+
+        if (Val1.val_type != Val2.val_type) return Value(true);
+
+        return Value( !(Val1 == Val2));
+}
+
+Value operator >= (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value(Val1.get_asbool() >= Val2.get_asbool());
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator <= (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value(Val1.get_asbool() <= Val2.get_asbool());
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator > (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value(Val1.get_asbool() > Val2.get_asbool());
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value operator < (Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value(Val1.get_asbool() < Val2.get_asbool());
+
+                default:
+                        //undefined
+                        return Value();
+        }
+}
 
 
 std::string get_OperatorString(OperatorType c_operator)
@@ -284,5 +462,23 @@ std::ostream& operator<<(std::ostream& out, Value thisval)
         return out << thisval.string();
 }
 
+Value round_equal(Value Val1, Value Val2)
+{
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value( (double)(std::round(Val1.get_asnumber()) == std::round(Val2.get_asnumber())) );
 
+                case AND(VALUE_STRING, VALUE_STRING):
+                        //test, but count maj and min as the same thing
+                        //maybe a more advenced algorithm to make shit easier
+                default:
+                        //undefined
+                        return Value();
+        }
+}
 

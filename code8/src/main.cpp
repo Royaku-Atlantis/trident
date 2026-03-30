@@ -1,4 +1,4 @@
-#include "general.hpp"
+#include "trident.hpp"
 using namespace std;
 
 /*
@@ -11,29 +11,28 @@ using namespace std;
 */
 
 int main(){
+
+        CodeLines cod;
+        get_file("code.trd", cod);
+        cout << to_string(cod);
         /*
-        //ValueType : VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR
         Command test_cmd (CMD_PRINT, Value(true));
-        test_cmd.append_expression(Value(15.0));
-        test_cmd.append_expression(Value(OPn_ADD));
-        test_cmd.append_expression(Value(1.0));
-        test_cmd.append_expression(Value(2.0));
-        test_cmd.append_expression(Value(OPn_SUB));
-        test_cmd.append_expression(Value((std::string)"jaime manger du"));//j'aime manger du 
-        test_cmd.append_expression(Value((std::string)"PAIN"));
-        test_cmd.append_expression(Value(OPn_ADD));
-        test_cmd.append_expression(Value(OPn_ADD));
-        test_cmd.append_expression(Value());
+        test_cmd.append_expression(Value(false));
+        test_cmd.append_expression(Value(OPb_OR));
+        test_cmd.append_expression(Value(OPb_NOT));
+        test_cmd.append_expression(Value((std::string)"Bla"));
+        test_cmd.append_expression(Value(4.0));
+        test_cmd.append_expression(Value(OPn_MUL));
+        test_cmd.append_expression(Value(3.0));
+        test_cmd.append_expression(Value(0.0));
+        test_cmd.append_expression(Value(5.0));
+        test_cmd.append_expression(Value(OPn_MUL));
+        test_cmd.append_expression(Value(OPn_DIV));
 
         ArgumentExecuter exe;
         calculate_arguments(test_cmd.get_expressionstart(), exe);
 
-        cout << exe.string() ;
-
-        ArgumentExecuter exe2;
-        calculate_arguments(test_cmd.get_expressionstart(), exe2);
-
-        cout << "\n lets try aigain : " << exe2.string() ; //*/
+        cout << exe.string() ;//*/
         
         return 0;
 }

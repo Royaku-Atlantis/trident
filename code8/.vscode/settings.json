@@ -4,10 +4,10 @@
     "src": {
       "order": [
         "definitions",
-
-        "main.cpp",
         "general.hpp",
-        "trident.hpp",
+        "parser.hpp",
+        "main.cpp",
+        "trident.cpp",
         "values.hpp",
         "expressions.hpp",
         "arguments.hpp",

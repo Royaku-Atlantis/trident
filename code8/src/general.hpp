@@ -1,16 +1,38 @@
 #pragma once
-
+#define REGION if (true)
 //external library that might be useful
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
+#include <fstream>
 
 // global "variable"
 #define DEBUG true
 extern bool GLOBAL_ErrorTellProgrammer;
 
+// double print as 6.900000 by default, this fix it
+std::string double_to_trimmed_string(double value);
+
+std::string string_multip(const std::string & str, int value);
+
+double modulo(double numb, double div);
+
+//concatanate chars in an int
+constexpr int AND(char c1, char c2, char c3=0, char c4=0) 
+{
+    //will transform (0xAA, 0xBB, 0xCC, 0xDD) into 0xDDCCBBAA
+    return (int)c1 + ((int)c2<<8) + ((int)c2<<16) + ((int)c2<<24);
+}
+
+//get all the lines of a file into a list of string
+void get_file(const std::string & filepath, std::vector<std::string> & file_text);
+
+//from a list of string, get all strings with a newline inbetween
+std::string to_string(const std::vector<std::string> & file_text);
+
 // - PRINT FUNCTIONS - //
-#pragma region "print functions"
+// { print functions
 
 //print one single txt
 void say(const std::string & text);
@@ -23,8 +45,8 @@ void say(const std::string & text, const T & txt2)
 
 void print_error(const std::string & errortext); //GLOBAL_ErrorTellProgrammer
 
-#pragma endregion
-#pragma region "color printing"
+// }
+// {color printing
 
 // CONSTANTS
 
@@ -40,16 +62,4 @@ enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_idk1, TXT_UNDERLINED, TX
 #define DARK 30
 
 std::string textFormat(int fontcolor = 0);
-#pragma endregion
-
-//concatanate chars in an int
-constexpr int AND(char c1, char c2, char c3=0, char c4=0) 
-{
-    //will transform (0xAA, 0xBB, 0xCC, 0xDD) into 0xDDCCBBAA
-    return (int)c1 + ((int)c2<<8) + ((int)c2<<16) + ((int)c2<<24);
-}
-
-// double print as 6.900000 by default, this fix it
-std::string double_to_trimmed_string(double value);
-
-std::string string_multip(const std::string & str, int value);
+// }
