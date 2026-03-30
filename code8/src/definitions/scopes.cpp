@@ -1,2 +1,2 @@
-#include "../trident.hpp"
+#include "../trident.cpp"
 #include "../scopes.hpp"

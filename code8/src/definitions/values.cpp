@@ -1,4 +1,4 @@
-#include "../trident.hpp"
+#include "../trident.cpp"
 #include "../values.hpp"
 
 Value::Value() : val_bool(false)
@@ -442,7 +442,7 @@ std::string get_OperatorString(OperatorType c_operator)
         }
 } 
 
-int get_value_color(ValueType vtype)
+String get_value_color(ValueType vtype)
 {
         switch (vtype)
         {
@@ -451,8 +451,8 @@ int get_value_color(ValueType vtype)
                 case VALUE_BOOL: return BLUE;
                 case VALUE_STRING: return YELLOW;
                 case VALUE_VARIABLE: return GREEN;
-                case VALUE_OPERATOR: return 0;
-                default: return 0;
+                case VALUE_OPERATOR: return "\033[31mOPERATOR_";
+                default: return "\033[31mERROR_INVALIDVALUETYPE_";
         }
 }; //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
 

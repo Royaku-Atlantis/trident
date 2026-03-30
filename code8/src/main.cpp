@@ -1,4 +1,4 @@
-#include "trident.hpp"
+#include "trident.cpp"
 using namespace std;
 
 /*
@@ -20,7 +20,7 @@ int main(){
         test_cmd.append_expression(Value(false));
         test_cmd.append_expression(Value(OPb_OR));
         test_cmd.append_expression(Value(OPb_NOT));
-        test_cmd.append_expression(Value((std::string)"Bla"));
+        test_cmd.append_expression(Value((String)"Bla"));
         test_cmd.append_expression(Value(4.0));
         test_cmd.append_expression(Value(OPn_MUL));
         test_cmd.append_expression(Value(3.0));

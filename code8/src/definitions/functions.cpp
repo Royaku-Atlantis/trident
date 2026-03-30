@@ -1,4 +1,4 @@
-#include "../trident.hpp"
+#include "../trident.cpp"
 #include "../commands.hpp"
 
 /*

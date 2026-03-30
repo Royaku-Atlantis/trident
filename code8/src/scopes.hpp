@@ -1,8 +1,8 @@
 #pragma once
-#include "trident.hpp"
+#include "trident.cpp"
 
 class Scope
 {
-    std::vector<Value> Variables;
+    Array<Value> Variables;
     int function_index; 
 };

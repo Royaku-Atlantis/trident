@@ -1,5 +1,5 @@
 #pragma once
-#include "trident.hpp"
+#include "trident.cpp"
 
 /* CLASS ARG ELEMENT LIST */
 struct ExpressionElement

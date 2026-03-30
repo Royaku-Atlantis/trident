@@ -20,6 +20,7 @@
   "definitions":{
     "order" : [
         "general.cpp",
+        "parser.cpp",
         "values.cpp",
         "expressions.cpp",
         "arguments.cpp",

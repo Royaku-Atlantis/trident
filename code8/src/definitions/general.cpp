@@ -1,14 +1,28 @@
-#include "../trident.hpp"
+#include "../trident.cpp"
 #include "../general.hpp"
 
-bool GLOBAL_ErrorTellProgrammer = false;
+//bool GLOBAL_ErrorTellProgrammer = false;
 
-std::string textFormat(int fontcolor)
+//print functions
+void print_error(const String & errortext) 
 {
-	return "\033[" + std::to_string(fontcolor) + "m";
+    std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
 }
 
-void get_file(const std::string & filepath, std::vector<std::string> & file_text)
+void say(const String & text)
+{std::cout<<text<<std::endl;}
+
+String textFormat(int fontcolor)
+{return "\033[" + std::to_string(fontcolor) + "m";}
+
+String textFormat(int info1, int info2)
+{return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + "m";}
+
+String textFormat(int info1, int info2, int info3)
+{return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + ',' + std::to_string(info3) + "m";}
+
+// file text
+void get_file(const String & filepath, Array<String> & file_text)
 {
 	//initialisation
 	std::ifstream filedata (filepath);
@@ -18,7 +32,7 @@ void get_file(const std::string & filepath, std::vector<std::string> & file_text
 	}
 	file_text.clear();
 	//read the file
-	std::string txtline;
+	String txtline;
 	while (!filedata.eof())
 	{
 		std::getline(filedata, txtline);
@@ -26,29 +40,22 @@ void get_file(const std::string & filepath, std::vector<std::string> & file_text
 	}
 }
 
-std::string to_string(const std::vector<std::string> & file_text)
+String to_string(const Array<String> & file_text)
 {
-	std::string printable = "";
-	for (std::string line : file_text)
+	String printable = "";
+	for (String line : file_text)
 		printable += line + '\n';
 	
 	return printable;
 }
 
-void print_error(const std::string & errortext)
+//math type sh...
+String double_to_trimmed_string(double value)
 {
-    std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
-}
-
-void say(const std::string & text)
-{std::cout<<text<<std::endl;}
-
-std::string double_to_trimmed_string(double value)
-{
-	std::string str = std::to_string(value);
+	String str = std::to_string(value);
 
 	//trim the useless 0
-	str.erase(str.find_last_not_of('0') + 1, std::string::npos );
+	str.erase(str.find_last_not_of('0') + 1, String::npos );
 
 	//remove the . if its a whole nuber
 	if (str.back()=='.') str.pop_back();
@@ -56,12 +63,12 @@ std::string double_to_trimmed_string(double value)
 	return str;
 }
 
-std::string string_multip(const std::string & str, int number)
+String string_multip(const String & str, int number)
 {
 	if (number <= 0) return "";
 	if (number == 1) return str;
 
-	std::string text = "";
+	String text = "";
 	text.reserve( str.size() * number );
 
 	for (int i=0; i<number; i++)

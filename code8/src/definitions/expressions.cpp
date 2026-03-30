@@ -1,4 +1,4 @@
-#include "../trident.hpp"
+#include "../trident.cpp"
 #include "../expressions.hpp"
 
 /* CLASS ARG/EXPRESSION ELEMENT LIST */

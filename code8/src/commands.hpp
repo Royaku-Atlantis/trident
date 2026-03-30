@@ -1,5 +1,5 @@
 #pragma once
-#include "trident.hpp"
+#include "trident.cpp"
 
 class Command
 {

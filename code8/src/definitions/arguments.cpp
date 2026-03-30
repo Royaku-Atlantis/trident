@@ -1,4 +1,4 @@
-#include "../trident.hpp"
+#include "../trident.cpp"
 #include "../arguments.hpp"
 
 
@@ -100,15 +100,15 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
  /* ---------------------------------- */
 /* ----- Debug Display Functions ---- */
 
-std::string ArgumentExecuter::string() const
+String ArgumentExecuter::string() const
 {
-        std::string res = "{ ";
+        String res = "{ ";
         bool firstelem = true;
         for (Value arg : arguments)
         {
                 if (!firstelem) res += ", "; else firstelem=false; //to have only "," in between parenthesis
 
-                std::string color_change = textFormat(get_value_color(arg.val_type));
+                String color_change = get_value_color(arg.val_type);
                 res += color_change + arg.string() + textFormat();
         }            
         return res + "}\n";

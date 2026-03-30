@@ -1,11 +1,11 @@
 #pragma once
-#include "trident.hpp"
+#include "trident.cpp"
 
 
 class Executer
 {
-    std::vector<Functions> functions;
-    std::vector<Scope> scopes;
+    Array<Functions> functions;
+    Array<Scope> scopes;
 
     void run();
 

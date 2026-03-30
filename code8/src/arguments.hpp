@@ -1,16 +1,16 @@
 #pragma once
-#include "trident.hpp"
+#include "trident.cpp"
 
 class ArgumentExecuter
 {
 protected: 
-        std::vector<Value> arguments;
+        Array<Value> arguments;
         Value pop_last_arg();
         bool do_operation(OperatorType operation_type);
 
 public:
         void add_val(const Value & newval);
-        std::string string() const;
+        String string() const;
 };
 
 void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & argument_output);

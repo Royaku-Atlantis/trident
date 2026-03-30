@@ -1,12 +1,12 @@
 #pragma once
-#include "trident.hpp"
+#include "trident.cpp"
 
 
 
 class Functions
 {
 private:        
-        std::vector<Command> code; //dont change once created
+        Array<Command> code; //dont change once created
         int code_size;
         int number_of_variables;
 
