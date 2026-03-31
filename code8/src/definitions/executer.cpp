@@ -1,2 +1,2 @@
-#include "../trident.cpp"
+#include "../trident.hpp"
 #include "../executer.hpp"

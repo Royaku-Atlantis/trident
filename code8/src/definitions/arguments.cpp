@@ -1,4 +1,4 @@
-#include "../trident.cpp"
+#include "../trident.hpp"
 #include "../arguments.hpp"
 
 

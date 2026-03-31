@@ -11,10 +11,24 @@ using namespace std;
 */
 
 int main(){
+        String totest;
+                cout << "\nstring : ";
+                getline(cin, totest);
+        do {
+                
+                Index id = 0;
+                cout << "\nindex : ";
+                cin >> id;
+                String res;
+                id=get_word(totest, id, res);
+                cout << "res: id=" << id << " word='" << res << "'\n"; 
 
-        CodeLines cod;
-        get_file("code.trd", cod);
-        cout << to_string(cod);
+
+        } while (true);
+
+        //CodeLines cod;
+        //get_file("code.trd", cod);
+        //cout << to_string(cod);
         /*
         Command test_cmd (CMD_PRINT, Value(true));
         test_cmd.append_expression(Value(false));

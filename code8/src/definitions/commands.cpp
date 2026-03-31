@@ -1,4 +1,4 @@
-#include "../trident.cpp"
+#include "../trident.hpp"
 #include "../commands.hpp"
 
 //enum CommandType : char {CMD_EMPTY, CMD_IF, CMD_ELIF, CMD_ELSE, CMD_PRINT, CMD_SET};
