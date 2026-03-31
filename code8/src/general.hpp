@@ -11,6 +11,7 @@
 #define Array       std::vector
 //wish i could change push_back() to append(), idk if its possible
 #define String      std::string
+
 #define Index       unsigned int
 #define IndexNval   ~(unsigned int)0 //max value of uint, 0b111...11
 

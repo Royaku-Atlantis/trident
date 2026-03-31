@@ -1,6 +1,6 @@
 #pragma once
 
-#include "trident.cpp"
+#include "trident.hpp"
 #include <sstream>
 
 Command cmdtext_to_command(String cmd_txt);

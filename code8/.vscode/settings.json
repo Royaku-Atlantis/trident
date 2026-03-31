@@ -7,7 +7,7 @@
         "general.hpp",
         "parser.hpp",
         "main.cpp",
-        "trident.cpp",
+        "trident.hpp",
         "values.hpp",
         "expressions.hpp",
         "arguments.hpp",

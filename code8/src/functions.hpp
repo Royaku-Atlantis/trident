@@ -1,5 +1,5 @@
 #pragma once
-#include "trident.cpp"
+#include "trident.hpp"
 
 
 

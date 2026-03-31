@@ -1,4 +1,4 @@
-#include "trident.cpp"
+#include "trident.hpp"
 using namespace std;
 
 /*

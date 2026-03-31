@@ -33,4 +33,6 @@ enum CommandType : char {CMD_EMPTY, CMD_IF, CMD_ELIF, CMD_ELSE, CMD_PRINT, CMD_S
 #include "scopes.hpp"
 #include "executer.hpp"
 
+
+
 #endif //TRIDENT_HEADER
