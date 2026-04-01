@@ -49,6 +49,28 @@ String to_string(const Array<String> & file_text)
 	return printable;
 }
 
+unsigned int stoi2(String text_to_convert, int default_value)
+{
+        try{
+                return stoi(text_to_convert);
+        }
+        catch(...){
+                return (default_value);
+        }
+}
+
+bool get_number_from_string(String text_to_convert, double & result)
+{
+        try{
+                double test = stod(text_to_convert);
+		result = test;
+		return true;
+        }
+        catch(...){
+                return false;
+        }
+}
+
 //math type sh...
 String double_to_trimmed_string(double value)
 {

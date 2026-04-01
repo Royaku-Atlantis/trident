@@ -19,16 +19,31 @@ ExpressionElement * ExpressionElement::append_expressionelement(const Value & ne
 {
         //create the new expression element
         ExpressionElement * new_expression_element_ptr = new ExpressionElement(new_value);
+        say("created new expression element with value : "+new_value.string());
 
-        //add it to the current expression element
+        //check if the current expression is actually not the tail
         if (ptr_next != nullptr)
         {
                 say("ho no! this element is not the tail:", value.string());
                 delete ptr_next;
         }
+        say("sucessfuly acceced the ptrnext");
+
+        //add it to the current expression element
         ptr_next = new_expression_element_ptr;
+        say("finished to append this value to the tail of expression");
 
         //return the pointer of the new tail element we just created
         return new_expression_element_ptr;
 }
 
+ExpressionElement * ExpressionElement::get_tail()
+{
+        //recursive, but could and should be made iteratively
+        //its supposed to be used only on Command creation, so it should be fine, but:
+        //TODO make get_tail() iteratif instead of recursive
+
+        if (ptr_next == nullptr) return this;
+
+        else return ptr_next->get_tail();
+}

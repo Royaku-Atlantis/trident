@@ -3,6 +3,14 @@
 
 //enum CommandType : char {CMD_EMPTY, CMD_IF, CMD_ELIF, CMD_ELSE, CMD_PRINT, CMD_SET};
 
+
+Command::Command (CommandType cmdtype)
+{
+        cmd_type = cmdtype;
+        first_exprelement = nullptr;
+        last_exprelement = nullptr;
+}
+
 Command::Command (CommandType cmdtype, const Value & newval)
 {
         cmd_type = cmdtype;
@@ -11,9 +19,27 @@ Command::Command (CommandType cmdtype, const Value & newval)
         last_exprelement = first_exprelement;
 }
 
+Command::Command (CommandType cmdtype, ExpressionElement * expression)
+{
+        say("create cmdtype : " + (cmdtype) + ' ');
+        cmd_type = cmdtype;
+        first_exprelement = expression;
+        last_exprelement = first_exprelement->get_tail();
+}
+
 void Command::append_expression(const Value & newval)
 {
-        last_exprelement = last_exprelement->append_expressionelement(newval);
+        //when the command have no expression initialised yet
+        if (first_exprelement==nullptr)
+        {
+               first_exprelement = new ExpressionElement (newval);
+                last_exprelement = first_exprelement; 
+        }
+        else //usual case, the command already have its expression initialised
+        {
+                say("append_expression with value : " + newval.string());
+                last_exprelement = last_exprelement->append_expressionelement(newval);
+        }
 }
 
 ExpressionElement * Command::get_expressionstart() const
@@ -21,3 +47,29 @@ ExpressionElement * Command::get_expressionstart() const
         return first_exprelement;
 }
 
+void Command::run() const
+{
+        ArgumentExecuter argexec;
+        calculate_arguments(first_exprelement, argexec);
+
+        switch (cmd_type)
+        {
+                case CMD_PRINT:
+                        say("gonna run print, args - "+argexec.string()+" -end of args\n");
+                        run_print(argexec);
+                        break;
+                case CMD_EMPTY:
+                default:
+                        say("\nNoCommand args- "+argexec.string()+" -end of args\n");
+                        break;
+        }
+}
+
+void run_print(const ArgumentExecuter & arguments)
+{
+        for (Index i=0; i<arguments.get_valnumber(); i++)
+        {
+                Value val_to_print = arguments.get_val(i);
+                std::cout<< (val_to_print.string());
+        }
+}

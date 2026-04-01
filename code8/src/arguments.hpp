@@ -11,6 +11,8 @@ protected:
 public:
         void add_val(const Value & newval);
         String string() const;
+        Value get_val(Index index) const;
+        Index get_valnumber() const;
 };
 
 void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & argument_output);

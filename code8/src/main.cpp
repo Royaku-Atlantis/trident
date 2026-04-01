@@ -11,26 +11,12 @@ using namespace std;
 */
 
 int main(){
-        String totest;
-                cout << "\nstring : ";
-                getline(cin, totest);
-        do {
-                
-                Index id = 0;
-                cout << "\nindex : ";
-                cin >> id;
-                String res;
-                id=get_word(totest, id, res);
-                cout << "res: id=" << id << " word='" << res << "'\n"; 
-
-
-        } while (true);
-
-        //CodeLines cod;
-        //get_file("code.trd", cod);
-        //cout << to_string(cod);
         /*
-        Command test_cmd (CMD_PRINT, Value(true));
+        Command * testprint = create_command("print 5 3 - \"joe mama\" * ");//joe mamajoe mama
+        testprint->run();
+        /*/
+        Command test_cmd (CMD_PRINT);
+        test_cmd.append_expression(Value(true));
         test_cmd.append_expression(Value(false));
         test_cmd.append_expression(Value(OPb_OR));
         test_cmd.append_expression(Value(OPb_NOT));
@@ -47,6 +33,6 @@ int main(){
         calculate_arguments(test_cmd.get_expressionstart(), exe);
 
         cout << exe.string() ;//*/
-        
+
         return 0;
 }

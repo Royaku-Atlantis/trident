@@ -106,10 +106,22 @@ String ArgumentExecuter::string() const
         bool firstelem = true;
         for (Value arg : arguments)
         {
-                if (!firstelem) res += ", "; else firstelem=false; //to have only "," in between parenthesis
+                if (!firstelem) res += ", "; 
+                else            firstelem=false; //to have only "," in between parenthesis
 
                 String color_change = get_value_color(arg.val_type);
                 res += color_change + arg.string() + textFormat();
         }            
         return res + "}\n";
+}
+
+
+Value ArgumentExecuter::get_val(Index index) const
+{
+        if (arguments.size() <= index) return Value();
+        else return arguments[index];
+}
+Index ArgumentExecuter::get_valnumber() const
+{
+        return arguments.size();
 }

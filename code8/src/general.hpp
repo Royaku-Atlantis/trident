@@ -35,8 +35,18 @@ constexpr int AND(char c1, char c2, char c3=0, char c4=0)
 
 //get all the lines of a file into a list of string
 void get_file(const String & filepath, Array<String> & file_text);
+
 //from a list of string, get all strings with a newline inbetween
 String to_string(const Array<String> & file_text);
+
+//string to int, but dont crash
+unsigned int stoi2(std::string text_to_convert, int default_value);
+
+//string input -> double output, bolean Is convertible
+//if the text_to_convert is convertible to a double,
+//then "result" is set to the value found in text_to_convert, and the function return True
+//else, the result will not be set, and the function return false
+bool get_number_from_string(String text_to_convert, double & result);
 
 // - PRINT FUNCTIONS - //
 // { print functions

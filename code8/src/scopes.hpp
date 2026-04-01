@@ -5,4 +5,7 @@ class Scope
 {
     Array<Value> Variables;
     int function_index; 
+
+    public:
+        
 };

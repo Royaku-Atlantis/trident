@@ -3,8 +3,6 @@
 
 //trident settings
 
-
-
 void print_error(const String & errortext); //GLOBAL_ErrorTellProgrammer
 
 // enum OperatorType : unsigned char {OP_EMPTY, OPn_ADD, OPn_MUL, OPn_DIV, OPn_SUB, OPn_MOD, OPl_GET, OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, OPb_COND};
