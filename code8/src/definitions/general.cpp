@@ -3,6 +3,9 @@
 
 //bool GLOBAL_ErrorTellProgrammer = false;
 
+#include <conio.h>
+void wait_interaction(){getch();}
+
 //print functions
 void print_error(const String & errortext) 
 {

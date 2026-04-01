@@ -12,9 +12,6 @@ Value ArgumentExecuter::pop_last_arg()
         Value back_value = arguments.back();
 
         arguments.pop_back();
-        #ifdef DEBUGINFO
-        say("Popped tail value = ",back_value.string());
-        #endif
 
         // VARIABLE --- change back_value into a pure Value if variable
         return back_value;
@@ -90,7 +87,6 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
         // the expression is a chained list of expr_elements 
         while (expr_element != nullptr)
         {
-                say(" add val with element ",expr_element->value);
                 argument_output.add_val(expr_element->value);
 
                 expr_element = expr_element->ptr_next;

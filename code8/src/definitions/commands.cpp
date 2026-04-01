@@ -21,7 +21,6 @@ Command::Command (CommandType cmdtype, const Value & newval)
 
 Command::Command (CommandType cmdtype, ExpressionElement * expression)
 {
-        say("create cmdtype : " + (cmdtype) + ' ');
         cmd_type = cmdtype;
         first_exprelement = expression;
         last_exprelement = first_exprelement->get_tail();
@@ -32,12 +31,11 @@ void Command::append_expression(const Value & newval)
         //when the command have no expression initialised yet
         if (first_exprelement==nullptr)
         {
-               first_exprelement = new ExpressionElement (newval);
+                first_exprelement = new ExpressionElement (newval);
                 last_exprelement = first_exprelement; 
         }
         else //usual case, the command already have its expression initialised
         {
-                say("append_expression with value : " + newval.string());
                 last_exprelement = last_exprelement->append_expressionelement(newval);
         }
 }
@@ -55,12 +53,10 @@ void Command::run() const
         switch (cmd_type)
         {
                 case CMD_PRINT:
-                        say("gonna run print, args - "+argexec.string()+" -end of args\n");
                         run_print(argexec);
                         break;
                 case CMD_EMPTY:
                 default:
-                        say("\nNoCommand args- "+argexec.string()+" -end of args\n");
                         break;
         }
 }

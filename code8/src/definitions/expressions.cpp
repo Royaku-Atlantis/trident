@@ -19,7 +19,6 @@ ExpressionElement * ExpressionElement::append_expressionelement(const Value & ne
 {
         //create the new expression element
         ExpressionElement * new_expression_element_ptr = new ExpressionElement(new_value);
-        say("created new expression element with value : "+new_value.string());
 
         //check if the current expression is actually not the tail
         if (ptr_next != nullptr)
@@ -27,11 +26,8 @@ ExpressionElement * ExpressionElement::append_expressionelement(const Value & ne
                 say("ho no! this element is not the tail:", value.string());
                 delete ptr_next;
         }
-        say("sucessfuly acceced the ptrnext");
-
         //add it to the current expression element
         ptr_next = new_expression_element_ptr;
-        say("finished to append this value to the tail of expression");
 
         //return the pointer of the new tail element we just created
         return new_expression_element_ptr;

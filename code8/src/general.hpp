@@ -36,6 +36,8 @@ constexpr int AND(char c1, char c2, char c3=0, char c4=0)
 //get all the lines of a file into a list of string
 void get_file(const String & filepath, Array<String> & file_text);
 
+void wait_interaction();//#include <conio.h> getch();
+
 //from a list of string, get all strings with a newline inbetween
 String to_string(const Array<String> & file_text);
 

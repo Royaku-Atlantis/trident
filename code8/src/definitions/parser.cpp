@@ -1,5 +1,5 @@
 #include "../trident.hpp"
-#include <sstream>
+
 
 // for example, transform the text "print "caca" 3 *" into
 // command : TYPE=CMD_PRINT - string "caca" - number 3 - operator OPn_MUL
@@ -15,9 +15,11 @@
 // TODO : backslash support
 Index get_word(const String & input_string, Index starthere, String & word)
 {
-	if (input_string.size()<=starthere) return starthere;
+	word = "";//empty the value before we modify it
 
-	word = ""; //empty the value before we modify it
+	//if the index is already too far, then its finished
+	if (input_string.size()<=(starthere))
+		return starthere;
 
 	//remove the space if it start with spaces
 	while (input_string[starthere] == ' ')starthere ++;
@@ -55,7 +57,10 @@ Index get_word(const String & input_string, Index starthere, String & word)
 
 	//std::cout << "word = '" << word << "'\n" ; //debug
 	//we also get the actual word found with the "word" variable reference
-	return endofword;
+	return endofword
+	
+	+ (endcase == '"');
+	//if its in string mode, increment the end of the word to skip the quote
 }
 
 // string -> CommandType
@@ -83,7 +88,6 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 //string -> Value 
 Value string_to_value(String & input_string)
 {
-	say("Transforming '"+input_string+"' into a value");
 
 	//case variables
 	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0));
@@ -96,29 +100,35 @@ Value string_to_value(String & input_string)
 	double output;
 	if (get_number_from_string(input_string, output)) return Value(output);
 
+	//test specific str -> value (const)
+	#define TEST_STR(txt, val) if (input_string==txt) return Value(val);
+
+	//boleans
+	TEST_STR("true", true);
+	TEST_STR("false", false);
+
 	//operators
-	#define TEST_OPERATOR(txt, OP_ID) if (input_string==txt) return Value(OP_ID);
+	TEST_STR("+",	OPn_ADD		);
+	TEST_STR("-",	OPn_SUB		);
+	TEST_STR("*",	OPn_MUL		);
+	TEST_STR("/",	OPn_DIV		);
+	TEST_STR("%",	OPn_MOD		);
+	TEST_STR(".",	OPl_GET		);
+	TEST_STR("and",	OPb_AND		);
+	TEST_STR("or",	OPb_OR		);
+	TEST_STR("!",	OPb_NOT		);
+	TEST_STR("xor",	OPb_XOR		);
+	TEST_STR("?",	OPb_COND	);
+	TEST_STR("<",	OPc_strictINF	);
+	TEST_STR(">",	OPc_strictSUP	);
+	TEST_STR("<=",	OPc_equalINF	);
+	TEST_STR(">=",	OPc_equalSUP	);
+	TEST_STR("==",	OPc_EQUAL	);
+	TEST_STR("~=",	OPc_roundEQUAL	);
+	TEST_STR("!=",	OPc_UNEQUAL	);
 
-	TEST_OPERATOR("+",	OPn_ADD		)
-	TEST_OPERATOR("-",	OPn_SUB		)
-	TEST_OPERATOR("*",	OPn_MUL		)
-	TEST_OPERATOR("/",	OPn_DIV		)
-	TEST_OPERATOR("%",	OPn_MOD		)
-	TEST_OPERATOR(".",	OPl_GET		)
-	TEST_OPERATOR("and",	OPb_AND		)
-	TEST_OPERATOR("or",	OPb_OR		)
-	TEST_OPERATOR("!",	OPb_NOT		)
-	TEST_OPERATOR("xor",	OPb_XOR		)
-	TEST_OPERATOR("?",	OPb_COND	)
-	TEST_OPERATOR("<",	OPc_strictINF	)
-	TEST_OPERATOR(">",	OPc_strictSUP	)
-	TEST_OPERATOR("<=",	OPc_equalINF	)
-	TEST_OPERATOR(">=",	OPc_equalSUP	)
-	TEST_OPERATOR("==",	OPc_EQUAL	)
-	TEST_OPERATOR("~=",	OPc_roundEQUAL	)
-	TEST_OPERATOR("!=",	OPc_UNEQUAL	)
+	#undef TEST_STR
 
-	#undef TEST_OPERATOR
 	//return undefined
 	return Value();
 }
@@ -126,31 +136,24 @@ Value string_to_value(String & input_string)
 // String code_line -> command object
 Command * create_command(const String & code_line)
 {
-	say("start to create command");
 	//get the command type
 	String commandname;
 	Index next_word = get_word(code_line, 0, commandname);
 	CommandType command_type = cmdtext_get_cmdtype(commandname);
 
-	say("command type gotten");
-
 	//define the command
 	Command * newcmd = new Command(command_type);
 
-	say("command defined");
-
 	//define the command arguments
 	String str_value;
-	do
+	next_word = get_word(code_line, next_word, str_value);
+
+	//loop through the "words" of the code line 
+	while (str_value != "")
 	{
-		next_word = get_word(code_line, next_word, str_value);
 		newcmd->append_expression(string_to_value(str_value));
-
-		say("apended value");
+		next_word = get_word(code_line, next_word, str_value);
 	}
-	while (str_value != "");
-
-	say("finished apendding values");
 
 	//return the newly created command
 	return newcmd;
