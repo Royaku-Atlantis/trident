@@ -1,3 +1,2 @@
-print "cacaboudin.fr" endl
-set 0v "cette variable possède une string"
-print 0v
+say "j'aime manger"
+say 4 3 * 2 +

@@ -72,7 +72,9 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 	GETCMD("elif",  CMD_ELIF);
 	GETCMD("else",  CMD_ELSE);
 	GETCMD("print", CMD_PRINT);
+	GETCMD("say", 	CMD_SAY);
 	GETCMD("set",   CMD_SET);
+	GETCMD("input",   CMD_INPUT);
 	//GETCMD("error",CMD_) 
 	//GETCMD("continue",CMD_) 
 	//GETCMD("break",CMD_) 
@@ -102,12 +104,12 @@ Value string_to_value(String & input_string)
 	#define TEST_STR(txt, val) if (input_string==txt) return Value(val);
 
 	//constants
-	TEST_STR("Undefined", Value());
-	TEST_STR("endl", Value((String)"\n"));
-
-	//boleans
 	TEST_STR("true", true);
 	TEST_STR("false", false);
+	TEST_STR("Undefined", Value());
+	TEST_STR("endl", (String)"\n");
+	TEST_STR("red_text", (String)RED);
+	TEST_STR("blue_text", (String)BLUE);
 
 	//operators
 	TEST_STR("+",	OPn_ADD		);

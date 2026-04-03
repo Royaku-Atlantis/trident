@@ -47,7 +47,7 @@ struct Value{
         Value get_var_data();//global_variable_acessor
 };
 
-std::ostream& operator<<(std::ostream& out, Value thisval);
+std::ostream& operator<<(std::ostream& out, const Value & thisval);
 
 //Value operators overloading
 Value operator +        (Value Val1, Value Val2);

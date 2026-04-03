@@ -58,25 +58,47 @@ Index Command::run() const
                 case CMD_PRINT:
                         run_print(argexec);
                         break;
+                case CMD_SAY:
+                        run_say(argexec);
+                        break;
                 case CMD_SET:
                         run_set(argexec);
+                        break;
+                case CMD_INPUT:
+                        run_input(argexec);
                         break;
                         //for jumps (ifs, while...), change PC
                 case CMD_EMPTY:
                 default:
+                        if (cmd_type <=CMD_NUMBEROFCOMMANDS)
+                                error("cmd_type have invalid index of command : [" + std::to_string(cmd_type) + ']');
                         break;
         }
         
         return PC_offset;
 }
 
+
+//Run Commands
+
 void run_print(const ArgumentExecuter & arguments)
 {
+        String toprint;
         for (Index i=0; i<arguments.get_valnumber(); i++)
         {
-                Value val_to_print = arguments.get_val(i);
-                std::cout<< (val_to_print.string());
+                toprint += arguments.get_val(i).string();
         }
+        std::cout << toprint ;
+}
+
+void run_say(const ArgumentExecuter & arguments)
+{
+        String toprint;
+        for (Index i=0; i<arguments.get_valnumber(); i++)
+        {
+                toprint += arguments.get_val(i).string();
+        }
+        std::cout << toprint << "\n";
 }
 
 void run_set(const ArgumentExecuter & arguments)
@@ -90,4 +112,27 @@ void run_set(const ArgumentExecuter & arguments)
 
         Value newval = arguments.get_val(1);
         global_variable_acessor_set_variable(var.val_variable, newval);
+}
+
+void run_input(const ArgumentExecuter & arguments)
+{
+        for (Index i=0; i<arguments.get_valnumber(); i++)
+        {
+                Value this_val = arguments.get_val(i);
+         
+                //check if its indeed a variable
+                if (this_val.val_type != VALUE_VARIABLE)
+                        continue; 
+                //get the var index;
+                Index varindex = this_val.val_variable;
+                
+                //input value
+                String input;
+                getline(std::cin, input);
+                
+                //can it be a number?
+                //can it be a bool?
+                //alright, its a string, isn't it?
+                global_variable_acessor_set_variable(varindex, Value((String)input));
+        }
 }

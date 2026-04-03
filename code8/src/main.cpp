@@ -12,7 +12,10 @@ using namespace std;
 
 int main(int argc, char ** args)
 {
-        Functions mainfunc (args[1]);
+        String trident_file_path = args[1];
+        Functions mainfunc (trident_file_path);
+
+        
         Scope scope (& mainfunc);
 
         scope.run();

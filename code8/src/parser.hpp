@@ -3,8 +3,6 @@
 #include "trident.hpp"
 #include <sstream>
 
-
-
 /*
  * @brief In the input_string, 
  *  -get the word starting in Index starthere,
@@ -20,7 +18,8 @@
  * @param starthere
  * @param word, outputed word found at indext start here
  * @return Index of the end of the word (the space just after)
- */ 
+ */
+
 Index get_word(const String & input_string, Index starthere, String & word);
 
 Value string_to_value(const String & input_string);

@@ -487,9 +487,10 @@ String get_value_color(ValueType vtype)
 }; //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
 
 //overload to be display with cout
-std::ostream& operator<<(std::ostream& out, Value thisval)
+std::ostream& operator<<(std::ostream& out, const Value & thisval)
 {
-        return out << thisval.string();
+        out << get_value_color(thisval.val_type) << thisval.string() << "\033[0m" ;
+        return out;
 }
 
 Value round_equal(Value Val1, Value Val2)

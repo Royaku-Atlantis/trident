@@ -19,6 +19,14 @@ public:
         Index run() const;
 };
 
-
+//print arguments
 void run_print(const ArgumentExecuter & arguments);
+
+//print arguments + \n
+void run_say(const ArgumentExecuter & arguments);
+
+//set var argument
 void run_set(const ArgumentExecuter & arguments);
+
+//input
+void run_input(const ArgumentExecuter & arguments);
