@@ -1,1 +1,1 @@
-.\bin\trident.exe code.atl
+.\bin\trident.exe code.trd

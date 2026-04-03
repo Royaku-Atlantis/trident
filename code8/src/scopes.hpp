@@ -5,9 +5,15 @@ class Scope
 {
     private:
         Array<Value> Variables;
-        int function_index; 
+        //Index function_index
+        Functions * function = nullptr;
 
     public:
+        //create the scope from the function index/pointer
+        Scope (Functions * func_ptr);
+
+        void run();
+
         void set_variable(Index index, const Value & newval);
         Value get_variable(Index index);
 };

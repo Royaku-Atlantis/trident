@@ -45,8 +45,11 @@ ExpressionElement * Command::get_expressionstart() const
         return first_exprelement;
 }
 
-void Command::run() const
+Index Command::run() const
 {
+        //next command will simply be the next one
+        Index PC_offset = 1;
+
         ArgumentExecuter argexec;
         calculate_arguments(first_exprelement, argexec);
 
@@ -58,10 +61,13 @@ void Command::run() const
                 case CMD_SET:
                         run_set(argexec);
                         break;
+                        //for jumps (ifs, while...), change PC
                 case CMD_EMPTY:
                 default:
                         break;
         }
+        
+        return PC_offset;
 }
 
 void run_print(const ArgumentExecuter & arguments)

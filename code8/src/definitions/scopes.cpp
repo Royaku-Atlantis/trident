@@ -1,9 +1,50 @@
 #include "../trident.hpp"
 #include "../scopes.hpp"
 
-//global defintion 
-//Global_Variable_Acessor global_variable_acessor;
+Scope::Scope (Functions * func_ptr)
+{
+        function = func_ptr;
+}
 
+void Scope::run()
+{
+        //set vriable acessors to the current scope
+        global_variable_acessor_set_scope(this);
+
+        Index func_size = function->get_code_size();
+        
+        //loop through the whole function
+        Index i=0;
+        while (i<func_size)
+        {
+                i += function->get_command(i)->run();
+        }
+}
+
+void Scope::set_variable(Index index, const Value & newval)
+{
+        //resize the size if it ask for a bigger variable
+        if (Variables.size() <= index)
+                Variables.resize(index +1);
+        //intentional use of resize and not reserve
+        
+        //affect variable
+        Variables[index] = newval; 
+}
+
+Value Scope::get_variable(Index index)
+{
+        //resize the size if it ask for a bigger variable
+        if (Variables.size() <= index)
+                Variables.resize(index +1);
+        //intentional use of resize and not reserve
+        
+        //affect variable
+        return Variables[index];
+}
+
+//global interaction with the current scope
+//Global_Variable_Acessor global_variable_acessor;
 Scope * global_variable_acessor_scope_link = nullptr;
 void global_variable_acessor_set_scope(Scope * new_scope_link)
 {
@@ -28,25 +69,3 @@ void global_variable_acessor_set_variable(Index index, const Value & newval)
         global_variable_acessor_scope_link->set_variable(index, newval);
 }
 
-
-void Scope::set_variable(Index index, const Value & newval)
-{
-        //resize the size if it ask for a bigger variable
-        if (Variables.size() <= index)
-                Variables.resize(index +1);
-        //intentional use of resize and not reserve
-        
-        //affect variable
-        Variables[index] = newval;
-}
-
-Value Scope::get_variable(Index index)
-{
-        //resize the size if it ask for a bigger variable
-        if (Variables.size() <= index)
-                Variables.resize(index +1);
-        //intentional use of resize and not reserve
-        
-        //affect variable
-        return Variables[index];
-}

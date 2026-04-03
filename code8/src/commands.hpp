@@ -14,7 +14,9 @@ public:
         void append_expression(const Value & newval);
 
         ExpressionElement * get_expressionstart() const;
-        void run() const;
+        
+        //return PCoffset (1 = basic increment, go to the next command) 
+        Index run() const;
 };
 
 

@@ -1,2 +1,3 @@
-print "caca" 3 *
-print "bro have " 1 5 - 9 + 0 / " behaviour"
+print "cacaboudin.fr" endl
+set 0v "cette variable possède une string"
+print 0v

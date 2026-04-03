@@ -6,12 +6,20 @@
 class Functions
 {
 private:        
-        Array<Command> code; //dont change once created
-        int code_size;
-        int number_of_variables;
-
+        Array<Command *> code; //dont change once created
+        Index code_size;
+        
+        //common procedure for constructor
+        void set_from_codelines(const CodeLines & func_code);
 public:
-        int get_number_of_variable();
-        int get_code_size();
+        //construct from array of string
+        Functions (const CodeLines & func_code);
+
+        //construct directly from the filepath
+        Functions (String filepath);
+
+        //functions to get informations of the function
+        Index get_code_size() const;
+        Command * get_command(Index cmd_index);
         //methodes for the scope to navigate between brackets
 };

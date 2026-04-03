@@ -88,13 +88,11 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 //string -> Value 
 Value string_to_value(String & input_string)
 {
-
 	//case variables
 	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0));
 
 	//case strings
 	if (input_string[0] == '"') return Value(input_string.erase(0,1));
-
 
 	//case numbers
 	double output;
@@ -102,6 +100,10 @@ Value string_to_value(String & input_string)
 
 	//test specific str -> value (const)
 	#define TEST_STR(txt, val) if (input_string==txt) return Value(val);
+
+	//constants
+	TEST_STR("Undefined", Value());
+	TEST_STR("endl", Value((String)"\n"));
 
 	//boleans
 	TEST_STR("true", true);
