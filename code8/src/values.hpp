@@ -43,6 +43,8 @@ struct Value{
         String string() const;
         double get_asnumber();
         bool get_asbool();
+
+        Value get_var_data();//global_variable_acessor
 };
 
 std::ostream& operator<<(std::ostream& out, Value thisval);

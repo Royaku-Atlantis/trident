@@ -150,6 +150,19 @@ bool Value::get_asbool()
         return false;
 }
 
+Value Value::get_var_data()
+{
+        //if its not a variable, lets not fucking care
+        if (val_type!=VALUE_VARIABLE) return * this;
+
+        Value vardata = global_variable_acessor.get_variable(val_variable);
+
+        //loop in case its a link to a variable, or something
+        //if (vardata.val_type == VALUE_VARIABLE) ...
+
+        return vardata;
+}//
+
 //operation overloading
 Value operator + (Value Val1, Value Val2)
 {
@@ -243,8 +256,6 @@ Value operator * (Value Val1, Value Val2)
 
 Value operator % (Value Val1, Value Val2)
 {
-        return Value();
-
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular multiplications

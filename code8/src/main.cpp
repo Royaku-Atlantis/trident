@@ -12,6 +12,9 @@ using namespace std;
 
 int main()
 {
+        //*
+        Scope scope;
+
         String input;
         do 
         {
@@ -21,7 +24,7 @@ int main()
                 usercmd->run();
                 cout << endl;
         }
-        while (input!="exit");
+        while (input!="exit");//*/
 
         return 0;
 }
