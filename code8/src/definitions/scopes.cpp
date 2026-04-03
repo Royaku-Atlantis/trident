@@ -68,4 +68,3 @@ void global_variable_acessor_set_variable(Index index, const Value & newval)
         }
         global_variable_acessor_scope_link->set_variable(index, newval);
 }
-

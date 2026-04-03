@@ -22,3 +22,4 @@ extern Scope * global_variable_acessor_scope_link;
 void global_variable_acessor_set_scope(Scope * new_scope_link);
 Value global_variable_acessor_get_variable(Index index);
 void global_variable_acessor_set_variable(Index index, const Value & newval);
+Index global_get_pcindex_linked_braces(Index pcindex);

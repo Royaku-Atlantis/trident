@@ -68,13 +68,16 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 {
 	#define GETCMD(text, cmdtype) if (cmd_firsttoken==text) return cmdtype;
 
-	GETCMD("if",    CMD_IF);
-	GETCMD("elif",  CMD_ELIF);
-	GETCMD("else",  CMD_ELSE);
 	GETCMD("print", CMD_PRINT);
 	GETCMD("say", 	CMD_SAY);
 	GETCMD("set",   CMD_SET);
-	GETCMD("input",   CMD_INPUT);
+	GETCMD("input", CMD_INPUT);
+	GETCMD("{",		CMD_BRACE_OPEN);
+	GETCMD("}",		CMD_BRACE_CLOSE);
+	GETCMD("if",    CMD_IF);
+	GETCMD("elif",  CMD_ELIF);
+	GETCMD("else",  CMD_ELSE);
+	GETCMD("while", CMD_WHILE);
 	//GETCMD("error",CMD_) 
 	//GETCMD("continue",CMD_) 
 	//GETCMD("break",CMD_) 

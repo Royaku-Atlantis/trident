@@ -82,6 +82,11 @@ Index Command::run() const
                 case CMD_INPUT:
                         run_input(argexec);
                         break;
+                case CMD_BRACE_OPEN:
+                        run_openbrace(argexec, PC_offset);
+                case CMD_BRACE_CLOSE:
+                        run_closebrace(argexec, PC_offset);
+
                         //for jumps (ifs, while...), change PC
                 case CMD_EMPTY:
                 default:
@@ -157,4 +162,19 @@ void run_input(const ArgumentExecuter & arguments)
                         global_variable_acessor_set_variable(varindex, Value((String)input));
                 }           
         }
+}
+
+void run_openbrace(const ArgumentExecuter & arguments, Index & PC)
+{
+        int closebrace_pc = arguments.get_val(0).get_asnumber();
+}
+
+void run_closebrace(const ArgumentExecuter & arguments, Index & PC)
+{
+        int openbrace_pc = arguments.get_val(0).get_asnumber();
+}
+
+void run_if(const ArgumentExecuter & arguments, Index & PC)
+{
+
 }

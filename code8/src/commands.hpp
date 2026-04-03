@@ -32,3 +32,16 @@ void run_set(const ArgumentExecuter & arguments);
 
 //input
 void run_input(const ArgumentExecuter & arguments);
+
+//braces
+void run_openbrace(const ArgumentExecuter & arguments, Index & PC);
+void run_closebrace(const ArgumentExecuter & arguments, Index & PC);
+
+//conditionals
+void run_if(const ArgumentExecuter & arguments, Index & PC);
+//run_elif
+//run else
+
+//loops
+//repeat
+//while
