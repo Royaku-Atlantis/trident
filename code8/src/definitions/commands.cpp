@@ -55,6 +55,9 @@ void Command::run() const
                 case CMD_PRINT:
                         run_print(argexec);
                         break;
+                case CMD_SET:
+                        run_set(argexec);
+                        break;
                 case CMD_EMPTY:
                 default:
                         break;
@@ -68,4 +71,17 @@ void run_print(const ArgumentExecuter & arguments)
                 Value val_to_print = arguments.get_val(i);
                 std::cout<< (val_to_print.string());
         }
+}
+
+void run_set(const ArgumentExecuter & arguments)
+{
+        Value var = arguments.get_val(0);
+        if (var.val_type != VALUE_VARIABLE)
+        {
+                error("tried to set something that wasn't a variable");
+                return;
+        }
+
+        Value newval = arguments.get_val(1);
+        global_variable_acessor_set_variable(var.val_variable, newval);
 }

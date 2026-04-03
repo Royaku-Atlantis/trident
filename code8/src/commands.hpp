@@ -19,3 +19,4 @@ public:
 
 
 void run_print(const ArgumentExecuter & arguments);
+void run_set(const ArgumentExecuter & arguments);

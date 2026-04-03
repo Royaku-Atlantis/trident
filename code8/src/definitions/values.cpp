@@ -120,7 +120,7 @@ std::string Value::string() const
                         return (* val_string);
 
                 case VALUE_VARIABLE:
-                        return "var:<" + std::to_string(val_variable) + '>';
+                        return global_variable_acessor_get_variable(val_variable).string();// "var:<" + std::to_string(val_variable) + '>';
 
                 case VALUE_OPERATOR:
                         return get_OperatorString(val_operator);
@@ -136,8 +136,7 @@ double Value::get_asnumber()
         if (val_type==VALUE_BOOL) return (double) val_bool;
         if (val_type==VALUE_NUMB) return val_numb;
         if (val_type==VALUE_STRING) return val_string->size();
-        //get from Variable
-
+        if (val_type==VALUE_VARIABLE) return get_var_data().get_asnumber();
         return 0;
 }
 bool Value::get_asbool()
@@ -155,7 +154,7 @@ Value Value::get_var_data()
         //if its not a variable, lets not fucking care
         if (val_type!=VALUE_VARIABLE) return * this;
 
-        Value vardata = global_variable_acessor.get_variable(val_variable);
+        Value vardata = global_variable_acessor_get_variable(val_variable);
 
         //loop in case its a link to a variable, or something
         //if (vardata.val_type == VALUE_VARIABLE) ...
@@ -163,9 +162,18 @@ Value Value::get_var_data()
         return vardata;
 }//
 
+void un_variable(Value & val)
+{
+        //if the value is a variable, get its non variable value
+        //if its STILL a variable, continue
+        while (val.val_type == VALUE_VARIABLE)
+                val = global_variable_acessor_get_variable(val.val_variable);
+}
+
 //operation overloading
 Value operator + (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch(AND(Val1.val_type, Val2.val_type))
         {
                 //regular addition
@@ -191,6 +199,7 @@ Value operator + (Value Val1, Value Val2)
 
 Value operator - (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch(AND(Val1.val_type, Val2.val_type))
         {
                 //regular substraction
@@ -213,6 +222,7 @@ Value operator - (Value Val1, Value Val2)
 
 Value operator / (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular division
@@ -231,6 +241,7 @@ Value operator / (Value Val1, Value Val2)
 
 Value operator * (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular multiplications
@@ -256,6 +267,7 @@ Value operator * (Value Val1, Value Val2)
 
 Value operator % (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular multiplications
@@ -273,6 +285,7 @@ Value operator % (Value Val1, Value Val2)
 
 Value operator or (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"
@@ -290,6 +303,7 @@ Value operator or (Value Val1, Value Val2)
 
 Value operator and (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"
@@ -307,6 +321,7 @@ Value operator and (Value Val1, Value Val2)
 
 Value operator xor (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"
@@ -324,6 +339,7 @@ Value operator xor (Value Val1, Value Val2)
 
 Value operator ! (Value Val1)
 {
+        un_variable(Val1);
         if (Val1.val_type == VALUE_NUMB or Val1.val_type == VALUE_BOOL)
                 return Value((bool)(!Val1.get_asbool()));
         return Value();
@@ -331,8 +347,7 @@ Value operator ! (Value Val1)
 
 Value operator == (Value Val1, Value Val2)
 {
-        //Val 1 = get value from variable
-        //Val 2 = get value from variable
+        un_variable(Val1); un_variable(Val2);
 
         if (Val1.val_type != Val2.val_type) return Value(false);
 
@@ -356,8 +371,8 @@ Value operator == (Value Val1, Value Val2)
 
 Value operator != (Value Val1, Value Val2)
 {
-        //Val 1 = get value from variable
-        //Val 2 = get value from variable
+        un_variable(Val1); un_variable(Val2);
+        un_variable(Val1); un_variable(Val2);
 
         if (Val1.val_type != Val2.val_type) return Value(true);
 
@@ -366,6 +381,7 @@ Value operator != (Value Val1, Value Val2)
 
 Value operator >= (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"
@@ -383,6 +399,7 @@ Value operator >= (Value Val1, Value Val2)
 
 Value operator <= (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"
@@ -400,6 +417,7 @@ Value operator <= (Value Val1, Value Val2)
 
 Value operator > (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"
@@ -417,6 +435,7 @@ Value operator > (Value Val1, Value Val2)
 
 Value operator < (Value Val1, Value Val2)
 {
+        un_variable(Val1); un_variable(Val2);
         switch (AND(Val1.val_type, Val2.val_type))
         {
                 //regular logic "or"

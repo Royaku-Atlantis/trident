@@ -59,8 +59,9 @@ void say(const String & text);
 template <class T>
 void say(const String & text, const T & txt2)
 {std::cout<<text<<txt2<<'\n';}
+#define error(text) std::cout << RED << (text) << "\033[0m" << std::endl ; 
 
-#define debug(txt,txt2) { if (DEBUG){say(textFormat(RED) + txt, txt2); std::cout << textFormat(0);}}
+#define debug(txt,txt2) { if (DEBUG){say(RED + txt, txt2); std::cout << textFormat(0);}}
 
 //{ color printing
 
