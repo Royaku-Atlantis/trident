@@ -7,7 +7,9 @@ void Functions::set_from_codelines(const CodeLines & func_code)
         code_size = func_code.size();
 
         for (String codeline : func_code)
+        {
                 code.push_back(create_command(codeline));
+        }
 }
 
 //construct from array of string, aka CodeLines
@@ -37,5 +39,11 @@ Command * Functions::get_command(Index cmd_index)
         return code[cmd_index];
 }
 
-
 //methodes for the scope to navigate between brackets ?
+
+//debug 
+void Functions::debug_display_command()
+{
+        for (Command * codeline : code)
+                codeline->debug_display_command();
+}

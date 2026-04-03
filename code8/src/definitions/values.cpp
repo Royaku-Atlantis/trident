@@ -74,7 +74,7 @@ Value::Value (bool value_bool)
         #endif
 }
 
-Value::Value (std::string value_string)
+Value::Value (String value_string)
 {
         val_type = VALUE_STRING;
         val_string = new std::string(value_string);
@@ -101,8 +101,41 @@ Value::Value (OperatorType value_operator)
         #endif
 }
 
+//Value affectation, fix memmory bs with strings
+Value& Value::operator = (const Value & new_value)
+{
+        if (val_type == VALUE_STRING)
+        {
+                delete val_string;
+        }
+        
+        val_type = new_value.val_type;
+        switch (val_type)
+        {
+                case VALUE_BOOL:
+                        val_bool = new_value.val_bool;
+                        break;
+                case VALUE_NUMB:
+                        val_numb = new_value.val_numb;
+                        break;
+                case VALUE_OPERATOR:
+                        val_operator = new_value.val_operator;
+                        break;
+                case VALUE_STRING:
+                        val_string = new String( *(new_value.val_string)); 
+                        break;
+                case VALUE_VARIABLE:
+                        val_variable = new_value.val_variable;
+                        break;
+                case VALUE_UNDEF:
+                default:
+                        //go endefine, or do nothing, depending of "Setmode undefined ..."
+                        break;
+        }       
+        //thanks compiler for telling it off ;)
+        return *this;
+}
 //to display the Value
-
 std::string Value::string() const
 {
         //if (val_type==VALUE_OPERATOR) return "OPERATOR";
@@ -502,7 +535,7 @@ Value round_equal(Value Val1, Value Val2)
                 case AND(VALUE_NUMB, VALUE_BOOL):
                 case AND(VALUE_BOOL, VALUE_NUMB):
                 case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value( (double)(std::round(Val1.get_asnumber()) == std::round(Val2.get_asnumber())) );
+                        return Value( (bool)( std::abs(Val1.get_asnumber()-Val2.get_asnumber()) < 1 ));
 
                 case AND(VALUE_STRING, VALUE_STRING):
                         //test, but count maj and min as the same thing

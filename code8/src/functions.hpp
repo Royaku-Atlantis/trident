@@ -22,4 +22,7 @@ public:
         Index get_code_size() const;
         Command * get_command(Index cmd_index);
         //methodes for the scope to navigate between brackets
+
+        //display all commands info
+        void debug_display_command();//codeline.debug_display_command()
 };

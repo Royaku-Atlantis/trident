@@ -56,7 +56,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPERATOR(OPc_EQUAL, ==);
                 case OPERATOR(OPc_UNEQUAL, !=);
                 case OPc_roundEQUAL:
-                        add_val( round_equal(pop_last_arg(), pop_last_arg())); 
+                        add_val(round_equal(pop_last_arg(), pop_last_arg())); 
                         break;
 
                 //special

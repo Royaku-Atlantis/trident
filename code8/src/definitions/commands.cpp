@@ -45,6 +45,21 @@ ExpressionElement * Command::get_expressionstart() const
         return first_exprelement;
 }
 
+void Command::debug_display_command()
+{
+                                     //i hate doing that, tf you mean, double convertion??
+        std::cout << "{cmdIndex:" << std::to_string((int)cmd_type);
+
+        ExpressionElement * expr = first_exprelement;
+
+        while (expr!=nullptr)
+        {
+                std::cout << ", " << expr->value ;
+                expr = expr->ptr_next;
+        }
+        std::cout << "}\n";
+}
+
 Index Command::run() const
 {
         //next command will simply be the next one
@@ -70,7 +85,7 @@ Index Command::run() const
                         //for jumps (ifs, while...), change PC
                 case CMD_EMPTY:
                 default:
-                        if (cmd_type <=CMD_NUMBEROFCOMMANDS)
+                        if (CMD_NUMBEROFCOMMANDS <= cmd_type)
                                 error("cmd_type have invalid index of command : [" + std::to_string(cmd_type) + ']');
                         break;
         }
@@ -131,8 +146,15 @@ void run_input(const ArgumentExecuter & arguments)
                 getline(std::cin, input);
                 
                 //can it be a number?
-                //can it be a bool?
-                //alright, its a string, isn't it?
-                global_variable_acessor_set_variable(varindex, Value((String)input));
+                double output;
+	        if (get_number_from_string(input, output))
+                {
+                        global_variable_acessor_set_variable(varindex, Value((double)output));
+                }
+                //then make it string
+                else
+                {
+                        global_variable_acessor_set_variable(varindex, Value((String)input));
+                }           
         }
 }

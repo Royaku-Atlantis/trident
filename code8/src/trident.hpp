@@ -21,11 +21,9 @@ enum CommandType : char {CMD_EMPTY, CMD_IF, CMD_ELIF, CMD_ELSE, CMD_PRINT, CMD_S
 #include "expressions.hpp"
 #include "arguments.hpp"
 #include "commands.hpp"
+#include "parser.hpp"
 #include "functions.hpp"
 #include "scopes.hpp"
 #include "executer.hpp"
-
-#include "parser.hpp"
-
 
 #endif //TRIDENT_HEADER

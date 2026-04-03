@@ -13,7 +13,7 @@ void print_error(const String & errortext)
 }
 
 void say(const String & text)
-{std::cout<<text<<std::endl;}
+{std::cout<<text<< WHITE "\n";}
 
 String textFormat(int fontcolor)
 {return "\033[" + std::to_string(fontcolor) + "m";}

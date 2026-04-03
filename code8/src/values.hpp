@@ -31,6 +31,9 @@ struct Value{
         Value (int value_variable);
         Value (OperatorType value_operator);
 
+        //Value affectation, fix memmory bs with strings
+        Value& operator = (const Value & new_value);
+
         //void setTo (double value_numb);
         //void setTo (bool value_bool);
         //void setTo (String value_string);

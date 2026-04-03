@@ -1,2 +1,6 @@
-say "j'aime manger"
-say 4 3 * 2 +
+say "test T de environ egal: "  0.9  0.9  ~=
+say "test T de environ egal: "  4    4.9  ~=
+say "test T de environ egal: "  -50.5  -51.4  ~=
+say "test F de environ egal: "  -50.5  -51.5  ~=
+say "test F de environ egal: "  8  9  ~=
+say "test F de environ egal: "  -8.5  -9.5  ~=

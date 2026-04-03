@@ -88,13 +88,18 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 }
 
 //string -> Value 
-Value string_to_value(String & input_string)
+Value string_to_value(const String & input_string)
 {
 	//case variables
 	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0));
 
 	//case strings
-	if (input_string[0] == '"') return Value(input_string.erase(0,1));
+	if (input_string[0] == '"')
+	{
+		String output_string = input_string;
+		output_string.erase(0,1);
+		return Value((String)output_string);
+	}
 
 	//case numbers
 	double output;
@@ -155,7 +160,8 @@ Command * create_command(const String & code_line)
 	//loop through the "words" of the code line 
 	while (str_value != "")
 	{
-		newcmd->append_expression(string_to_value(str_value));
+		Value newval = string_to_value(str_value);
+		newcmd->append_expression(newval);
 		next_word = get_word(code_line, next_word, str_value);
 	}
 
