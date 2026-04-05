@@ -70,3 +70,7 @@ Value operator >        (Value Val1, Value Val2);
 Value operator <        (Value Val1, Value Val2);
 
 Value round_equal(Value Val1, Value Val2);
+Value value_random_range(Value Val1, Value Val2);
+
+//trigo
+Value value_cos(Value Val1);

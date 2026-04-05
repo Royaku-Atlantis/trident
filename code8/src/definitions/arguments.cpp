@@ -29,8 +29,16 @@ void ArgumentExecuter::add_val(const Value & newval)
 
 bool ArgumentExecuter::do_operation(OperatorType operation_type)
 {
+        //case operator between values
         #define OPERATOR(opvalue, operator) opvalue:add_val(pop_last_arg() operator pop_last_arg()); break;
 
+        //case function with two input
+        #define FUNCTION(opvalue, function) opvalue:add_val(function(pop_last_arg(), pop_last_arg())); break;
+
+        //case function (or prefix operator) with one input
+        #define FUNCMONO(opvalue, funcmono) opvalue:add_val(funcmono(pop_last_arg())); break;
+
+        //postfix action with operator switch
         switch (operation_type)
         {
                 //classic number operations
@@ -44,9 +52,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPERATOR(OPb_AND, and);
                 case OPERATOR(OPb_OR, or);
                 case OPERATOR(OPb_XOR, xor);
-                case OPb_NOT:
-                        add_val(!pop_last_arg());
-                        break;
+                case FUNCMONO(OPb_NOT, !);
 
                 //comparators
                 case OPERATOR(OPc_equalINF, <=);
@@ -55,10 +61,14 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPERATOR(OPc_strictSUP, >);
                 case OPERATOR(OPc_EQUAL, ==);
                 case OPERATOR(OPc_UNEQUAL, !=);
-                case OPc_roundEQUAL:
-                        add_val(round_equal(pop_last_arg(), pop_last_arg())); 
-                        break;
+                case FUNCTION(OPc_roundEQUAL, round_equal);
+                
+                //trigo function
+                case FUNCMONO(OPn_COS, value_cos);
 
+                //functions-operators
+                case FUNCTION(OPn_RAND,value_random_range);
+                
                 //special
                 case OPb_COND :
                         add_val(
@@ -71,11 +81,15 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                         //for lists, does nothing yet
                 case OP_EMPTY :
                 default:
+                        //return false;//i guess ?, 
+                        //like, there was only one return in the whole func lmao 
                         break;  
         
         }
 
         #undef OPERATOR
+        #undef FUNCTION
+        #undef FUNCMONO
 
         //return the fact that it was an operation
         return true;

@@ -177,7 +177,7 @@ bool Value::get_asbool()
         if (val_type==VALUE_BOOL) return val_bool;
         if (val_type==VALUE_NUMB) return val_numb <= 0;
         if (val_type==VALUE_STRING) return 0 < val_string->size();
-        //get from Variable
+        if (val_type==VALUE_VARIABLE) return get_var_data().get_asbool();
 
         return false;
 }
@@ -484,7 +484,6 @@ Value operator < (Value Val1, Value Val2)
         }
 }
 
-
 std::string get_OperatorString(OperatorType c_operator)
 {
         switch (c_operator)
@@ -546,3 +545,35 @@ Value round_equal(Value Val1, Value Val2)
         }
 }
 
+Value value_random_range(Value Val1, Value Val2)//OPn_RAND
+{       
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                        return Value((double)random_range(Val1.get_asnumber(), Val2.get_asnumber()));
+
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        //if both bool have the same value, then no random needs to take place
+                        if (Val1.val_bool == Val2.val_bool) return Value((bool)Val1.val_bool);
+                        // true false random = coinflip
+                        return Value((bool)(rand()%2));
+
+                default:
+                        return Value();
+        }
+}
+
+Value value_cos(Value Val1)//OPn_COS
+{       
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                case VALUE_BOOL:
+                        return Value((double)cosf(Val1.get_asnumber()));
+                default:
+                        return Value();
+        }
+}

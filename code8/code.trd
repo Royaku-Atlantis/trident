@@ -1,15 +1,2 @@
-
-print "is it true :"
-
-if true
-{ 8
-    say "shit was true"
-    say "id even say, like, for real"
-} 5
-
-say "this should print tho"
-if 2 false
-{ 14
-    say "shit aint true
-} 12
-endif
+say "should be 1:" 0 cos
+say "should be 0:" pi 2 / cos

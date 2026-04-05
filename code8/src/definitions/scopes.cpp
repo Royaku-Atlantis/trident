@@ -17,7 +17,7 @@ void Scope::run()
         Index i=0;
         while (i<func_size)
         {
-                i += function->get_command(i)->run();
+                i = function->get_command(i)->run(i);
         }
 }
 

@@ -60,10 +60,10 @@ void Command::debug_display_command()
         std::cout << "}\n";
 }
 
-Index Command::run() const
+Index Command::run(Index PC) const
 {
+        Index new_PC = PC + 1;
         //next command will simply be the next one
-        Index PC_offset = 1;
 
         ArgumentExecuter argexec;
         calculate_arguments(first_exprelement, argexec);
@@ -82,12 +82,12 @@ Index Command::run() const
                 case CMD_INPUT:
                         run_input(argexec);
                         break;
-                case CMD_BRACE_OPEN:
-                        run_openbrace(argexec, PC_offset);
-                case CMD_BRACE_CLOSE:
-                        run_closebrace(argexec, PC_offset);
-
-                        //for jumps (ifs, while...), change PC
+                case CMD_JUMP:
+                        new_PC = run_jump(argexec, PC);
+                        break;
+                case CMD_JUMPIF:
+                        new_PC = run_jumpif(argexec, PC);
+                        break;
                 case CMD_EMPTY:
                 default:
                         if (CMD_NUMBEROFCOMMANDS <= cmd_type)
@@ -95,7 +95,7 @@ Index Command::run() const
                         break;
         }
         
-        return PC_offset;
+        return new_PC;
 }
 
 
@@ -164,17 +164,23 @@ void run_input(const ArgumentExecuter & arguments)
         }
 }
 
-void run_openbrace(const ArgumentExecuter & arguments, Index & PC)
-{
-        int closebrace_pc = arguments.get_val(0).get_asnumber();
+//return the new PC
+Index run_jump(const ArgumentExecuter & arguments, Index PC)
+{       
+        //jump to the new_PC
+        return arguments.get_val(0).get_asnumber()
+        -1;//-1 because vs code show the first line as 1 instead of 0
+                //so for now, i correct it here
 }
 
-void run_closebrace(const ArgumentExecuter & arguments, Index & PC)
-{
-        int openbrace_pc = arguments.get_val(0).get_asnumber();
-}
+//return the new PC
+Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
+{       
+        if (arguments.get_val(1).get_asbool()) 
+                return PC+1; //simply continue the code
 
-void run_if(const ArgumentExecuter & arguments, Index & PC)
-{
-
+        //skip to the end of the if statement
+        return arguments.get_val(0).get_asnumber()
+        -1;//-1 because vs code show the first line as 1 instead of 0
+                //so for now, i correct it here
 }

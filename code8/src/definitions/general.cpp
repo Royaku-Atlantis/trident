@@ -111,3 +111,12 @@ double modulo(double numb, double div)
 	hres *= div;
 	return hres;
 }
+
+double random_range(double mini, double maxi)
+{
+	//flip if wrong order
+	if (maxi < mini) flip(mini, maxi);
+
+	double random = rand()/static_cast<double>(RAND_MAX);
+	return (random * (maxi - mini)) + mini;
+}

@@ -12,8 +12,20 @@
 
 //enums :
 enum ValueType : unsigned char {VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT};
-enum OperatorType : unsigned char {OP_EMPTY, OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, OPl_GET, OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, OPb_COND, OPc_strictINF, OPc_strictSUP, OPc_equalINF, OPc_equalSUP, OPc_EQUAL, OPc_roundEQUAL, OPc_UNEQUAL};
-enum CommandType : char {CMD_EMPTY, CMD_PRINT, CMD_SAY, CMD_SET, CMD_INPUT, CMD_BRACE_OPEN, CMD_BRACE_CLOSE, CMD_IF, CMD_ELIF, CMD_ELSE, CMD_WHILE, CMD_NUMBEROFCOMMANDS};
+enum OperatorType : unsigned char 
+{OP_EMPTY, 
+        OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, 
+        
+        OPb_AND, OPb_OR, OPb_NOT, OPb_XOR,
+
+        OPc_strictINF, OPc_strictSUP, OPc_equalINF, OPc_equalSUP, 
+        OPc_EQUAL, OPc_roundEQUAL, OPc_UNEQUAL,
+
+        OPn_COS, 
+
+        OPn_RAND, OPl_GET, OPb_COND
+};
+enum CommandType : char {CMD_EMPTY, CMD_PRINT, CMD_SAY, CMD_SET, CMD_INPUT, CMD_JUMP, CMD_JUMPIF, CMD_NUMBEROFCOMMANDS};
 
 // declaration of everything
 #include "values.hpp"

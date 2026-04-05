@@ -18,7 +18,7 @@ public:
         void debug_display_command();
 
         //return PCoffset (1 = basic increment, go to the next command) 
-        Index run() const;
+        Index run(Index PC) const;
 };
 
 //print arguments
@@ -34,14 +34,6 @@ void run_set(const ArgumentExecuter & arguments);
 void run_input(const ArgumentExecuter & arguments);
 
 //braces
-void run_openbrace(const ArgumentExecuter & arguments, Index & PC);
-void run_closebrace(const ArgumentExecuter & arguments, Index & PC);
+Index run_jump(const ArgumentExecuter & arguments, Index PC);
 
-//conditionals
-void run_if(const ArgumentExecuter & arguments, Index & PC);
-//run_elif
-//run else
-
-//loops
-//repeat
-//while
+Index run_jumpif(const ArgumentExecuter & arguments, Index PC);

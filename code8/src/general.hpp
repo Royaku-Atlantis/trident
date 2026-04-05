@@ -20,17 +20,28 @@
 //extern bool GLOBAL_ErrorTellProgrammer;
 
 // double print as 6.900000 by default, this fix it
+//TODO : 0 can be displayed as -0
 String double_to_trimmed_string(double value);
 // concat the same string 'value' times
 String string_multip(const String & str, int value);
 //modulo but with floats, very useful, actually
 double modulo(double numb, double div);
 
+double random_range(double mini, double maxi);
+
+template<typename T>
+void flip(T & a, T & b)
+{
+	T c = a;
+	a = b;
+	b = c;
+}
+
 //concatanate chars in an int, useful for switch, and checking multiple enum:char at the same time
 constexpr int AND(char c1, char c2, char c3=0, char c4=0) 
 {
-    //will transform (0xAA, 0xBB, 0xCC, 0xDD) into 0xDDCCBBAA
-    return (int)c1 + ((int)c2<<8) + ((int)c2<<16) + ((int)c2<<24);
+	//will transform (0xAA, 0xBB, 0xCC, 0xDD) into 0xDDCCBBAA
+	return (int)c1 + ((int)c2<<8) + ((int)c2<<16) + ((int)c2<<24);
 }
 
 //get all the lines of a file into a list of string
@@ -79,3 +90,5 @@ enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_idk1, TXT_UNDERLINED, TX
 String textFormat(int fontcolor = 0);
 String textFormat(int info1, int info2);
 String textFormat(int info1, int info2, int info3);
+
+#define repeat(n) for (int izqft = 0; izqft<n ; izqft++)

@@ -22,7 +22,9 @@ Index get_word(const String & input_string, Index starthere, String & word)
 		return starthere;
 
 	//remove the space if it start with spaces
-	while (input_string[starthere] == ' ')starthere ++;
+	while (input_string[starthere] == ' '
+		or input_string[starthere] == '|') //to make more lisible .trd code
+	starthere ++;
 
 	//std::cout << "start at " << starthere << "in str '" << input_string << "' -> " ; //debug
 
@@ -72,12 +74,8 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 	GETCMD("say", 	CMD_SAY);
 	GETCMD("set",   CMD_SET);
 	GETCMD("input", CMD_INPUT);
-	GETCMD("{",		CMD_BRACE_OPEN);
-	GETCMD("}",		CMD_BRACE_CLOSE);
-	GETCMD("if",    CMD_IF);
-	GETCMD("elif",  CMD_ELIF);
-	GETCMD("else",  CMD_ELSE);
-	GETCMD("while", CMD_WHILE);
+	GETCMD("jump",	CMD_JUMP);
+	GETCMD("jumpif",CMD_JUMPIF);
 	//GETCMD("error",CMD_) 
 	//GETCMD("continue",CMD_) 
 	//GETCMD("break",CMD_) 
@@ -116,6 +114,8 @@ Value string_to_value(const String & input_string)
 	TEST_STR("false", false);
 	TEST_STR("Undefined", Value());
 	TEST_STR("endl", (String)"\n");
+	TEST_STR("pi", (double)3.14159265359);
+
 	TEST_STR("red_text", (String)RED);
 	TEST_STR("blue_text", (String)BLUE);
 
@@ -138,7 +138,13 @@ Value string_to_value(const String & input_string)
 	TEST_STR("==",	OPc_EQUAL	);
 	TEST_STR("~=",	OPc_roundEQUAL	);
 	TEST_STR("!=",	OPc_UNEQUAL	);
-
+	TEST_STR("cos",	OPn_COS		);
+	
+	//higher level operator / pseudo funcions
+	//TEST_STR("rand",OPn_RAND	);
+	if (input_string=="rand")
+		return Value(OPn_RAND);
+	
 	#undef TEST_STR
 
 	//return undefined
