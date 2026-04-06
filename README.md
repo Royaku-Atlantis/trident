@@ -1,19 +1,21 @@
-# trident
-project of an interpreted programming language, perhaps in the future for an atlantis game ide
-its objective is to be simple to use for anyone
+# Trident 🔱 
+## A simplistic interpreted programming language
+### To make programming more accessible, fun and fast.  
+---
+/!\ there are 8 experimentations, the 8th yet is the most concluding, I will archive the seven oldest, and put to the main folder
+---
 
-should the extention be .atl or .trd?
+I began to design and program Trident, because many things are overcomplicated in programming. 
 
-# __documentation:__
-put the ``trident.exe`` in your project folder
-Put your main code in a file called ``main.atl/.trd``
+### objectives :
+- make an ultra accessible programming language
+- use it for an Atlantis Games idea
+- make it personnalisable (change language)
+--- 
+This programming language is inspired from GML, Python, and also Minecraft commands.
+The flexibility of Game Maker Language
+The simplicity of Python
+The efficieny of writing Commands
 
-
-## __commands :__
-### say
-exemple, with two variable
-- ``foo`` = ``2.5``
-- ``bar`` = ``"blah blah"``
-``say "the result is :" foo bar "text missing a quote, but its ok ``
-- it will return :
-**the result is : 2.5 blah blah text missing a quote, but its ok**
+``print "Hello world" variable 5+3``
+parenthesis and commas can be skipped, there is no ambiguity possible
