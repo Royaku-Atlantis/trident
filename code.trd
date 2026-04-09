@@ -1,0 +1,3 @@
+print "enter a value:"
+input 0v
+say endl "you entered " 0v ":" 0v 0 <

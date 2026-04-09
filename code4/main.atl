@@ -1,3 +1,0 @@
-let var[0] = 5
-
-print var[0]

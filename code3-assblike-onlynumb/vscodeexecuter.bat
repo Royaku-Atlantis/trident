@@ -1,1 +1,0 @@
-.\trident_alpha3.exe

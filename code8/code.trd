@@ -1,2 +1,0 @@
-say "should be 1:" 0 cos
-say "should be 0:" pi 2 / cos
