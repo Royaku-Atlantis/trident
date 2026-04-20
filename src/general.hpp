@@ -77,7 +77,7 @@ void say(const String & text, const T & txt2)
 //{ color printing
 
 // CONSTANTS
-enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_idk1, TXT_UNDERLINED, TXT_idk5, TXT_idk6, TXT_SETBACKGROUND, TXT_idk8, TXT_STRIKETHROUGH};
+enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_ITALIC, TXT_UNDERLINED, TXT_BLINK, TXT_BLINK2, TXT_SETBACKGROUND, TXT_INVISIBLE, TXT_STRIKETHROUGH};
 #define RED     "\033[31m"  //red     31   41
 #define GREEN   "\033[32m"  //green   32   42
 #define YELLOW  "\033[33m"  //yellow  33   43
@@ -86,7 +86,8 @@ enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_idk1, TXT_UNDERLINED, TX
 #define CYAN    "\033[36m"  //cyan    36   46
 #define WHITE   "\033[37m"  //white   37   47
 #define BLACK   "\033[30m"  //black   30   40
-#define DARK    "\033[30m"  
+#define RESET   "\033[0m"  
+
 String textFormat(int fontcolor = 0);
 String textFormat(int info1, int info2);
 String textFormat(int info1, int info2, int info3);

@@ -17,10 +17,8 @@ void say(const String & text)
 
 String textFormat(int fontcolor)
 {return "\033[" + std::to_string(fontcolor) + "m";}
-
 String textFormat(int info1, int info2)
 {return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + "m";}
-
 String textFormat(int info1, int info2, int info3)
 {return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + ',' + std::to_string(info3) + "m";}
 

@@ -12,6 +12,7 @@ using namespace std;
 
 int main(int argc, char ** args)
 {
+        cout << "\033[0m";
         /*
         /*/
         String trident_file_path = args[1];

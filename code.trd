@@ -1,3 +1,21 @@
-print "enter a value:"
-input 0v
-say endl "you entered " 0v ":" 0v 0 <
+say YELLOW
+
+say "blabla test"
+say 0v " start
+
+init 0v "pipi"
+say 0v " init
+
+set 0v "kaku kaku"
+say 0v " set
+
+init 0v "pipi"
+say 0v " init again
+
+set 0v Undefined
+say 0v " set Undef
+
+init 0v 84
+say 0v " set again
+
+say RESET

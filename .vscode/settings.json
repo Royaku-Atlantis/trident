@@ -5,30 +5,40 @@
         "C_Cpp.errorSquiggles": "enabled",
         
         "customFileOrder.rules": {
-                "src": {"order": [
-                        "definitions",
-                        "general.hpp",
-                        "parser.hpp",
-                        "main.cpp",
-                        "trident.hpp",
-                        "values.hpp",
-                        "expressions.hpp",
-                        "arguments.hpp",
-                        "commands.hpp",
-                        "functions.hpp",
-                        "scopes.hpp",
-                        "executer.hpp"
-                ]},
-                "definitions":{"order" : [
-                        "general.cpp",
-                        "parser.cpp",
-                        "values.cpp",
-                        "expressions.cpp",
-                        "arguments.cpp",
-                        "commands.cpp",
-                        "functions.cpp",
-                        "scopes.cpp",
-                        "executer.cpp",
-                ]}
+                "src": {
+                        "order": [
+                                "definitions",
+                                "general.hpp",
+                                "parser.hpp",
+                                "main.cpp",
+                                "trident.hpp",
+                                "values.hpp",
+                                "expressions.hpp",
+                                "arguments.hpp",
+                                "commands.hpp",
+                                "functions.hpp",
+                                "scopes.hpp",
+                                "executer.hpp"
+                        ]
+                },
+                "definitions": {
+                        "order": [
+                                "general.cpp",
+                                "parser.cpp",
+                                "values.cpp",
+                                "expressions.cpp",
+                                "arguments.cpp",
+                                "commands.cpp",
+                                "functions.cpp",
+                                "scopes.cpp",
+                                "executer.cpp"
+                        ]
+                },
+                "d:\\Documents\\trident": {
+                        "order": [
+                                "code copy.trd"
+                        ],
+                        "type": "manual"
+                }
         }
 }

@@ -79,6 +79,9 @@ Index Command::run(Index PC) const
                 case CMD_SET:
                         run_set(argexec);
                         break;
+                case CMD_SETIFUNDEF:
+                        run_setifundef(argexec);
+                        break;
                 case CMD_INPUT:
                         run_input(argexec);
                         break;
@@ -123,12 +126,30 @@ void run_say(const ArgumentExecuter & arguments)
 
 void run_set(const ArgumentExecuter & arguments)
 {
+        //should only have 2 arguments, put a warning if (arguments!=2) ?
+
         Value var = arguments.get_val(0);
         if (var.val_type != VALUE_VARIABLE)
         {
                 error("tried to set something that wasn't a variable");
                 return;
         }
+
+        Value newval = arguments.get_val(1);
+        global_variable_acessor_set_variable(var.val_variable, newval);
+}
+
+void run_setifundef(const ArgumentExecuter & arguments)
+{
+        Value var = arguments.get_val(0);
+        if (var.val_type != VALUE_VARIABLE)
+        {
+                error("tried to set something that wasn't a variable");
+                return;
+        }
+
+        //check if its not undefined
+        if (VALUE_UNDEF != global_variable_acessor_get_variable(var.val_variable).val_type) return;
 
         Value newval = arguments.get_val(1);
         global_variable_acessor_set_variable(var.val_variable, newval);

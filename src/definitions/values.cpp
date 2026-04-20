@@ -164,6 +164,12 @@ std::string Value::string() const
         }
 }
 
+void Value::describe() const
+{
+
+        std::cout <<"{type="<< val_type << ",val=" << string() <<"}";
+}
+
 double Value::get_asnumber()
 {
         if (val_type==VALUE_BOOL) return (double) val_bool;

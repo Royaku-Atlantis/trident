@@ -76,6 +76,7 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 	GETCMD("input", CMD_INPUT);
 	GETCMD("jump",	CMD_JUMP);
 	GETCMD("jumpif",CMD_JUMPIF);
+	GETCMD("init",	CMD_SETIFUNDEF);
 	//GETCMD("error",CMD_) 
 	//GETCMD("continue",CMD_) 
 	//GETCMD("break",CMD_) 
@@ -91,9 +92,6 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 //string -> Value 
 Value string_to_value(const String & input_string)
 {
-	//case variables
-	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0));
-
 	//case strings
 	if (input_string[0] == '"')
 	{
@@ -102,22 +100,42 @@ Value string_to_value(const String & input_string)
 		return Value((String)output_string);
 	}
 
+	//case variables
+	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0));
+
 	//case numbers
 	double output;
 	if (get_number_from_string(input_string, output)) return Value(output);
 
 	//test specific str -> value (const)
 	#define TEST_STR(txt, val) if (input_string==txt) return Value(val);
+	#define TXT_FORMAT(val) "\033[" + val + 'm'
 
 	//constants
 	TEST_STR("true", true);
 	TEST_STR("false", false);
 	TEST_STR("Undefined", Value());
+
+
 	TEST_STR("endl", (String)"\n");
 	TEST_STR("pi", (double)3.14159265359);
 
-	TEST_STR("red_text", (String)RED);
-	TEST_STR("blue_text", (String)BLUE);
+	//colors
+	TEST_STR("RED", 	(String)RED	);
+	TEST_STR("GREEN", 	(String)GREEN	);
+	TEST_STR("YELLOW", 	(String)YELLOW	);
+	TEST_STR("BLUE", 	(String)BLUE	);
+	TEST_STR("MAGENTA", 	(String)MAGENTA	);
+	TEST_STR("CYAN", 	(String)CYAN	);
+	TEST_STR("WHITE", 	(String)WHITE	);
+	TEST_STR("BLACK", 	(String)BLACK	);
+	TEST_STR("RESET", 	(String)RESET	); //not a color, reset to default shell
+	TEST_STR("DEFAULT",		(String)(TXT_FORMAT(TXT_DEFAULT))	);
+	TEST_STR("BOLD",		(String)(TXT_FORMAT(TXT_BOLD))		);
+	TEST_STR("DARKER",		(String)(TXT_FORMAT(TXT_DARKER))	);
+	TEST_STR("UNDERLINED",		(String)(TXT_FORMAT(TXT_UNDERLINED))	);
+	TEST_STR("SETBACKGROUND",	(String)(TXT_FORMAT(TXT_SETBACKGROUND))	);
+	TEST_STR("STRIKETHROUGH",	(String)(TXT_FORMAT(TXT_STRIKETHROUGH))	);
 
 	//operators
 	TEST_STR("+",	OPn_ADD		);
@@ -139,13 +157,10 @@ Value string_to_value(const String & input_string)
 	TEST_STR("~=",	OPc_roundEQUAL	);
 	TEST_STR("!=",	OPc_UNEQUAL	);
 	TEST_STR("cos",	OPn_COS		);
-	
-	//higher level operator / pseudo funcions
-	//TEST_STR("rand",OPn_RAND	);
-	if (input_string=="rand")
-		return Value(OPn_RAND);
+	TEST_STR("rand",OPn_RAND	);
 	
 	#undef TEST_STR
+	#undef TXT_FORMAT
 
 	//return undefined
 	return Value();

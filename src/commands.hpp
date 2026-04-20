@@ -30,6 +30,9 @@ void run_say(const ArgumentExecuter & arguments);
 //set var argument
 void run_set(const ArgumentExecuter & arguments);
 
+//initialise a variable, if its not undefined, do nothing. usefule for the beggening of functions
+void run_setifundef(const ArgumentExecuter & arguments);
+
 //input
 void run_input(const ArgumentExecuter & arguments);
 

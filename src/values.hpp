@@ -14,9 +14,10 @@ struct Value{
         union {
                 double val_numb;
                 bool val_bool;
-                String * val_string;
                 int val_variable;
                 OperatorType val_operator;
+                
+                String * val_string;
         };
 
         ValueType val_type;
@@ -44,6 +45,7 @@ struct Value{
         //use it in operator overloads, with a new function AnyValueHaveValueType(VALUETYPECONSTANTE, VAL1, VAL2)
 
         String string() const;
+        void describe() const; //for debug {VAL_TYPE, value.string()}
         double get_asnumber();
         bool get_asbool();
 
