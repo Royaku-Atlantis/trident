@@ -12,6 +12,9 @@ class Scope
         //create the scope from the function index/pointer
         Scope (Functions * func_ptr);
 
+        //create a new scope, with arguments
+        Scope (Functions * func_ptr, const ArgumentExecuter & arguments);
+
         void run();
 
         void set_variable(Index index, const Value & newval);

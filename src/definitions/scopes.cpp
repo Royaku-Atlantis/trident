@@ -6,6 +6,17 @@ Scope::Scope (Functions * func_ptr)
         function = func_ptr;
 }
 
+Scope::Scope (Functions * func_ptr, const ArgumentExecuter & arguments)
+{
+        function = func_ptr;
+        say("execute scope with function named:" + arguments.get_val(0).string());
+        for (size_t i=1; i < arguments.get_valnumber() ; i++)
+        {
+                say("initialize variable index : " + std::to_string(i));
+                set_variable(i-1, arguments.get_val(i));
+        }
+}
+
 void Scope::run()
 {
         //set vriable acessors to the current scope

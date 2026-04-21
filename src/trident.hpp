@@ -35,7 +35,7 @@ enum CommandType : char {
         CMD_EMPTY, 
         CMD_PRINT, CMD_SAY, 
         CMD_SET, CMD_INPUT, CMD_SETIFUNDEF,
-        CMD_JUMP, CMD_JUMPIF, 
+        CMD_JUMP, CMD_JUMPIF, CMD_CALL,
 CMD_NUMBEROFCOMMANDS
 };
 

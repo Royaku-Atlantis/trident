@@ -1,1 +1,1 @@
-.\bin\trident.exe code.trd
+.\bin\trident.exe trident_folder
