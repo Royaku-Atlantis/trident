@@ -77,6 +77,8 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 	GETCMD("jump",	CMD_JUMP);
 	GETCMD("jumpif",CMD_JUMPIF);
 	GETCMD("init",	CMD_SETIFUNDEF);
+	GETCMD("call",	CMD_CALL);
+	GETCMD("exit",	CMD_EXIT);
 	//GETCMD("error",CMD_) 
 	//GETCMD("continue",CMD_) 
 	//GETCMD("break",CMD_) 

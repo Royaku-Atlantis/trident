@@ -3,7 +3,7 @@
 
 
 
-class Functions
+class Function
 {
 private:        
         Array<Command *> code; //dont change once created
@@ -13,10 +13,10 @@ private:
         void set_from_codelines(const CodeLines & func_code);
 public:
         //construct from array of string
-        Functions (const CodeLines & func_code);
+        Function (const CodeLines & func_code);
 
         //construct directly from the filepath
-        Functions (String filepath);
+        Function (String filepath);
 
         //functions to get informations of the function
         Index get_code_size() const;

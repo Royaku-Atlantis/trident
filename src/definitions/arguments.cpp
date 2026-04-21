@@ -108,7 +108,7 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
 }
 
  /* ---------------------------------- */
-/* ----- Debug Display Functions ---- */
+/* ----- Debug Display Function ---- */
 
 String ArgumentExecuter::string() const
 {

@@ -91,6 +91,12 @@ Index Command::run(Index PC) const
                 case CMD_JUMPIF:
                         new_PC = run_jumpif(argexec, PC);
                         break;
+                case CMD_CALL:
+                        run_call(argexec);
+                        break;
+                case CMD_EXIT:
+                        run_exit();
+                        break;
                 case CMD_EMPTY:
                 default:
                         if (CMD_NUMBEROFCOMMANDS <= cmd_type)
@@ -206,3 +212,16 @@ Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
         -1;//-1 because vs code show the first line as 1 instead of 0
                 //so for now, i correct it here
 }
+
+
+//functions 
+void run_call(const ArgumentExecuter & arguments)
+{	
+        function_call_append_scope(arguments);
+}
+void run_exit()
+{
+        scope_exit();
+}
+void run_return(const ArgumentExecuter & arguments)
+{}

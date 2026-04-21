@@ -74,6 +74,8 @@ void say(const String & text, const T & txt2)
 
 #define debug(txt,txt2) { if (DEBUG){say(RED + txt, txt2); std::cout << textFormat(0);}}
 
+//error handeling and detections
+void assert(bool condition, String error_message = "Unspecified error message");
 //{ color printing
 
 // CONSTANTS

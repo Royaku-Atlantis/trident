@@ -5,20 +5,33 @@
 class Executer
 {
 private:
-    //functions array (static after initialisation)
-    Array<Functions> functions;
-    Array<String> funcnames;
+	//functions array (static after initialisation)
+	Array<Function*> functions;
+	Array<String> funcnames;
 
-    Functions * get_function(String func_string) const;
-    Functions * get_function(Index func_index) const;
+	Function * get_function(String func_name) const;
 
-    //Scope array (dynamic)
-    Array<Scope> scopes;
-    Array<Value> global_variables;
+  	//Scope array (dynamic)
+	Array<Scope> scopes;
+	Array<Value> global_variables;
 public:
-    //append functions and funcnames
-    void add_function(const String & func_name, const Functions & new_func);
+	//append functions and funcnames
+	//will be switch to private, after the creation of constructor(folderpath)
+	void add_function(const String & func_name, const String & new_func_file_path);
 
-    //run the functions, starting from the "main" function
-    void run(const String & function_name = "main");
+    	/*// interactions with scope*/
+					//arg 0 is string = function call
+        void _function_call_append_scope(ArgumentExecuter function_arguments); //called by command call
+        void _scope_exit(); // called by command exit, procedures
+        void _scope_return(Value); // called by command return <value>, functions  
+
+	//quite self explenatory
+	void run();
+
+	~Executer();//destructor
 };
+
+extern Executer * global_executer_acessor;
+void function_call_append_scope(ArgumentExecuter function_arguments);
+void scope_exit();
+void scope_return(Value);

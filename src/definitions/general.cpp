@@ -16,11 +16,18 @@ void say(const String & text)
 {std::cout<<text<< WHITE "\n";}
 
 String textFormat(int fontcolor)
-{return "\033[" + std::to_string(fontcolor) + "m";}
+{return "\033[" + std::to_string(fontcolor) + 'm';}
 String textFormat(int info1, int info2)
-{return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + "m";}
+{return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + 'm';}
 String textFormat(int info1, int info2, int info3)
-{return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + ',' + std::to_string(info3) + "m";}
+{return "\033[" + std::to_string(info1) + ',' + std::to_string(info2) + ',' + std::to_string(info3) + 'm';}
+
+void assert(bool condition, String error_message)
+{
+	if (condition) return;
+	error(error_message);
+	throw -1;
+}
 
 // file text
 void get_file(const String & filepath, Array<String> & file_text)

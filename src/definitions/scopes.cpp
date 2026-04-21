@@ -1,18 +1,16 @@
 #include "../trident.hpp"
 #include "../scopes.hpp"
 
-Scope::Scope (Functions * func_ptr)
+Scope::Scope (Function * func_ptr)
 {
         function = func_ptr;
 }
 
-Scope::Scope (Functions * func_ptr, const ArgumentExecuter & arguments)
+Scope::Scope (Function * func_ptr, const ArgumentExecuter & arguments)
 {
         function = func_ptr;
-        say("execute scope with function named:" + arguments.get_val(0).string());
         for (size_t i=1; i < arguments.get_valnumber() ; i++)
         {
-                say("initialize variable index : " + std::to_string(i));
                 set_variable(i-1, arguments.get_val(i));
         }
 }
@@ -30,6 +28,7 @@ void Scope::run()
         {
                 i = function->get_command(i)->run(i);
         }
+        run_exit();
 }
 
 void Scope::set_variable(Index index, const Value & newval)

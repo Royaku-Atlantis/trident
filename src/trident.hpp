@@ -18,6 +18,7 @@ enum ValueType : unsigned int {
 
         VALUE_VALTYPECOUNT //to dynamically create new object types in trident
 };
+
 enum OperatorType : unsigned char 
 {OP_EMPTY, 
         OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, 
@@ -31,11 +32,13 @@ enum OperatorType : unsigned char
 
         OPn_RAND, OPl_GET, OPb_COND
 };
+
 enum CommandType : char {
         CMD_EMPTY, 
         CMD_PRINT, CMD_SAY, 
         CMD_SET, CMD_INPUT, CMD_SETIFUNDEF,
-        CMD_JUMP, CMD_JUMPIF, CMD_CALL,
+        CMD_JUMP, CMD_JUMPIF,
+        CMD_CALL, CMD_EXIT, CMD_RETURN,
 CMD_NUMBEROFCOMMANDS
 };
 

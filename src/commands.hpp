@@ -38,5 +38,9 @@ void run_input(const ArgumentExecuter & arguments);
 
 //braces
 Index run_jump(const ArgumentExecuter & arguments, Index PC);
-
 Index run_jumpif(const ArgumentExecuter & arguments, Index PC);
+
+//functions 
+void run_call(const ArgumentExecuter & arguments);
+void run_exit();
+void run_return(const ArgumentExecuter & arguments);

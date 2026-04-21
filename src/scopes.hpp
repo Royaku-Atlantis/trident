@@ -6,14 +6,14 @@ class Scope
     private:
         Array<Value> Variables;
         //Index function_index
-        Functions * function = nullptr;
+        Function* function = nullptr;
 
     public:
         //create the scope from the function index/pointer
-        Scope (Functions * func_ptr);
+        Scope (Function * func_ptr);
 
         //create a new scope, with arguments
-        Scope (Functions * func_ptr, const ArgumentExecuter & arguments);
+        Scope (Function * func_ptr, const ArgumentExecuter & arguments);
 
         void run();
 
@@ -21,7 +21,7 @@ class Scope
         Value get_variable(Index index);
 };
 
-extern Scope * global_variable_acessor_scope_link;
+extern Scope * global_variable_acessor_scope_link;//global_executer_acessor
 void global_variable_acessor_set_scope(Scope * new_scope_link);
 Value global_variable_acessor_get_variable(Index index);
 void global_variable_acessor_set_variable(Index index, const Value & newval);

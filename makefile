@@ -38,4 +38,5 @@ clean:
 	del bin\*.o
 
 veryclean:
+	del bin\*.o
 	del bin\*.exe
