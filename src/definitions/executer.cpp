@@ -26,7 +26,7 @@ void Executer::add_function(const String & func_name, const String & new_func_fi
 {
 	Function newfunc (new_func_file_path);
 
-	Function * new_function = new Function("trident_folder/main.trd");
+	Function * new_function = new Function(new_func_file_path);
 	
 	funcnames.push_back(func_name);
 	functions.push_back(new_function);

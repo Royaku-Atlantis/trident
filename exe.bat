@@ -1,1 +1,1 @@
-.\bin\main.exe main.atl
+.\bin\main.exe trident_folder

@@ -104,12 +104,15 @@ Value::Value (OperatorType value_operator)
 //Value affectation, fix memmory bs with strings
 Value& Value::operator = (const Value & new_value)
 {
+        //delet the local string hold by THIS value
         if (val_type == VALUE_STRING)
         {
                 delete val_string;
         }
-        
+
+        //case variable, to get the value it itself holds                
         val_type = new_value.val_type;
+
         switch (val_type)
         {
                 case VALUE_BOOL:
@@ -170,7 +173,7 @@ void Value::describe() const
         std::cout <<"{type="<< val_type << ",val=" << string() <<"}";
 }
 
-double Value::get_asnumber()
+double Value::get_asnumber() const
 {
         if (val_type==VALUE_BOOL) return (double) val_bool;
         if (val_type==VALUE_NUMB) return val_numb;
@@ -178,7 +181,7 @@ double Value::get_asnumber()
         if (val_type==VALUE_VARIABLE) return get_var_data().get_asnumber();
         return 0;
 }
-bool Value::get_asbool()
+bool Value::get_asbool() const
 {
         if (val_type==VALUE_BOOL) return val_bool;
         if (val_type==VALUE_NUMB) return val_numb <= 0;
@@ -188,18 +191,14 @@ bool Value::get_asbool()
         return false;
 }
 
-Value Value::get_var_data()
+Value Value::get_var_data() const
 {
         //if its not a variable, lets not fucking care
-        if (val_type!=VALUE_VARIABLE)
-                return Value();//return Undefined
-
-        Value vardata = global_variable_acessor_get_variable(val_variable);
-
+        Value var_data = * this;
+        un_variable(var_data);
+        return var_data;
         //loop in case its a link to a variable, or something
         //if (vardata.val_type == VALUE_VARIABLE) ...
-
-        return vardata;
 }//
 
 void un_variable(Value & val)
@@ -412,7 +411,6 @@ Value operator == (Value Val1, Value Val2)
 Value operator != (Value Val1, Value Val2)
 {
         un_variable(Val1); un_variable(Val2);
-        un_variable(Val1); un_variable(Val2);
 
         if (Val1.val_type != Val2.val_type) return Value(true);
 
@@ -491,6 +489,62 @@ Value operator < (Value Val1, Value Val2)
         }
 }
 
+Value round_equal(Value Val1, Value Val2)
+{
+        un_variable(Val1); un_variable(Val2);
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value( (bool)( std::abs(Val1.get_asnumber()-Val2.get_asnumber()) < 1 ));
+
+                case AND(VALUE_STRING, VALUE_STRING):
+                        //test, but count maj and min as the same thing
+                        //maybe a more advenced algorithm to make shit easier
+                default:
+                        //undefined
+                        return Value();
+        }
+}
+
+Value value_random_range(Value Val1, Value Val2)//OPn_RAND
+{       
+        un_variable(Val1); un_variable(Val2);
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                        return Value((double)random_range(Val1.get_asnumber(), Val2.get_asnumber()));
+
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        //if both bool have the same value, then no random needs to take place
+                        if (Val1.val_bool == Val2.val_bool) return Value((bool)Val1.val_bool);
+                        // true false random = coinflip
+                        return Value((bool)(rand()%2));
+
+                default:
+                        return Value();
+        }
+}
+
+Value value_cos(Value Val1)//OPn_COS
+{       
+        un_variable(Val1);
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                case VALUE_BOOL:
+                        return Value((double)cosf(Val1.get_asnumber()));
+                default:
+                        return Value();
+        }
+}
+
 std::string get_OperatorString(OperatorType c_operator)
 {
         switch (c_operator)
@@ -532,55 +586,3 @@ std::ostream& operator<<(std::ostream& out, const Value & thisval)
         return out;
 }
 
-Value round_equal(Value Val1, Value Val2)
-{
-        switch (AND(Val1.val_type, Val2.val_type))
-        {
-                //regular logic "or"
-                case AND(VALUE_NUMB, VALUE_NUMB):
-                case AND(VALUE_NUMB, VALUE_BOOL):
-                case AND(VALUE_BOOL, VALUE_NUMB):
-                case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value( (bool)( std::abs(Val1.get_asnumber()-Val2.get_asnumber()) < 1 ));
-
-                case AND(VALUE_STRING, VALUE_STRING):
-                        //test, but count maj and min as the same thing
-                        //maybe a more advenced algorithm to make shit easier
-                default:
-                        //undefined
-                        return Value();
-        }
-}
-
-Value value_random_range(Value Val1, Value Val2)//OPn_RAND
-{       
-        switch (AND(Val1.val_type, Val2.val_type))
-        {
-                //regular logic "or"
-                case AND(VALUE_NUMB, VALUE_NUMB):
-                case AND(VALUE_NUMB, VALUE_BOOL):
-                case AND(VALUE_BOOL, VALUE_NUMB):
-                        return Value((double)random_range(Val1.get_asnumber(), Val2.get_asnumber()));
-
-                case AND(VALUE_BOOL, VALUE_BOOL):
-                        //if both bool have the same value, then no random needs to take place
-                        if (Val1.val_bool == Val2.val_bool) return Value((bool)Val1.val_bool);
-                        // true false random = coinflip
-                        return Value((bool)(rand()%2));
-
-                default:
-                        return Value();
-        }
-}
-
-Value value_cos(Value Val1)//OPn_COS
-{       
-        switch (Val1.val_type)
-        {
-                case VALUE_NUMB:
-                case VALUE_BOOL:
-                        return Value((double)cosf(Val1.get_asnumber()));
-                default:
-                        return Value();
-        }
-}

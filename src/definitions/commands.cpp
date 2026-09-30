@@ -90,7 +90,6 @@ Index Command::run(Index PC) const
                         break;
                 case CMD_JUMPIF:
                         new_PC = run_jumpif(argexec, PC);
-                        std::cout << "-NewPC:" << new_PC << "-\n"; 
                         break;
                 case CMD_CALL:
                         run_call(argexec);
@@ -185,6 +184,15 @@ void run_input(const ArgumentExecuter & arguments)
                 {
                         global_variable_acessor_set_variable(varindex, Value((double)output));
                 }
+                //can it be a bool?
+                else if (input=="True" or input=="true")
+                {
+                        global_variable_acessor_set_variable(varindex, Value(true));
+                }
+                else if (input=="False" or input=="false")
+                {
+                        global_variable_acessor_set_variable(varindex, Value(false));
+                }
                 //then make it string
                 else
                 {       
@@ -196,23 +204,24 @@ void run_input(const ArgumentExecuter & arguments)
 //return the new PC
 Index run_jump(const ArgumentExecuter & arguments, Index PC)
 {       
-        //jump to the new_PC
-        return PC + arguments.get_val(0).get_asnumber() +1;
+        int new_PC = PC + arguments.get_val(0).get_asnumber() + 1;
+        new_PC = std::max(0, new_PC); //cut minimum at 0
+        return new_PC;
 }
 
 //return the new PC
 Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
 {         
         bool do_jump = !arguments.get_val(0).get_asbool();
-        arguments.get_val(0).describe();
         
-        int new_PC = PC;
+        int new_PC;
         if (do_jump)
                 new_PC = PC + arguments.get_val(1).get_asnumber() + 1;
         else
-                new_PC = PC+1; //simply continue the code
+                new_PC = PC + 1; //simply continue the code
 
-        std::cout << " |PC="<<PC<<", dojump="<<do_jump<<", new Pc=" << new_PC <<"| ";
+        //cut minimum at 0
+        new_PC = std::max(0, new_PC);
         return new_PC;
 }
 

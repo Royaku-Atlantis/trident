@@ -22,9 +22,10 @@ Index get_word(const String & input_string, Index starthere, String & word)
 		return starthere;
 
 	//remove the space if it start with spaces
-	while (input_string[starthere] == ' '
-		or input_string[starthere] == '|') //to make more lisible .trd code
-	starthere ++;
+	while (input_string[starthere] == ' ' 
+		or input_string[starthere] == '\t' 
+		or input_string[starthere] == '|') //to make more lisible .atl code
+		starthere ++;
 
 	//std::cout << "start at " << starthere << "in str '" << input_string << "' -> " ; //debug
 
@@ -59,9 +60,7 @@ Index get_word(const String & input_string, Index starthere, String & word)
 
 	//std::cout << "word = '" << word << "'\n" ; //debug
 	//we also get the actual word found with the "word" variable reference
-	return endofword
-	
-	+ (endcase == '"');
+	return endofword + (endcase == '"');
 	//if its in string mode, increment the end of the word to skip the quote
 }
 
@@ -72,18 +71,17 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 
 	GETCMD("print", CMD_PRINT);
 	GETCMD("say", 	CMD_SAY);
+	//GETCMD("error",CMD_) 
+
 	GETCMD("set",   CMD_SET);
 	GETCMD("input", CMD_INPUT);
+	GETCMD("init",	CMD_SETIFUNDEF);
+
 	GETCMD("jump",	CMD_JUMP);
 	GETCMD("jumpif",CMD_JUMPIF);
-	GETCMD("init",	CMD_SETIFUNDEF);
+	
 	GETCMD("call",	CMD_CALL);
 	GETCMD("exit",	CMD_EXIT);
-	//GETCMD("error",CMD_) 
-	//GETCMD("continue",CMD_) 
-	//GETCMD("break",CMD_) 
-	//GETCMD("for",CMD_) 
-	//GETCMD("while",CMD_)
 
 	//if no other cmd is recognised
 	return CMD_EMPTY;

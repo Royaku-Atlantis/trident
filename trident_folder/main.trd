@@ -1,6 +1,0 @@
-print "input 0v:"
-input 0v 1v
-set 0v 1v 0 +
-jumpif 0v 0
-jumpif 1v 0
-say "end of program"

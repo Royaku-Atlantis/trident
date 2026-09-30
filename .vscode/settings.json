@@ -7,17 +7,19 @@
         "customFileOrder.rules": {
                 ".": {
                         "order": [
-                                "src",
-                                "bin",
-                                "trident_folder",
-                                "reset_files.bat",
-                                "exe.bat",
-                                "compilator.bat",
-                                "other_code",
                                 ".vscode",
-                                "documentation",
                                 "images",
-                                "README.md"
+                                "other_code",
+                                "documentation",
+                                ".gitignore",
+                                "README.md",
+                                "bin",
+                                "src",
+                                "reset_files.bat",
+                                "makefile",
+                                "compilator.bat",
+                                "exe.bat",
+                                "trident_folder"
                         ]
                 },
                 "src": {
@@ -33,10 +35,11 @@
                                 "commands.hpp",
                                 "functions.hpp",
                                 "scopes.hpp",
-                                "executer.hpp"
+                                "executer.hpp",
+                                "bin"
                         ]
                 },
-                "definitions": {
+                "src/definitions": {
                         "order": [
                                 "general.cpp",
                                 "parser.cpp",
@@ -46,7 +49,7 @@
                                 "commands.cpp",
                                 "functions.cpp",
                                 "scopes.cpp",
-                                "executer.cpp"
+                                "executer.cpp",
                         ]
                 }
         }
