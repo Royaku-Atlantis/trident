@@ -128,8 +128,10 @@ String ArgumentExecuter::string() const
 
 Value ArgumentExecuter::get_val(Index index) const
 {
-        if (arguments.size() <= index) return Value();
-        else return arguments[index];
+        if (arguments.size() <= index)
+                return Value(); //Default Value
+        else
+                return arguments[index];
 }
 Index ArgumentExecuter::get_valnumber() const
 {

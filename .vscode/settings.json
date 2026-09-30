@@ -5,12 +5,27 @@
         "C_Cpp.errorSquiggles": "enabled",
         
         "customFileOrder.rules": {
+                ".": {
+                        "order": [
+                                "src",
+                                "bin",
+                                "trident_folder",
+                                "reset_files.bat",
+                                "exe.bat",
+                                "compilator.bat",
+                                "other_code",
+                                ".vscode",
+                                "documentation",
+                                "images",
+                                "README.md"
+                        ]
+                },
                 "src": {
                         "order": [
+                                "main.cpp",
                                 "definitions",
                                 "general.hpp",
                                 "parser.hpp",
-                                "main.cpp",
                                 "trident.hpp",
                                 "values.hpp",
                                 "expressions.hpp",
@@ -33,12 +48,6 @@
                                 "scopes.cpp",
                                 "executer.cpp"
                         ]
-                },
-                "d:\\Documents\\trident": {
-                        "order": [
-                                "code copy.trd"
-                        ],
-                        "type": "manual"
                 }
         }
 }

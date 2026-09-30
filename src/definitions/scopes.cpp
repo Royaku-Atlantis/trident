@@ -26,6 +26,7 @@ void Scope::run()
         Index i=0;
         while (i<func_size)
         {
+                //std::cout <<" -- Currently at line " << i<<"\n";
                 i = function->get_command(i)->run(i);
         }
         run_exit();
@@ -46,7 +47,7 @@ Value Scope::get_variable(Index index)
 {
         //resize the size if it ask for a bigger variable
         if (Variables.size() <= index)
-                Variables.resize(index +1);
+                Variables.resize(index + 1);
         //intentional use of resize and not reserve
         
         //affect variable
@@ -60,6 +61,7 @@ void global_variable_acessor_set_scope(Scope * new_scope_link)
 {
         global_variable_acessor_scope_link = new_scope_link;
 }
+
 Value global_variable_acessor_get_variable(Index index)
 {
         if (global_variable_acessor_scope_link==nullptr)
@@ -69,6 +71,7 @@ Value global_variable_acessor_get_variable(Index index)
         }
         return global_variable_acessor_scope_link->get_variable(index);
 }
+
 void global_variable_acessor_set_variable(Index index, const Value & newval)
 {
         if (global_variable_acessor_scope_link==nullptr)

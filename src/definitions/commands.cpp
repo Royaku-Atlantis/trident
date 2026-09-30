@@ -90,6 +90,7 @@ Index Command::run(Index PC) const
                         break;
                 case CMD_JUMPIF:
                         new_PC = run_jumpif(argexec, PC);
+                        std::cout << "-NewPC:" << new_PC << "-\n"; 
                         break;
                 case CMD_CALL:
                         run_call(argexec);
@@ -125,7 +126,7 @@ void run_say(const ArgumentExecuter & arguments)
         String toprint;
         for (Index i=0; i<arguments.get_valnumber(); i++)
         {
-                toprint += arguments.get_val(i).string();
+                toprint += arguments.get_val(i).string() + " ";
         }
         std::cout << toprint << "\n";
 }
@@ -196,21 +197,23 @@ void run_input(const ArgumentExecuter & arguments)
 Index run_jump(const ArgumentExecuter & arguments, Index PC)
 {       
         //jump to the new_PC
-        return arguments.get_val(0).get_asnumber()
-        -1;//-1 because vs code show the first line as 1 instead of 0
-                //so for now, i correct it here
+        return PC + arguments.get_val(0).get_asnumber() +1;
 }
 
 //return the new PC
 Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
-{       
-        if (arguments.get_val(1).get_asbool()) 
-                return PC+1; //simply continue the code
+{         
+        bool do_jump = !arguments.get_val(0).get_asbool();
+        arguments.get_val(0).describe();
+        
+        int new_PC = PC;
+        if (do_jump)
+                new_PC = PC + arguments.get_val(1).get_asnumber() + 1;
+        else
+                new_PC = PC+1; //simply continue the code
 
-        //skip to the end of the if statement
-        return arguments.get_val(0).get_asnumber()
-        -1;//-1 because vs code show the first line as 1 instead of 0
-                //so for now, i correct it here
+        std::cout << " |PC="<<PC<<", dojump="<<do_jump<<", new Pc=" << new_PC <<"| ";
+        return new_PC;
 }
 
 

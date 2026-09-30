@@ -153,7 +153,7 @@ std::string Value::string() const
                         return (* val_string);
 
                 case VALUE_VARIABLE:
-                        return global_variable_acessor_get_variable(val_variable).string();// "var:<" + std::to_string(val_variable) + '>';
+                        return "Vindex["+std::to_string(val_variable) + "]:" + global_variable_acessor_get_variable(val_variable).string();// "var:<" + std::to_string(val_variable) + '>';
 
                 case VALUE_OPERATOR:
                         return get_OperatorString(val_operator);
@@ -182,7 +182,7 @@ bool Value::get_asbool()
 {
         if (val_type==VALUE_BOOL) return val_bool;
         if (val_type==VALUE_NUMB) return val_numb <= 0;
-        if (val_type==VALUE_STRING) return 0 < val_string->size();
+        if (val_type==VALUE_STRING) return 0 != val_string->size();
         if (val_type==VALUE_VARIABLE) return get_var_data().get_asbool();
 
         return false;
@@ -191,7 +191,8 @@ bool Value::get_asbool()
 Value Value::get_var_data()
 {
         //if its not a variable, lets not fucking care
-        if (val_type!=VALUE_VARIABLE) return * this;
+        if (val_type!=VALUE_VARIABLE)
+                return Value();//return Undefined
 
         Value vardata = global_variable_acessor_get_variable(val_variable);
 
