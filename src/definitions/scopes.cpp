@@ -17,19 +17,23 @@ Scope::Scope (Function * func_ptr, const ArgumentExecuter & arguments)
 
 void Scope::run()
 {
+        std::cout<<"\n(start of run() of this func)\n";
         //set vriable acessors to the current scope
         global_variable_acessor_set_scope(this);
 
         Index func_size = function->get_code_size();
+        std::cout<<"\n(funcize = "<<func_size<<")\n";
         
         //loop through the whole function
-        Index i=0;
-        while (i<func_size)
+        Index PC=0;
+        while (PC<func_size)
         {
-                //std::cout <<" -- Currently at line " << i<<"\n";
-                i = function->get_command(i)->run(i);
+                std::cout <<"\n - now at command [" << PC <<"]\t";
+                PC = function->get_command(PC)->run(PC);
+                std::cout<<"\n - end of command, next index is :"<<PC;
         }
         run_exit();
+        std::cout<<"\n(end of run() of this func)\n";
 }
 
 void Scope::set_variable(Index index, const Value & newval)

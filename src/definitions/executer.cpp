@@ -24,8 +24,7 @@ Function * Executer::get_function(String func_name) const
 
 void Executer::add_function(const String & func_name, const String & new_func_file_path)
 {
-	Function newfunc (new_func_file_path);
-
+	//Function newfunc (new_func_file_path);
 	Function * new_function = new Function(new_func_file_path);
 	
 	funcnames.push_back(func_name);
@@ -58,11 +57,13 @@ void Executer::_scope_exit() // called by command exit, procedures
 	//case main scope
 	if (scopes.size() == 0)
 	{
+		std::cout << YELLOW "\nEND OF EXECUTION\n" RESET;
 		//end of program
 	}
 	else //case called function scope
 	{
 	        global_variable_acessor_set_scope(& scopes.back());
+		std::cout << YELLOW "\nEND OF FUNCALL\n" RESET;
 	}
 }
 void Executer::_scope_return(Value)

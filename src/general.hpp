@@ -24,6 +24,17 @@
 String double_to_trimmed_string(double value);
 // concat the same string 'value' times
 String string_multip(const String & str, int value);
+
+bool ends_with(std::string const & value, std::string const & ending);
+
+//code from https://codemia.io/knowledge-hub/path/how_to_trim_a_stdstring
+// Trim from the left (in place)
+void ltrim(String & s);
+// Trim from the right (in place)
+void rtrim(String & s);
+// Trim both ends (in place)
+void trim(String & s);
+
 //modulo but with floats, very useful, actually
 double modulo(double numb, double div);
 
@@ -62,8 +73,6 @@ unsigned int stoi2(std::string text_to_convert, int default_value);
 bool get_number_from_string(String text_to_convert, double & result);
 
 // - PRINT FUNCTIONS - //
-// { print functions
-
 //print one single txt
 void say(const String & text);
 //say with any type after
@@ -76,7 +85,6 @@ void say(const String & text, const T & txt2)
 
 //error handeling and detections
 void assert(bool condition, String error_message = "Unspecified error message");
-//{ color printing
 
 // CONSTANTS
 enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_ITALIC, TXT_UNDERLINED, TXT_BLINK, TXT_BLINK2, TXT_SETBACKGROUND, TXT_INVISIBLE, TXT_STRIKETHROUGH};

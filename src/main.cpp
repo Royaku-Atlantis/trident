@@ -10,16 +10,67 @@ using namespace std;
 ╚═╝╘╩╛╩═╛╚═╝  ╩╚═╝╚═╝  ╜╚═╝╚═╝
 */
 
+#include <filesystem>
+#define FILE_EXT_LEN 4
+#define FILE_EXT ".atl"
+int filepath_atl_function_name_get_size(String path)
+{
+        //check if it end in .atl
+        if (!ends_with(path, FILE_EXT)) return -1;
+
+        int size = 0;
+        for (int i=path.size()-FILE_EXT_LEN-1; i>=0; i--)
+        {
+                if (path[i] == '/' or path[i] == '\\') break;
+                size ++;
+        }
+        return size;
+}
+String get_function_name(String path, int file_name_size)
+{
+        return path.substr(
+                path.size()-file_name_size-FILE_EXT_LEN,
+                file_name_size);
+}
+#undef FILE_EXT_LEN
+#undef FILE_EXT
+
 int main(int argc, char ** args)
 {
         cout << "\033[0m";
         String program_name = args[1];
-        //*
-        //String trident_file_path = args[1];
+
+        String totrim = "\t test\t   \t";
+        trim(totrim);
+        cout << "\n-'" << totrim << "'-\n";
+
         Executer exe;
         exe.add_function("main", program_name+"/main.atl");
-        //exe.add_function("test", "trident_folder/test.trd");
+
+        //add all functions
+        for(const auto & entry : filesystem::directory_iterator(program_name+"/functions")) 
+        {
+                String function_file_path = entry.path().string();
+                cout << "\nGet file path : '" << function_file_path << "'";
+
+                int filesize = filepath_atl_function_name_get_size(function_file_path);
+
+                if (filesize==-1)
+                {
+                        //TODO warning?
+                        cout << "\n -> not a func file";
+                }
+                else
+                {
+                        String funcfile_name = get_function_name(function_file_path, filesize);
+                        //add this function
+                        cout << "\n -> nom = '" << funcfile_name << "'\n";
+                        exe.add_function(funcfile_name, function_file_path);
+                }
+        }//*/
 
         exe.run();
+        say( BLUE "end of ALL the program" RESET);
+
         return 0;
 }

@@ -14,7 +14,7 @@ string input(const string & saytext="in"){
     return smth;
 }
 void say(const string & saytext){
-    cout << saytext << endl ;
+    cout << endl << saytext ;
 }
 
 /////////////////////////////////////////////////////////

@@ -45,10 +45,10 @@ ExpressionElement * Command::get_expressionstart() const
         return first_exprelement;
 }
 
-void Command::debug_display_command()
+void Command::debug_display_command() const
 {
                                      //i hate doing that, tf you mean, double convertion??
-        std::cout << "{cmdIndex:" << std::to_string((int)cmd_type);
+        std::cout << "\n{cmdIndex:" << std::to_string((int)cmd_type);
 
         ExpressionElement * expr = first_exprelement;
 
@@ -57,7 +57,7 @@ void Command::debug_display_command()
                 std::cout << ", " << expr->value ;
                 expr = expr->ptr_next;
         }
-        std::cout << "}\n";
+        std::cout << "}";
 }
 
 Index Command::run(Index PC) const
@@ -103,7 +103,7 @@ Index Command::run(Index PC) const
                                 error("cmd_type have invalid index of command : [" + std::to_string(cmd_type) + ']');
                         break;
         }
-        
+
         return new_PC;
 }
 
@@ -127,7 +127,7 @@ void run_say(const ArgumentExecuter & arguments)
         {
                 toprint += arguments.get_val(i).string() + " ";
         }
-        std::cout << toprint << "\n";
+        std::cout << "\n" << toprint;
 }
 
 void run_set(const ArgumentExecuter & arguments)
@@ -230,11 +230,14 @@ Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
 //functions 
 void run_call(const ArgumentExecuter & arguments)
 {	
+	std::cout << RED "\n End of call, from run_call" RESET;
         function_call_append_scope(arguments);
+	std::cout << RED "\n End of call, from run_call" RESET;
 }
 void run_exit()
 {
         scope_exit();
+	std::cout<<"\n(in run_exit())";
 }
 void run_return(const ArgumentExecuter & arguments)
 {}

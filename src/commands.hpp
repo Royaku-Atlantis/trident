@@ -15,7 +15,7 @@ public:
 
         ExpressionElement * get_expressionstart() const;
         
-        void debug_display_command();
+        void debug_display_command() const;
 
         //return PCoffset (1 = basic increment, go to the next command) 
         Index run(Index PC) const;

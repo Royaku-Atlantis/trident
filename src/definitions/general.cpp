@@ -39,6 +39,7 @@ void get_file(const String & filepath, Array<String> & file_text)
 		return;
 	}
 	file_text.clear();
+	
 	//read the file
 	String txtline;
 	while (!filedata.eof())
@@ -105,6 +106,32 @@ String string_multip(const String & str, int number)
 		text += str;
 
 	return text;
+}
+
+bool ends_with(std::string const & value, std::string const & ending)
+{
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+#include <algorithm>
+#include <cctype>
+
+//code from https://codemia.io/knowledge-hub/path/how_to_trim_a_stdstring
+// Trim from the left (in place)
+void ltrim(String & s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+        [](unsigned char ch) { return !std::isspace(ch); }));
+}
+// Trim from the right (in place)
+void rtrim(String & s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+        [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+}
+// Trim both ends (in place)
+void trim(String & s) {
+    ltrim(s);
+    rtrim(s);
 }
 
 double modulo(double numb, double div)

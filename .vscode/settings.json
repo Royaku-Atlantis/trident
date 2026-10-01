@@ -36,7 +36,8 @@
                                 "functions.hpp",
                                 "scopes.hpp",
                                 "executer.hpp",
-                                "bin"
+                                "bin",
+                                "lol.atl"
                         ]
                 },
                 "src/definitions": {
@@ -49,7 +50,7 @@
                                 "commands.cpp",
                                 "functions.cpp",
                                 "scopes.cpp",
-                                "executer.cpp",
+                                "executer.cpp"
                         ]
                 }
         }
