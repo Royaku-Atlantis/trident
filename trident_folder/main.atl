@@ -1,14 +1,12 @@
 print "entrez la variable:"
 input 0v
+say "inputted :" 0v
 
-jumpif 0v "stop" != 8
-
+jumpif 0v "test" == 2
+	say "you said test"
+jump 4
 jumpif 0v not 2
-	say "you said true"
-jump 1
 	say "you said false"
-
-say "retour au debut!"
-jump -100
-
-say "fin du programme"
+jump 1
+	say "you said true"
+say "end of prog

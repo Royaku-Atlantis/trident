@@ -142,6 +142,7 @@ void run_set(const ArgumentExecuter & arguments)
         }
 
         Value newval = arguments.get_val(1);
+        un_variable(newval);
         global_variable_acessor_set_variable(var.val_variable, newval);
 }
 

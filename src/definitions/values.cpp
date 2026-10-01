@@ -156,7 +156,8 @@ std::string Value::string() const
                         return (* val_string);
 
                 case VALUE_VARIABLE:
-                        return "Vindex["+std::to_string(val_variable) + "]:" + global_variable_acessor_get_variable(val_variable).string();// "var:<" + std::to_string(val_variable) + '>';
+                        //"Vindex["+std::to_string(val_variable) + "]:" +
+                        return global_variable_acessor_get_variable(val_variable).string();
 
                 case VALUE_OPERATOR:
                         return get_OperatorString(val_operator);

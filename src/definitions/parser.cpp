@@ -145,8 +145,11 @@ Value string_to_value(const String & input_string)
 	TEST_STR("%",	OPn_MOD		);
 	TEST_STR(".",	OPl_GET		);
 	TEST_STR("and",	OPb_AND		);
+	TEST_STR("&&",	OPb_AND		);
 	TEST_STR("or",	OPb_OR		);
+	TEST_STR("||",	OPb_OR		);
 	TEST_STR("!",	OPb_NOT		);
+	TEST_STR("not",	OPb_NOT		);
 	TEST_STR("xor",	OPb_XOR		);
 	TEST_STR("?",	OPb_COND	);
 	TEST_STR("<",	OPc_strictINF	);
