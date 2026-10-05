@@ -79,6 +79,7 @@ void say(const String & text);
 template <class T>
 void say(const String & text, const T & txt2)
 {std::cout<<text<<txt2<<'\n';}
+//#define str(not_text) std::to_string(not_text)
 #define error(text) std::cout << std::endl << RED << (text) << RESET  ; 
 #define debug(txt,txt2) { if (DEBUG){say(RED + txt, txt2); std::cout << textFormat(0);}}
 

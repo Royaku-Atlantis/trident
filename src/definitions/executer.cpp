@@ -55,18 +55,13 @@ Function * Executer::get_function(Index func_idx) const
 
 void Executer::add_function(const String & func_name, const String & new_func_file_path)
 {
-        say("TEST");
 	//Function newfunc (new_func_file_path);
 	Function * new_function = new Function(new_func_file_path);
 	
 	funcnames.push_back(func_name);
 	functions.push_back(new_function);
-
-	say ("Add Function named '" + func_name + "' : ");
-	functions.back()->debug_display_command();
-        say("TEST");
+	//functions.back()->debug_display_command();
 }
-
 
 void Executer::run()
 {
@@ -84,10 +79,7 @@ void Executer::run()
 		Index & PC = callstack_PC.back();
 		bool Call_Function = false;
 
-		if (PC==0)
-			say(YELLOW "Start Of Function " );
-		else 	say(MAGENTA "Continue Function ");
-		std::cout<<current_func<<"---";
+		//if (PC==0) say("start new func");
 		//start execution of function
 		while (PC < current_func_size and !Call_Function)
 		{
@@ -98,7 +90,6 @@ void Executer::run()
 			Function * newfunc = get_function(step_data.newfunc_name);
 			if (newfunc != nullptr)
 			{
-				say(MAGENTA "Call for a new scope");
 				callstack_PC[callstack_PC.size()-1] = PC; //PC = Index & so idk wy i need to do this??
 				callstack_PC.push_back(0);
 				callstack_Func.push_back(newfunc);
@@ -119,11 +110,8 @@ void Executer::run()
 				global_variables.begin() + global_variables.size()
 			);
 			callstack_var_start.pop_back();
-			
-			say(YELLOW "End Of Function");
 		}
 	}
-
 	say(BLUE "End Of Execution");
 }
 
@@ -153,6 +141,10 @@ void Executer::set_var(int var_idx, Value var_value)
 	global_variables[var_idx] = var_value;
 }
 
+void Executer::print_var_status()
+{
+	for (int i=0; i<variab)
+}
 
 void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 {

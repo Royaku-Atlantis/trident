@@ -1,3 +1,5 @@
 say "TEST"
-call "subtest"
+call "test"
+say "subtest done
+call "subtest" 3
 say "pipou pipou" 5 4 +

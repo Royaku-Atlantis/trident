@@ -11,7 +11,7 @@ StepData::StepData(Index PCnext)
 
 StepData::StepData(Index PCnext, String NewFuncName)
 {
-	PC_next = PC_next;
+	PC_next = PCnext;
 	newfunc_name = NewFuncName;
 }
 
@@ -104,7 +104,7 @@ StepData Command::run(Index PC) const
                         new_PC = run_jumpif(argexec, PC);
                         break;
                 case CMD_CALL:
-                        return run_call(argexec, PC);
+                        return run_call(argexec, new_PC);
                         break;
                 case CMD_EXIT:
                         run_exit();

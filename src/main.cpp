@@ -41,7 +41,6 @@ int main(int argc, char ** args)
         String program_name = args[1];
 
         Executer exe;
-        say("TEST exe");
         exe.add_function("main", program_name+"/main.atl");
 
         //add all functions
@@ -53,7 +52,7 @@ int main(int argc, char ** args)
 
                 if (filesize==-1)
                 {
-                        cout << " -> not a func file";
+                        //cout << " -> not a func file";
                 }
                 else
                 {
@@ -64,7 +63,6 @@ int main(int argc, char ** args)
         }//*/
 
         exe.run();
-        say( BLUE "end of ALL the program" RESET);
 
         return 0;
 }

@@ -33,6 +33,7 @@ public:
 
 	Value get_var(int var_idx) const;
 	void set_var(int var_idx, Value var_value);
+	void print_var_status();
 
 	void load_var_incoming_scope(const ArgumentExecuter & arguments);
 
