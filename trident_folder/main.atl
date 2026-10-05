@@ -1,3 +1,3 @@
 say "TEST"
-#call "subtest"
+call "subtest"
 say "pipou pipou" 5 4 +

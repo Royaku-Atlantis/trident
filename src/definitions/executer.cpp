@@ -79,15 +79,15 @@ void Executer::run()
 		//init execution of function
 		StepData step_data = StepData(0);
 
-		Function * current_func = functions.back();
+		Function * current_func = callstack_Func.back();
 		Index current_func_size = current_func->get_code_size();
 		Index & PC = callstack_PC.back();
 		bool Call_Function = false;
 
 		if (PC==0)
-			say(YELLOW "Start Of Function");
-		else 	say(MAGENTA "Continue Function");
-
+			say(YELLOW "Start Of Function " );
+		else 	say(MAGENTA "Continue Function ");
+		std::cout<<current_func<<"---";
 		//start execution of function
 		while (PC < current_func_size and !Call_Function)
 		{
@@ -99,6 +99,7 @@ void Executer::run()
 			if (newfunc != nullptr)
 			{
 				say(MAGENTA "Call for a new scope");
+				callstack_PC[callstack_PC.size()-1] = PC; //PC = Index & so idk wy i need to do this??
 				callstack_PC.push_back(0);
 				callstack_Func.push_back(newfunc);
 				Call_Function = true;
