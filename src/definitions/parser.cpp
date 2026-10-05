@@ -170,7 +170,7 @@ Value string_to_value(const String & input_string)
 }
 
 // String code_line -> command object
-Command * create_command(const String & code_line)
+Command create_command(const String & code_line)
 {
 	//get the command type
 	String commandname;
@@ -178,7 +178,7 @@ Command * create_command(const String & code_line)
 	CommandType command_type = cmdtext_get_cmdtype(commandname);
 
 	//define the command
-	Command * newcmd = new Command(command_type);
+	Command newcmd = Command(command_type);
 
 	//define the command arguments
 	String str_value;
@@ -188,7 +188,7 @@ Command * create_command(const String & code_line)
 	while (str_value != "")
 	{
 		Value newval = string_to_value(str_value);
-		newcmd->append_expression(newval);
+		newcmd.append_expression(newval);
 		next_word = get_word(code_line, next_word, str_value);
 	}
 

@@ -3,6 +3,18 @@
 
 //enum CommandType : char {CMD_EMPTY, CMD_IF, CMD_ELIF, CMD_ELSE, CMD_PRINT, CMD_SET};
 
+StepData::StepData(Index PCnext)
+{
+	PC_next = PCnext;
+	newfunc_name = "";
+}
+
+StepData::StepData(Index PCnext, String NewFuncName)
+{
+	PC_next = PC_next;
+	newfunc_name = NewFuncName;
+}
+
 
 Command::Command (CommandType cmdtype)
 {
@@ -47,7 +59,7 @@ ExpressionElement * Command::get_expressionstart() const
 
 void Command::debug_display_command() const
 {
-                                     //i hate doing that, tf you mean, double convertion??
+        //i hate doing that, tf you mean, double convertion??
         std::cout << "\n{cmdIndex:" << std::to_string((int)cmd_type);
 
         ExpressionElement * expr = first_exprelement;
@@ -60,7 +72,7 @@ void Command::debug_display_command() const
         std::cout << "}";
 }
 
-Index Command::run(Index PC) const
+StepData Command::run(Index PC) const
 {
         Index new_PC = PC + 1;
         //next command will simply be the next one
@@ -92,7 +104,7 @@ Index Command::run(Index PC) const
                         new_PC = run_jumpif(argexec, PC);
                         break;
                 case CMD_CALL:
-                        run_call(argexec);
+                        return run_call(argexec, PC);
                         break;
                 case CMD_EXIT:
                         run_exit();
@@ -103,7 +115,6 @@ Index Command::run(Index PC) const
                                 error("cmd_type have invalid index of command : [" + std::to_string(cmd_type) + ']');
                         break;
         }
-
         return new_PC;
 }
 
@@ -142,8 +153,8 @@ void run_set(const ArgumentExecuter & arguments)
         }
 
         Value newval = arguments.get_val(1);
-        un_variable(newval);
-        global_variable_acessor_set_variable(var.val_variable, newval);
+        un_variable(newval);//to be sure to get the actual value
+        global_executer_acessor->set_var(var.val_variable, newval);
 }
 
 void run_setifundef(const ArgumentExecuter & arguments)
@@ -156,10 +167,10 @@ void run_setifundef(const ArgumentExecuter & arguments)
         }
 
         //check if its not undefined
-        if (VALUE_UNDEF != global_variable_acessor_get_variable(var.val_variable).val_type) return;
+        if (VALUE_UNDEF != global_executer_acessor->get_var(var.val_variable).val_type) return;
 
         Value newval = arguments.get_val(1);
-        global_variable_acessor_set_variable(var.val_variable, newval);
+        global_executer_acessor->set_var(var.val_variable, newval);
 }
 
 void run_input(const ArgumentExecuter & arguments)
@@ -183,22 +194,22 @@ void run_input(const ArgumentExecuter & arguments)
                 double output;
 	        if (get_number_from_string(input, output))
                 {
-                        global_variable_acessor_set_variable(varindex, Value((double)output));
+                        global_executer_acessor->set_var(varindex, Value((double)output));
                 }
                 //can it be a bool?
-                else if (input=="True" or input=="true")
+                else if (input=="True" or input=="true" or input=="TRUE")
                 {
-                        global_variable_acessor_set_variable(varindex, Value(true));
+                        global_executer_acessor->set_var(varindex, Value(true));
                 }
-                else if (input=="False" or input=="false")
+                else if (input=="False" or input=="false" or input=="FALSE")
                 {
-                        global_variable_acessor_set_variable(varindex, Value(false));
+                        global_executer_acessor->set_var(varindex, Value(false));
                 }
                 //then make it string
                 else
                 {       
-                        global_variable_acessor_set_variable(varindex, Value((String)input));
-                }        
+                        global_executer_acessor->set_var(varindex, Value((String)input));
+                }      
         }
 }
 
@@ -228,16 +239,15 @@ Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
 
 
 //functions 
-void run_call(const ArgumentExecuter & arguments)
+StepData run_call(const ArgumentExecuter & arguments, Index PC)
 {	
-	std::cout << RED "\n End of call, from run_call" RESET;
-        function_call_append_scope(arguments);
-	std::cout << RED "\n End of call, from run_call" RESET;
+        global_executer_acessor->load_var_incoming_scope(arguments);
+        return StepData(PC, arguments.get_val(0).string());
 }
 void run_exit()
 {
-        scope_exit();
-	std::cout<<"\n(in run_exit())";
+        //scope_exit();
+	//std::cout<<"\n(in run_exit())";
 }
 void run_return(const ArgumentExecuter & arguments)
 {}

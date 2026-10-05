@@ -1,5 +1,5 @@
-all: bin\arguments.o bin\commands.o bin\executer.o bin\expressions.o bin\functions.o bin\general.o bin\parser.o bin\scopes.o bin\values.o bin\main.o
-	g++ bin\arguments.o bin\commands.o bin\executer.o bin\expressions.o bin\functions.o bin\general.o bin\parser.o bin\scopes.o bin\values.o bin\main.o -g -o bin\main.exe -std=c++20
+all: bin\arguments.o bin\commands.o bin\executer.o bin\expressions.o bin\functions.o bin\general.o bin\parser.o bin\values.o bin\main.o
+	g++ bin\arguments.o bin\commands.o bin\executer.o bin\expressions.o bin\functions.o bin\general.o bin\parser.o bin\values.o bin\main.o -g -o bin\main.exe -std=c++20
 
 bin\arguments.o: src\definitions\arguments.cpp
 	g++ -c src\definitions\arguments.cpp -g -o bin\arguments.o
@@ -15,8 +15,6 @@ bin\general.o: src\definitions\general.cpp
 	g++ -c src\definitions\general.cpp -g -o bin\general.o
 bin\parser.o: src\definitions\parser.cpp
 	g++ -c src\definitions\parser.cpp -g -o bin\parser.o
-bin\scopes.o: src\definitions\scopes.cpp
-	g++ -c src\definitions\scopes.cpp -g -o bin\scopes.o
 bin\values.o: src\definitions\values.cpp
 	g++ -c src\definitions\values.cpp -g -o bin\values.o
 bin\main.o: src\main.cpp

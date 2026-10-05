@@ -157,7 +157,7 @@ std::string Value::string() const
 
                 case VALUE_VARIABLE:
                         //"Vindex["+std::to_string(val_variable) + "]:" +
-                        return global_variable_acessor_get_variable(val_variable).string();
+                        return global_executer_acessor->get_var(val_variable).string();
 
                 case VALUE_OPERATOR:
                         return get_OperatorString(val_operator);
@@ -207,7 +207,7 @@ void un_variable(Value & val)
         //if the value is a variable, get its non variable value
         //if its STILL a variable, continue
         while (val.val_type == VALUE_VARIABLE)
-                val = global_variable_acessor_get_variable(val.val_variable);
+                val = global_executer_acessor->get_var(val.val_variable);
 }
 
 //operation overloading

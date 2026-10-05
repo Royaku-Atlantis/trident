@@ -1,6 +1,15 @@
 #pragma once
 #include "trident.hpp"
 
+struct StepData
+{
+	Index PC_next = 0;
+	String newfunc_name = "";
+
+	StepData(Index PCnext);
+	StepData(Index PCnext, String NewFuncName);
+};
+
 class Command
 {
         CommandType cmd_type = CMD_EMPTY;
@@ -18,7 +27,7 @@ public:
         void debug_display_command() const;
 
         //return PCoffset (1 = basic increment, go to the next command) 
-        Index run(Index PC) const;
+        StepData run(Index PC) const;
 };
 
 //print arguments
@@ -41,6 +50,6 @@ Index run_jump(const ArgumentExecuter & arguments, Index PC);
 Index run_jumpif(const ArgumentExecuter & arguments, Index PC);
 
 //functions 
-void run_call(const ArgumentExecuter & arguments);
+StepData run_call(const ArgumentExecuter & arguments, Index PC);
 void run_exit();
 void run_return(const ArgumentExecuter & arguments);

@@ -37,34 +37,28 @@ String get_function_name(String path, int file_name_size)
 
 int main(int argc, char ** args)
 {
-        cout << "\033[0m";
+        say( BLUE "start of ALL the program" RESET);
         String program_name = args[1];
 
-        String totrim = "\t test\t   \t";
-        trim(totrim);
-        cout << "\n-'" << totrim << "'-\n";
-
         Executer exe;
+        say("TEST exe");
         exe.add_function("main", program_name+"/main.atl");
 
         //add all functions
         for(const auto & entry : filesystem::directory_iterator(program_name+"/functions")) 
         {
                 String function_file_path = entry.path().string();
-                cout << "\nGet file path : '" << function_file_path << "'";
 
                 int filesize = filepath_atl_function_name_get_size(function_file_path);
 
                 if (filesize==-1)
                 {
-                        //TODO warning?
-                        cout << "\n -> not a func file";
+                        cout << " -> not a func file";
                 }
                 else
                 {
                         String funcfile_name = get_function_name(function_file_path, filesize);
                         //add this function
-                        cout << "\n -> nom = '" << funcfile_name << "'\n";
                         exe.add_function(funcfile_name, function_file_path);
                 }
         }//*/

@@ -6,7 +6,7 @@
 class Function
 {
 private:        
-        Array<Command *> code; //dont change once created
+        Array<Command> code; //dont change once created
         Index code_size;
         
         //common procedure for constructor
@@ -14,13 +14,14 @@ private:
 public:
         //construct from array of string
         Function (const CodeLines & func_code);
-
         //construct directly from the filepath
         Function (String filepath);
+        //destructor
+        ~Function ();
 
         //functions to get informations of the function
         Index get_code_size() const;
-        Command * get_command(Index cmd_index) const;
+        Command get_command(Index cmd_index) const;
         //methodes for the scope to navigate between brackets
 
         //display all commands info

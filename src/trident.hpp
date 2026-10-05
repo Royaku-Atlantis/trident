@@ -49,7 +49,6 @@ CMD_NUMBEROFCOMMANDS
 #include "commands.hpp"
 #include "parser.hpp"
 #include "functions.hpp"
-#include "scopes.hpp"
 #include "executer.hpp"
 
 #endif //TRIDENT_HEADER

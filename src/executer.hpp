@@ -1,37 +1,42 @@
 #pragma once
 #include "trident.hpp"
 
-
 class Executer
 {
 private:
 	//functions array (static after initialisation)
-	Array<Function*> functions;
-	Array<String> funcnames;
+	Array<Function*> functions; //constant after init
+	Array<String> funcnames; //constant after init
 
-	Function * get_function(String func_name) const;
+	//callstack
+	Array<Index> callstack_PC;
+	Array<Function*> callstack_Func;
 
   	//Scope array (dynamic)
-	Array<Scope> scopes;
 	Array<Value> global_variables;
+	Array<Index> callstack_var_start;
+
+	Function * get_function(String func_name) const;
+	Function * get_function(Index func_idx) const;
 public:
+	Executer ();
+	void reset();
 	//append functions and funcnames
 	//will be switch to private, after the creation of constructor(folderpath)
 	void add_function(const String & func_name, const String & new_func_file_path);
 
     	/*// interactions with scope*/
-					//arg 0 is string = function call
-        void _function_call_append_scope(ArgumentExecuter function_arguments); //called by command call
-        void _scope_exit(); // called by command exit, procedures
-        void _scope_return(Value); // called by command return <value>, functions  
+	//arg 0 is string = function call
 
 	//quite self explenatory
 	void run();
+
+	Value get_var(int var_idx) const;
+	void set_var(int var_idx, Value var_value);
+
+	void load_var_incoming_scope(const ArgumentExecuter & arguments);
 
 	~Executer();//destructor
 };
 
 extern Executer * global_executer_acessor;
-void function_call_append_scope(ArgumentExecuter function_arguments);
-void scope_exit();
-void scope_return(Value);

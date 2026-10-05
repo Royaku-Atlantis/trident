@@ -17,7 +17,7 @@ Scope::Scope (Function * func_ptr, const ArgumentExecuter & arguments)
 
 void Scope::run()
 {
-        std::cout<<"\n(start of run() of this func)\n";
+        say(GREEN "start of run() of this func");
         //set vriable acessors to the current scope
         global_variable_acessor_set_scope(this);
 
@@ -28,12 +28,12 @@ void Scope::run()
         Index PC=0;
         while (PC<func_size)
         {
-                std::cout <<"\n - now at command [" << PC <<"]\t";
-                PC = function->get_command(PC)->run(PC);
-                std::cout<<"\n - end of command, next index is :"<<PC;
+                String funcidx = std::to_string(func_size);
+                say(" - now at command ["+std::to_string(PC)+"]");
+                PC = PC+1;//function->get_command(PC).run(PC);
+                say(" - end of command, next index is ->"+std::to_string(PC));
         }
-        run_exit();
-        std::cout<<"\n(end of run() of this func)\n";
+        say(GREEN "End of run() of this func");
 }
 
 void Scope::set_variable(Index index, const Value & newval)

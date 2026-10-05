@@ -22,7 +22,7 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
  *
  * exemple:
  * from the trident expressions : "1 + 5*3 "joe's age:" + round(var_age)"
- * expr_element = <5, 3, op_mul, 1, op_add, "joe's age:", var_age, op_round>
+ * expr_element = <5, 3, op_mul, 1, op_add, "joe's age:", var_age, op_round, op_add>
  *  | (let's say var_age store the number 24.3)
  *  V
  * argument_output <16, "joe's age:24">
