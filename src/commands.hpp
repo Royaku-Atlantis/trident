@@ -42,6 +42,8 @@ void run_set(const ArgumentExecuter & arguments);
 //initialise a variable, if its not undefined, do nothing. usefule for the beggening of functions
 void run_setifundef(const ArgumentExecuter & arguments);
 
+//unref the variable intake (if it hold a reference) and set it to a new value 
+void run_unref(const ArgumentExecuter & arguments);
 //input
 void run_input(const ArgumentExecuter & arguments);
 

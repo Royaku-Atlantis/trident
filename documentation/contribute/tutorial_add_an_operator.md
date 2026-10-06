@@ -1,5 +1,5 @@
-# **Trident** - Technical documentation
-[Go back to the Tutorials Menu](contribute.md)
+# **Trident** - Add an Operator
+[Go back to Menu](../Trident.md)
 ---
 # Add an operator :
 
@@ -18,8 +18,8 @@ The format is: **OP``t``_``NAME``:**
 - 'n' for numbers, like ``OPn_ADD`` for a+b.
 - 'b' for booleans, like ``OPb_NOT`` for !a
 - 'c' for comparators, like ``OPc_UNEQUAL`` for a!=b 
-- NAME should be uppercase in most case,  
-But you can add lowercase for specification, like what we hava with ``OPc_strictINF`` and ``OPc_equalINF``  
+- 'v' for variable management, like ``OPv_REF`` for 0v ref
+- NAME should be uppercase in **most** case, unless it's more readable otherwise ``OPc_strictINF`` and ``OPc_equalINF``  
 
 ## __• Add the function__
 Put the declaration in ``src/values.hpp``  

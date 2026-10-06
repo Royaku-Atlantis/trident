@@ -33,6 +33,10 @@ public:
 
 	Value get_var(int var_idx) const;
 	void set_var(int var_idx, Value var_value);
+	Value get_var_abs(Index var_idx) const;
+	void set_var_abs(Index var_idx, Value var_value);
+	Index get_var_offset();
+
 	void print_var_status();
 
 	void load_var_incoming_scope(const ArgumentExecuter & arguments);

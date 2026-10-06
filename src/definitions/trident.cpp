@@ -9,6 +9,7 @@ String valuetype_string(ValueType ValType)
 		case VALUE_NUMB: return "Numb";
 		case VALUE_BOOL: return "Bool";
 		case VALUE_VARIABLE: return "Var";
+		case VALUE_VAREFERENCE: return "VarRef";
 		case VALUE_STRING: return "Str";
 		default : return "INVALID_TYPE";
 		//case VALUE_VALTYPECOUNT:

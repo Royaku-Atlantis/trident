@@ -4,6 +4,8 @@
   
   The readme is still under construction
 
+[Documentation](documentation/Trident.md)  
+
 ### objectives :
 - make an ultra accessible programming language
 - use it for an Atlantis Games idea

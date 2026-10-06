@@ -1,4 +1,4 @@
-# **Trident** - Technical documentation
-[Go back to the Tutorials Menu](contribute.md)
+# **Trident** - Add an Type
+[Go back to Menu](../Trident.md)
 --
 ### To test this, i'll create the point index, i think

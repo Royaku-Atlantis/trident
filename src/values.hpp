@@ -29,7 +29,7 @@ struct Value{
         Value (double value_numb);
         Value (bool value_bool);
         Value (String value_string);
-        Value (int value_variable);
+        Value (int value_variable, bool is_reference);
         Value (OperatorType value_operator);
 
         //Value affectation, fix memmory bs with strings
@@ -58,6 +58,7 @@ std::ostream& operator<<(std::ostream& out, const Value & thisval);
 //if the Value is a variable, it transforms it into the Value it holds
 void un_variable(Value & val);
 void un_variable_maintain_reference(Value & val);
+Value variable_to_reference(Value val);
 
 //Value operators overloading
 Value operator +        (Value Val1, Value Val2);
@@ -75,9 +76,12 @@ Value operator >=       (Value Val1, Value Val2);
 Value operator <=       (Value Val1, Value Val2);
 Value operator >        (Value Val1, Value Val2);
 Value operator <        (Value Val1, Value Val2);
+
 //random
 Value round_equal(Value Val1, Value Val2);
 Value value_random_range(Value Val1, Value Val2);
+
+Value abs(Value Val1);
 
 //trigo
 Value value_cos(Value Val1);

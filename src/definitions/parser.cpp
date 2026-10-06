@@ -76,6 +76,7 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 	GETCMD("set",   CMD_SET);
 	GETCMD("input", CMD_INPUT);
 	GETCMD("init",	CMD_SETIFUNDEF);
+	GETCMD("unref",   CMD_SET);
 
 	GETCMD("jump",	CMD_JUMP);
 	GETCMD("jumpif",CMD_JUMPIF);
@@ -101,7 +102,7 @@ Value string_to_value(const String & input_string)
 	}
 
 	//case variables
-	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0));
+	if (input_string.back() == 'v') return Value((int)stoi2(input_string, 0), false);
 
 	//case numbers
 	double output;
@@ -115,7 +116,6 @@ Value string_to_value(const String & input_string)
 	TEST_STR("true", true);
 	TEST_STR("false", false);
 	TEST_STR("Undefined", Value());
-
 
 	TEST_STR("endl", (String)"\n");
 	TEST_STR("pi", (double)3.14159265359);
@@ -161,10 +161,11 @@ Value string_to_value(const String & input_string)
 	TEST_STR("!=",	OPc_UNEQUAL	);
 	TEST_STR("cos",	OPn_COS		);
 	TEST_STR("rand",OPn_RAND	);
+	TEST_STR("abs",	OPn_ABS		);
+	TEST_STR("ref",	OPv_REF		);
 	
 	#undef TEST_STR
 	#undef TXT_FORMAT
-
 	//return undefined
 	return Value();
 }

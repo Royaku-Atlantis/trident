@@ -83,13 +83,21 @@ Value::Value (String value_string)
         #endif
 }
 
-Value::Value (int value_variable)
+Value::Value (int value_variable, bool is_reference)
 {
-        val_type = VALUE_VARIABLE;
-        val_variable = value_variable;
-        #ifdef DEBUGINFO 
-        say("create varid:",std::to_string(value_variable));
-        #endif
+        if (is_reference)
+        {
+                val_type = VALUE_VAREFERENCE;
+                val_variable = value_variable - global_executer_acessor->get_var_offset();
+        }
+        else
+        {
+                val_type = VALUE_VARIABLE;
+                val_variable = value_variable;
+                #ifdef DEBUGINFO 
+                say("create varid:",std::to_string(value_variable));
+                #endif
+        }
 }
 
 Value::Value (OperatorType value_operator)
@@ -128,6 +136,7 @@ Value& Value::operator = (const Value & new_value)
                         val_string = new String( *(new_value.val_string)); 
                         break;
                 case VALUE_VARIABLE:
+                case VALUE_VAREFERENCE:
                         val_variable = new_value.val_variable;
                         break;
                 case VALUE_UNDEF:
@@ -158,19 +167,30 @@ std::string Value::string() const
                 case VALUE_VARIABLE:
                         //"Vindex["+std::to_string(val_variable) + "]:" +
                         return global_executer_acessor->get_var(val_variable).string();
+                case VALUE_VAREFERENCE:
+                        //"Vindex["+std::to_string(val_variable) + "]:" +
+                        return global_executer_acessor->get_var_abs(val_variable).string();
 
                 case VALUE_OPERATOR:
                         return get_OperatorString(val_operator);
 
                 case VALUE_UNDEF:
-                default:
                         return "Undefined";
+                default:
+                        return "Undescribable";
         }
 }
 
 void Value::describe() const
 {
-        std::cout <<"{type="<< valuetype_string(val_type) << ", val=" << string() <<"}";
+        std::cout <<"{type="<< valuetype_string(val_type);
+
+        if (val_type==VALUE_VAREFERENCE)
+                std::cout <<", hold var["<< val_variable <<"]=" << string() <<"}";
+        else if (val_type==VALUE_VARIABLE)
+                std::cout <<", var["<< val_variable <<"]=" << string() <<"}";
+        else
+                std::cout <<", val=" << string() <<"}";
 }
 
 double Value::get_asnumber() const
@@ -205,14 +225,37 @@ void un_variable(Value & val)
 {
         //if the value is a variable, get its non variable value
         //if its STILL a variable, continue
-        while (val.val_type == VALUE_VARIABLE)
-        //TODO check for Var Ref too
-                val = global_executer_acessor->get_var(val.val_variable);
+        if (val.val_type == VALUE_VARIABLE
+                or val.val_type == VALUE_VAREFERENCE)
+        {
+                if (val.val_type == VALUE_VARIABLE)
+                        val = global_executer_acessor->get_var(val.val_variable);
+                if (val.val_type == VALUE_VAREFERENCE)
+                        val = global_executer_acessor->get_var_abs(val.val_variable);
+        }               
 }
+
 void un_variable_maintain_reference(Value & val)
 {
         while (val.val_type == VALUE_VARIABLE)
                 val = global_executer_acessor->get_var(val.val_variable);
+}
+
+Value variable_to_reference(Value val)
+{
+        switch (val.val_type)
+        {
+                case VALUE_VARIABLE:
+                        say("REF VARIABLE");
+                        return Value(val.val_variable, true);
+                case VALUE_NUMB: //get variable index numb
+                        say("REF ALREADY REF");
+                        return Value(val.val_numb, false);
+
+                case VALUE_VAREFERENCE: //don't change anything
+                default:
+                        return val;
+        }
 }
 
 //operation overloading
@@ -546,6 +589,19 @@ Value value_cos(Value Val1)//OPn_COS
                 case VALUE_NUMB:
                 case VALUE_BOOL:
                         return Value((double)cosf(Val1.get_asnumber()));
+                default:
+                        return Value();
+        }
+}
+
+Value abs(Value Val1)
+{
+        un_variable(Val1);
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                case VALUE_BOOL:
+                        return Value((double)std::abs(Val1.get_asnumber()));
                 default:
                         return Value();
         }

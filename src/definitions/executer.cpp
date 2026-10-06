@@ -143,6 +143,34 @@ void Executer::set_var(int var_idx, Value var_value)
 	global_variables[var_idx] = var_value;
 }
 
+Value Executer::get_var_abs(Index var_idx) const
+{
+	//return the value at idx
+	if (var_idx < global_variables.size())
+		return global_variables[var_idx];
+	
+	//return default value if out of bound
+	else 
+		return Value();
+}
+void Executer::set_var_abs(Index var_idx, Value var_value)
+{
+	//check for variable index higher than already initialized
+	if (var_idx >= global_variables.size())
+	{
+		global_variables.resize(var_idx+1, Value());
+	}
+
+	//set variable
+	global_variables[var_idx] = var_value;
+}
+
+Index Executer::get_var_offset()
+{
+	return callstack_var_start.back();
+}
+
+
 void Executer::print_var_status()
 {
 	std::cout << BLUE "\n- Var Status : -";

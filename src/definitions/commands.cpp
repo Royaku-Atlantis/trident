@@ -94,6 +94,9 @@ StepData Command::run(Index PC) const
                 case CMD_SETIFUNDEF:
                         run_setifundef(argexec);
                         break;
+                case CMD_UNREF:
+                        run_unref(argexec);
+                        break;
                 case CMD_INPUT:
                         run_input(argexec);
                         break;
@@ -146,15 +149,36 @@ void run_set(const ArgumentExecuter & arguments)
         //should only have 2 arguments, put a warning if (arguments!=2) ?
 
         Value var = arguments.get_val(0);
-        if (var.val_type != VALUE_VARIABLE)
+        if (var.val_type == VALUE_VAREFERENCE)
+        {
+                Value newval = arguments.get_val(1);
+                un_variable(newval);//to be sure to get the actual value
+                global_executer_acessor->set_var_abs(var.val_variable, newval);
+        }
+        else if (var.val_type == VALUE_VARIABLE)
+        {
+                Value newval = arguments.get_val(1);
+                un_variable_maintain_reference(newval);//to be sure to get the actual value
+                global_executer_acessor->set_var(var.val_variable, newval);
+        }
+        else
         {
                 error("tried to set something that wasn't a variable");
                 return;
         }
+}
 
-        Value newval = arguments.get_val(1);
-        un_variable(newval);//to be sure to get the actual value
-        global_executer_acessor->set_var(var.val_variable, newval);
+void run_unref(const ArgumentExecuter & arguments)
+{
+        Value var = arguments.get_val(0);
+        Value optional_newval = arguments.get_val(1);
+
+        if (var.val_type == VALUE_VAREFERENCE)
+        {
+                Value newval = arguments.get_val(1);
+                un_variable(newval);//to be sure to get the actual value
+                global_executer_acessor->set_var(var.val_variable, newval);
+        }
 }
 
 void run_setifundef(const ArgumentExecuter & arguments)
@@ -236,7 +260,6 @@ Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
         new_PC = std::max(0, new_PC);
         return new_PC;
 }
-
 
 //functions 
 StepData run_call(const ArgumentExecuter & arguments, Index PC)

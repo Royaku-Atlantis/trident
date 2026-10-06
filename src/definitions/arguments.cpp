@@ -63,6 +63,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPERATOR(OPc_UNEQUAL, !=);
                 case FUNCTION(OPc_roundEQUAL, round_equal);
                 
+                case FUNCMONO(OPv_REF, variable_to_reference);
                 //trigo function
                 case FUNCMONO(OPn_COS, value_cos);
 
@@ -130,7 +131,7 @@ Value ArgumentExecuter::get_val(Index index) const
 {
         if (arguments.size() <= index)
         {
-                error("tryna fetch out of bound value in ArgExec");
+                //error("tryna fetch out of bound value in ArgExec");
                 return Value(); //Default Value
         }
         else
