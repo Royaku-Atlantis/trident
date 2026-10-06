@@ -19,6 +19,8 @@ enum ValueType : unsigned int {
         VALUE_VALTYPECOUNT //to dynamically create new object types in trident
 };
 
+String valuetype_string(ValueType);
+
 enum OperatorType : unsigned char 
 {OP_EMPTY, 
         OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, 

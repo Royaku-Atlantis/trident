@@ -32,7 +32,7 @@ Function::Function(String file_path)
 
 Function::~Function()
 {
-        say(BLUE "Function is being destroyed");
+        say("Function is being destroyed");
 }
 
 //functions to get informations of the function

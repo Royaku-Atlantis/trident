@@ -1,1 +1,4 @@
 say "IN THE SUB FUNCTION" 0v *
+set 0v 67
+set 1v 47
+say "the subfunc has 0v=" 0v "and 1v=" 1v

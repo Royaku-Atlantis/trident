@@ -86,6 +86,8 @@ void Executer::run()
 			step_data = current_func->get_command(PC).run(PC);
 			PC = step_data.PC_next;
 
+			print_var_status();
+
 			//New Scope with "Call" command
 			Function * newfunc = get_function(step_data.newfunc_name);
 			if (newfunc != nullptr)
@@ -143,19 +145,48 @@ void Executer::set_var(int var_idx, Value var_value)
 
 void Executer::print_var_status()
 {
-	for (int i=0; i<variab)
+	std::cout << BLUE "\n- Var Status : -";
+	int Varstart_index = -1;
+	for (int i=0; i<global_variables.size(); i++)
+	{
+		//if at start of scope, increment scope index
+		bool is_next_scope = (callstack_var_start[Varstart_index+1] == i);
+		if (is_next_scope)
+		{
+			Varstart_index ++;
+			//separate scopes variable by color
+			std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
+		}
+		//get variable index relative
+		Index local_var_index = i - callstack_var_start[Varstart_index];
+		std::cout << "\n[" << i << "] -> " << local_var_index <<"v =";
+		//print variable value :
+		global_variables[i].describe();
+	}
+	//flip color one last time
+	std::cout<< ((Varstart_index%2)? CYAN : BLUE); 
+	std::cout << "\n------------" RESET;
 }
 
 void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 {
-	//set new start of Variable for the incoming scope
-	callstack_var_start.push_back(global_variables.size());
+	Index last_start_of_variables = global_variables.size();
 
+	say(YELLOW "new start of variable for this scope is:", std::to_string(callstack_var_start.back()));
 	//add each Values To Variables
+	//start at 1, because arg 1 = func name
 	for (Index i=1; i<arguments.get_valnumber(); i++)
-        {
-                global_variables.push_back(arguments.get_val(i));
+        {		
+                Value appended_value = arguments.get_val(i);
+		//to add variable as the value they hold
+		//but maintain reference variable, for data/result arguments
+		std::cout<<YELLOW "\nadd variable with data["<<i<<"]=" << appended_value<<RESET;
+                un_variable_maintain_reference(appended_value);
+		std::cout<<YELLOW "\nun variable -> data="<<appended_value<<RESET;
+                global_variables.push_back(appended_value);
         }
+	//set new start of Variable for the incoming scope
+	callstack_var_start.push_back(last_start_of_variables);
 }
 
 Executer::~Executer()

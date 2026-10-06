@@ -57,6 +57,7 @@ std::ostream& operator<<(std::ostream& out, const Value & thisval);
 //input : a Value
 //if the Value is a variable, it transforms it into the Value it holds
 void un_variable(Value & val);
+void un_variable_maintain_reference(Value & val);
 
 //Value operators overloading
 Value operator +        (Value Val1, Value Val2);

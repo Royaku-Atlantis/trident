@@ -170,8 +170,7 @@ std::string Value::string() const
 
 void Value::describe() const
 {
-
-        std::cout <<"{type="<< val_type << ",val=" << string() <<"}";
+        std::cout <<"{type="<< valuetype_string(val_type) << ", val=" << string() <<"}";
 }
 
 double Value::get_asnumber() const
@@ -206,6 +205,12 @@ void un_variable(Value & val)
 {
         //if the value is a variable, get its non variable value
         //if its STILL a variable, continue
+        while (val.val_type == VALUE_VARIABLE)
+        //TODO check for Var Ref too
+                val = global_executer_acessor->get_var(val.val_variable);
+}
+void un_variable_maintain_reference(Value & val)
+{
         while (val.val_type == VALUE_VARIABLE)
                 val = global_executer_acessor->get_var(val.val_variable);
 }

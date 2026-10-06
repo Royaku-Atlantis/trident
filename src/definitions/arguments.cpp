@@ -129,9 +129,15 @@ String ArgumentExecuter::string() const
 Value ArgumentExecuter::get_val(Index index) const
 {
         if (arguments.size() <= index)
+        {
+                error("tryna fetch out of bound value in ArgExec");
                 return Value(); //Default Value
+        }
         else
-                return arguments[index];
+        {
+                Value retval = arguments[index];
+                return retval;
+        }
 }
 Index ArgumentExecuter::get_valnumber() const
 {
