@@ -149,19 +149,21 @@ void run_set(const ArgumentExecuter & arguments)
         //should only have 2 arguments, put a warning if (arguments!=2) ?
 
         Value var = arguments.get_val(0);
-        if (var.val_type == VALUE_VAREFERENCE)
+
+        if (var.val_type == VALUE_VARIABLE)
         {
                 Value newval = arguments.get_val(1);
                 un_variable_maintain_reference(newval);//to be sure to get the actual value
-                std::cout << "\n Var index local:"<< var.val_variable << " <- " <<newval;
-                global_executer_acessor->set_var_abs(var.val_variable, newval);
-        }
-        else if (var.val_type == VALUE_VARIABLE)
-        {
-                Value newval = arguments.get_val(1);
-                un_variable_maintain_reference(newval);//to be sure to get the actual value
-                std::cout << "\n Var index local:"<< var.val_variable << " <- " <<newval;
-                global_executer_acessor->set_var(var.val_variable, newval);
+
+                //case var reference
+                Value original_value = global_executer_acessor->get_var(var.val_variable);
+                if (original_value.val_type==VALUE_VAREFERENCE)
+                {
+                        global_executer_acessor->set_var_abs(original_value.val_variable, newval);
+                }
+                //classic variables
+                else
+                        global_executer_acessor->set_var(var.val_variable, newval);
         }
         else
         {

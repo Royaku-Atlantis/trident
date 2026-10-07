@@ -176,19 +176,24 @@ Index Executer::get_var_offset()
 
 void Executer::print_var_status()
 {
-	std::cout << BLUE "\n- Var Status : -";
+	std::cout << BLUE "\n- Var Status : - [";
+
+	for (auto i : callstack_var_start)
+	{
+		std::cout << "," << i;
+	}
+	std::cout << "]\n";
+
 	int Varstart_index = -1;
 	for (int i=0; i<global_variables.size(); i++)
 	{
 		//if at start of scope, increment scope index
-		if (callstack_var_start.size() < Varstart_index) {
-			bool is_next_scope = (callstack_var_start[Varstart_index+1] == i);
-			if (is_next_scope)
-			{
-				Varstart_index ++;
-				//separate scopes variable by color
-				std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
-			}
+		bool is_next_scope = (callstack_var_start[Varstart_index+1] == i);
+		if (is_next_scope)
+		{
+			Varstart_index ++;
+			//separate scopes variable by color
+			std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
 		}
 		//get variable index relative
 		Index local_var_index = i - callstack_var_start[Varstart_index];

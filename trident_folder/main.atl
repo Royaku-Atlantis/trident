@@ -1,4 +1,5 @@
 #debut loop
-set 0v 4
-set 1v 0v ref
-set 1v 5
+set 0v
+say "0v is undef : " 0v
+call "subtest" 0v ref
+say 0v
