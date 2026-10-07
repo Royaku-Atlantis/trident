@@ -16,6 +16,8 @@ private:
 	Array<Value> global_variables;
 	Array<Index> callstack_var_start;
 
+	Value return_value;
+
 	Function * get_function(String func_name) const;
 	Function * get_function(Index func_idx) const;
 public:
@@ -35,6 +37,9 @@ public:
 	void set_var(int var_idx, Value var_value);
 	Value get_var_abs(Index var_idx) const;
 	void set_var_abs(Index var_idx, Value var_value);
+	Value get_return() const;
+	void set_return(Value var_value);
+
 	Index get_var_offset();
 
 	void print_var_status();

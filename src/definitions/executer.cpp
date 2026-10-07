@@ -150,22 +150,34 @@ Value Executer::get_var_abs(Index var_idx) const
 {
 	//return the value at idx
 	if (var_idx < global_variables.size())
+	{
 		return global_variables[var_idx];
-	
+	}
 	//return default value if out of bound
 	else 
+	{	
 		return Value();
+	}
 }
 void Executer::set_var_abs(Index var_idx, Value var_value)
 {
 	//check for variable index higher than already initialized
-	if (var_idx >= global_variables.size())
+	if (var_idx < global_variables.size())
 	{
 		global_variables.resize(var_idx+1, Value());
 	}
-
-	//set variable
+	
 	global_variables[var_idx] = var_value;
+	//set variable
+}
+
+Value Executer::get_return() const
+{
+	return return_value;
+}
+void Executer::set_return(Value var_value)
+{
+	return_value = var_value;
 }
 
 Index Executer::get_var_offset()
@@ -182,18 +194,19 @@ void Executer::print_var_status()
 	{
 		std::cout << "," << i;
 	}
-	std::cout << "]\n";
+	std::cout << "] -";
 
 	int Varstart_index = -1;
 	for (int i=0; i<global_variables.size(); i++)
 	{
 		//if at start of scope, increment scope index
-		bool is_next_scope = (callstack_var_start[Varstart_index+1] == i);
-		if (is_next_scope)
-		{
-			Varstart_index ++;
-			//separate scopes variable by color
-			std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
+		if (callstack_var_start.size() > (Varstart_index+1)){
+			if (callstack_var_start[Varstart_index+1] == i)
+			{
+				Varstart_index ++;
+				//separate scopes variable by color
+				std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
+			}
 		}
 		//get variable index relative
 		Index local_var_index = i - callstack_var_start[Varstart_index];
@@ -208,9 +221,28 @@ void Executer::print_var_status()
 
 void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 {
-	Index last_start_of_variables = global_variables.size();
 
+	//init var references
+	//otherwise, using reference to unset variables crash
+	for (Index i=1; i<arguments.get_valnumber(); i++)
+        {		
+                Value value = arguments.get_val(i);
+		if (value.val_type==VALUE_VAREFERENCE)
+		{
+			Index difference = value.val_variable - global_variables.size() + 1;
+
+			if (difference > 0)
+			{
+                		global_variables.resize(value.val_variable+1);
+				say("added new variable in precedent scope, diff = " + std::to_string(difference));
+			}
+		}
+        }
+
+	//init variable start to prepare the incoming scope
+	Index last_start_of_variables = global_variables.size();
 	say(YELLOW "new start of variable for this scope is:", std::to_string(callstack_var_start.back()));
+
 	//add each Values To Variables
 	//start at 1, because arg 1 = func name
 	for (Index i=1; i<arguments.get_valnumber(); i++)
@@ -218,11 +250,10 @@ void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
                 Value appended_value = arguments.get_val(i);
 		//to add variable as the value they hold
 		//but maintain reference variable, for data/result arguments
-		std::cout<<YELLOW "\nadd variable with data["<<i<<"]=" << appended_value<<RESET;
                 un_variable_maintain_reference(appended_value);
-		std::cout<<YELLOW "\nun variable -> data="<<appended_value<<RESET;
                 global_variables.push_back(appended_value);
         }
+
 	//set new start of Variable for the incoming scope
 	callstack_var_start.push_back(last_start_of_variables);
 }

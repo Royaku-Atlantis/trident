@@ -158,7 +158,7 @@ Value& Value::operator = (const Value & new_value)
         return *this;
 }
 //to display the Value
-std::string Value::string() const
+String Value::string() const
 {
         //if (val_type==VALUE_OPERATOR) return "OPERATOR";
         switch(val_type)

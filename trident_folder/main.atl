@@ -1,5 +1,5 @@
 #debut loop
-set 0v
-say "0v is undef : " 0v
-call "subtest" 0v ref
-say 0v
+set 2v -4
+say "gonna call test"
+call "test"
+say "end"
