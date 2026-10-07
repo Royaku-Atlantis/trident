@@ -1,5 +1,2 @@
 #debut loop
-set 2v -4
-say "gonna call test"
-call "test"
-say "end"
+call "print" "Arg1" 45 2 + "and a random value :" -9 9 rand

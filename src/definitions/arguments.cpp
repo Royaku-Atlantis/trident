@@ -78,7 +78,17 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                         );
                         break;
                 case OPl_GET :
+                        break;
                         //for lists, does nothing yet
+                
+                //operator that are key word returning global variable
+                
+                case OPgk_RETURNED:
+                        add_val(global_executer_acessor->get_return());
+                        break;
+                case OPgk_VARCOUNT:
+                        add_val(global_executer_acessor->get_local_varcount());
+                        break;
                 case OP_EMPTY :
                 default:
                         //return false;//i guess ?, 

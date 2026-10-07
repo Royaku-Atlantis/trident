@@ -15,7 +15,6 @@ StepData::StepData(Index PCnext, String NewFuncName)
 	newfunc_name = NewFuncName;
 }
 
-
 Command::Command (CommandType cmdtype)
 {
         cmd_type = cmdtype;
@@ -60,7 +59,7 @@ ExpressionElement * Command::get_expressionstart() const
 void Command::debug_display_command() const
 {
         //i hate doing that, tf you mean, double convertion??
-        std::cout << "\n{cmdIndex:" << std::to_string((int)cmd_type);
+        std::cout << "\n{cmdIndex:" << commandtype_string(cmd_type);
 
         ExpressionElement * expr = first_exprelement;
 
@@ -72,7 +71,7 @@ void Command::debug_display_command() const
         std::cout << "}";
 }
 
-StepData Command::run(Index PC) const
+StepData Command::run(Index PC, Index CodeSize) const
 {
         Index new_PC = PC + 1;
         //next command will simply be the next one
@@ -100,18 +99,24 @@ StepData Command::run(Index PC) const
                 case CMD_INPUT:
                         run_input(argexec);
                         break;
+
                 case CMD_JUMP:
                         new_PC = run_jump(argexec, PC);
                         break;
                 case CMD_JUMPIF:
                         new_PC = run_jumpif(argexec, PC);
                         break;
+
                 case CMD_CALL:
                         return run_call(argexec, new_PC);
                         break;
+
+                case CMD_RETURN:
+                        run_return(argexec);
                 case CMD_EXIT:
-                        run_exit();
+                        PC = CodeSize;
                         break;
+
                 case CMD_EMPTY:
                 default:
                         if (CMD_NUMBEROFCOMMANDS <= cmd_type)
@@ -214,6 +219,16 @@ void run_input(const ArgumentExecuter & arguments)
                 //get the var index;
                 Index varindex = this_val.val_variable;
                 
+                //adapt to var references
+                bool is_var_ref = false;
+                Value stored_value = global_executer_acessor->get_var(varindex);
+                if (stored_value.val_type == VALUE_VAREFERENCE)
+                {
+                        say("set var ref");
+                        varindex = stored_value.val_variable;
+                        is_var_ref = true;
+                }
+
                 //input value
                 String input;
                 getline(std::cin, input);
@@ -221,30 +236,43 @@ void run_input(const ArgumentExecuter & arguments)
                 //can it be a number?
                 double output;
 	        if (get_number_from_string(input, output))
-                {
-                        global_executer_acessor->set_var(varindex, Value((double)output));
-                }
+                        stored_value = Value((double)output);
+
                 //can it be a bool?
                 else if (input=="True" or input=="true" or input=="TRUE")
-                {
-                        global_executer_acessor->set_var(varindex, Value(true));
-                }
+                        stored_value = Value(true);
                 else if (input=="False" or input=="false" or input=="FALSE")
-                {
-                        global_executer_acessor->set_var(varindex, Value(false));
-                }
+                        stored_value = Value(false);
                 //then make it string
-                else
-                {       
-                        global_executer_acessor->set_var(varindex, Value((String)input));
-                }      
+                else    stored_value = Value((String)input);
+
+                //set variable to inputed vakue
+                if (is_var_ref)
+                {
+                        say("set var abs v[" + std::to_string(varindex) + "] <- " + stored_value.string());
+                        global_executer_acessor->set_var_abs(varindex, stored_value);
+                }else{
+                        say("set var abs v[" + std::to_string(varindex) + "] <- " + stored_value.string());
+                        global_executer_acessor->set_var(varindex, stored_value);
+                }
         }
 }
 
 //return the new PC
 Index run_jump(const ArgumentExecuter & arguments, Index PC)
-{       
-        int new_PC = PC + arguments.get_val(0).get_asnumber() + 1;
+{        
+        int jump_value = arguments.get_val(0).get_asnumber();
+
+        if (jump_value==0)
+        {
+                error("Jump 0 is forbidden");
+                return PC + 1;
+        }
+
+        if (jump_value>0) jump_value++; //correction
+
+        int new_PC = PC + jump_value;   
+
         new_PC = std::max(0, new_PC); //cut minimum at 0
         return new_PC;
 }
@@ -253,10 +281,19 @@ Index run_jump(const ArgumentExecuter & arguments, Index PC)
 Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
 {         
         bool do_jump = !arguments.get_val(0).get_asbool();
-        
+        int jump_value = arguments.get_val(1).get_asnumber();
+
+        if (jump_value==0)
+        {
+                error("Jump 0 is forbidden");
+                return PC + 1;
+        }
+
+        if (jump_value>0) jump_value++; //correction
+
         int new_PC;
         if (do_jump)
-                new_PC = PC + arguments.get_val(1).get_asnumber() + 1;
+                new_PC = PC + jump_value;
         else
                 new_PC = PC + 1; //simply continue the code
 
@@ -271,10 +308,7 @@ StepData run_call(const ArgumentExecuter & arguments, Index PC)
         global_executer_acessor->load_var_incoming_scope(arguments);
         return StepData(PC, arguments.get_val(0).string());
 }
-void run_exit()
-{
-        //scope_exit();
-	//std::cout<<"\n(in run_exit())";
-}
 void run_return(const ArgumentExecuter & arguments)
-{}
+{
+        global_executer_acessor->set_return(arguments.get_val(0));
+}

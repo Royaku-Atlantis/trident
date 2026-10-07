@@ -1,3 +1,2 @@
-say "gonna call sub"
-call "subtest" 76 0v ref
-say "subtest set 0v to :" 0v
+say "input 4v:"
+input 4v

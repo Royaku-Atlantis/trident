@@ -618,7 +618,7 @@ Value abs(Value Val1)
         }
 }
 
-std::string get_OperatorString(OperatorType c_operator)
+String get_OperatorString(OperatorType c_operator)
 {
         switch (c_operator)
         {
@@ -642,6 +642,8 @@ std::string get_OperatorString(OperatorType c_operator)
                 case OPc_roundEQUAL : return "(2)roundEQUAL"; 
                 case OPc_UNEQUAL : return "(2)UNEQUAL"; 
                 case OPv_REF :  return "(1)REF";
+                case OPgk_RETURNED : return "(0)RETVAL";
+                case OPgk_VARCOUNT : return "(0)VARCOUNT";
                 default :       return "(0)INVALID";
         }
 } 

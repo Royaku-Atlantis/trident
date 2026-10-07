@@ -20,7 +20,6 @@ enum ValueType : unsigned int {
         VALUE_VALTYPECOUNT //get the max idx to dynamically create new object types in trident
 };
 
-String valuetype_string(ValueType);
 
 enum OperatorType : unsigned char 
 {OP_EMPTY, 
@@ -37,6 +36,9 @@ enum OperatorType : unsigned char
         OPn_RAND, OPb_COND, OPn_ABS, 
         //object and variable management
         OPv_REF, OPl_GET, 
+
+        //global variable/function/key word
+        OPgk_RETURNED, OPgk_VARCOUNT
 };
 
 enum CommandType : char {
@@ -47,6 +49,10 @@ enum CommandType : char {
         CMD_CALL, CMD_EXIT, CMD_RETURN,
 CMD_NUMBEROFCOMMANDS
 };
+
+
+String valuetype_string(ValueType);
+String commandtype_string(CommandType);
 
 // declaration of everything
 #include "values.hpp"

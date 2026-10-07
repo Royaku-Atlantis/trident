@@ -24,8 +24,15 @@ Index get_word(const String & input_string, Index starthere, String & word)
 	//remove the space if it start with spaces
 	while (input_string[starthere] == ' ' 
 		or input_string[starthere] == '\t' 
-		or input_string[starthere] == '|') //to make more lisible .atl code
+		or input_string[starthere] == ',') //to make more lisible .atl code
 		starthere ++;
+	
+	//remove end comment
+	if (input_string[starthere]=='#')
+	{
+		word = "";
+		return input_string.length();
+	}
 
 	//std::cout << "start at " << starthere << "in str '" << input_string << "' -> " ; //debug
 
@@ -82,6 +89,7 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 	GETCMD("jumpif",CMD_JUMPIF);
 	
 	GETCMD("call",	CMD_CALL);
+	GETCMD("return",CMD_RETURN);
 	GETCMD("exit",	CMD_EXIT);
 
 	//if no other cmd is recognised
@@ -120,22 +128,22 @@ Value string_to_value(const String & input_string)
 	TEST_STR("endl", (String)"\n");
 	TEST_STR("pi", (double)3.14159265359);
 
-	//colors
-	TEST_STR("RED", 	(String)RED	);
-	TEST_STR("GREEN", 	(String)GREEN	);
-	TEST_STR("YELLOW", 	(String)YELLOW	);
-	TEST_STR("BLUE", 	(String)BLUE	);
-	TEST_STR("MAGENTA", 	(String)MAGENTA	);
-	TEST_STR("CYAN", 	(String)CYAN	);
-	TEST_STR("WHITE", 	(String)WHITE	);
-	TEST_STR("BLACK", 	(String)BLACK	);
-	TEST_STR("RESET", 	(String)RESET	); //not a color, reset to default shell
-	TEST_STR("DEFAULT",		(String)(TXT_FORMAT(TXT_DEFAULT))	);
-	TEST_STR("BOLD",		(String)(TXT_FORMAT(TXT_BOLD))		);
-	TEST_STR("DARKER",		(String)(TXT_FORMAT(TXT_DARKER))	);
-	TEST_STR("UNDERLINED",		(String)(TXT_FORMAT(TXT_UNDERLINED))	);
-	TEST_STR("SETBACKGROUND",	(String)(TXT_FORMAT(TXT_SETBACKGROUND))	);
-	TEST_STR("STRIKETHROUGH",	(String)(TXT_FORMAT(TXT_STRIKETHROUGH))	);
+	//colors	
+	TEST_STR("RED", 		(String)RED);
+	TEST_STR("GREEN", 		(String)GREEN);
+	TEST_STR("YELLOW", 		(String)YELLOW);
+	TEST_STR("BLUE", 		(String)BLUE);
+	TEST_STR("MAGENTA", 		(String)MAGENTA);
+	TEST_STR("CYAN", 		(String)CYAN);
+	TEST_STR("WHITE", 		(String)WHITE);
+	TEST_STR("BLACK", 		(String)BLACK);
+	TEST_STR("RESET", 		(String)RESET); //not a color, reset to default shell
+	TEST_STR("DEFAULT",		(String)(TXT_FORMAT(TXT_DEFAULT)));
+	TEST_STR("BOLD",		(String)(TXT_FORMAT(TXT_BOLD))	);
+	TEST_STR("DARKER",		(String)(TXT_FORMAT(TXT_DARKER)));
+	TEST_STR("UNDERLINED",		(String)(TXT_FORMAT(TXT_UNDERLINED)));
+	TEST_STR("SETBACKGROUND",	(String)(TXT_FORMAT(TXT_SETBACKGROUND)));
+	TEST_STR("STRIKETHROUGH",	(String)(TXT_FORMAT(TXT_STRIKETHROUGH)));
 
 	//operators
 	TEST_STR("+",	OPn_ADD		);
@@ -163,6 +171,10 @@ Value string_to_value(const String & input_string)
 	TEST_STR("rand",OPn_RAND	);
 	TEST_STR("abs",	OPn_ABS		);
 	TEST_STR("ref",	OPv_REF		);
+	
+	//keyword global var 
+	TEST_STR("retval", OPgk_RETURNED);
+	TEST_STR("varcount", OPgk_VARCOUNT);
 	
 	#undef TEST_STR
 	#undef TXT_FORMAT

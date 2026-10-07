@@ -40,6 +40,15 @@ double modulo(double numb, double div);
 
 double random_range(double mini, double maxi);
 
+//Input=0 -> 0 ; Input<0 -> -1; Input>0 -> 1 
+template<typename T>
+int sign(T input)
+{
+	if (input>0) return 1;
+	if (input<0) return -1; 
+	return 0;
+}  
+
 template<typename T>
 void flip(T & a, T & b)
 {

@@ -7,7 +7,6 @@ void Function::set_from_codelines(const CodeLines & func_code)
         for (String codeline : func_code)
         {
                 trim(codeline);
-
                 //case of ignior code line
                 if (codeline=="" or codeline[0]=='#') continue;
                 

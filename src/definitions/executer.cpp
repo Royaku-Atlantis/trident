@@ -79,17 +79,15 @@ void Executer::run()
 		Index & PC = callstack_PC.back();
 		bool Call_Function = false;
 
-		if (PC==0){
-			say("start new func");
-			current_func->debug_display_command();
-		}
+		//if (PC==0) current_func->debug_display_command();
+		
 		//start execution of function
 		while (PC < current_func_size and !Call_Function)
 		{
-			step_data = current_func->get_command(PC).run(PC);
+			step_data = current_func->get_command(PC).run(PC, current_func_size);
 			PC = step_data.PC_next;
 
-			print_var_status();
+			//print_var_status();
 
 			//New Scope with "Call" command
 			Function * newfunc = get_function(step_data.newfunc_name);
@@ -162,7 +160,7 @@ Value Executer::get_var_abs(Index var_idx) const
 void Executer::set_var_abs(Index var_idx, Value var_value)
 {
 	//check for variable index higher than already initialized
-	if (var_idx < global_variables.size())
+	if (var_idx >= global_variables.size())
 	{
 		global_variables.resize(var_idx+1, Value());
 	}
@@ -185,7 +183,10 @@ Index Executer::get_var_offset()
 	return callstack_var_start.back();
 }
 
-
+Value Executer::get_local_varcount()
+{
+	return (double)(global_variables.size() - callstack_var_start.back());
+}
 void Executer::print_var_status()
 {
 	std::cout << BLUE "\n- Var Status : - [";
@@ -194,7 +195,7 @@ void Executer::print_var_status()
 	{
 		std::cout << "," << i;
 	}
-	std::cout << "] -";
+	std::cout << "] - retval=" << return_value;
 
 	int Varstart_index = -1;
 	for (int i=0; i<global_variables.size(); i++)
@@ -241,7 +242,7 @@ void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 
 	//init variable start to prepare the incoming scope
 	Index last_start_of_variables = global_variables.size();
-	say(YELLOW "new start of variable for this scope is:", std::to_string(callstack_var_start.back()));
+	//say(YELLOW "new start of variable for this scope is:", std::to_string(callstack_var_start.back()));
 
 	//add each Values To Variables
 	//start at 1, because arg 1 = func name

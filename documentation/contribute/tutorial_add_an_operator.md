@@ -7,7 +7,7 @@
 - [Add the function](#-add-the-function)
 - [Add the operation execution](#-add-the-operation-execution)
 - [Let the parser know about it](#-let-the-parser-know-about-it)
-
+- String get_OperatorString(OperatorType c_operator)
 ---
 step 1:
 ## __**• Add the Macro**__

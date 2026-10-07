@@ -1,0 +1,10 @@
+set varcount ref 0 #Set the var index last to this
+
+say #newline
+
+jumpif varcount 1 - ref varcount < 3
+	print YELLOW varcount 1 - ref 0 + ref
+	set varcount 1 - ref  varcount 1 - ref 1 +
+	jump -3
+
+say YELLOW "End Of Print"

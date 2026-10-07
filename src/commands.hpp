@@ -27,7 +27,7 @@ public:
         void debug_display_command() const;
 
         //return PCoffset (1 = basic increment, go to the next command) 
-        StepData run(Index PC) const;
+        StepData run(Index PC, Index CodeSize) const;
 };
 
 //print arguments

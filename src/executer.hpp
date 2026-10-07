@@ -41,6 +41,7 @@ public:
 	void set_return(Value var_value);
 
 	Index get_var_offset();
+	Value get_local_varcount();
 
 	void print_var_status();
 
