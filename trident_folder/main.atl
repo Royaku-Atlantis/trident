@@ -1,9 +1,15 @@
-say "TEST"
-set 0v 67
-set 1v 0v ref
-say "1v is set to rev 0v=" 0v ", and we have 1v="1v
-set 1v 8
-say "1v was set to 8:" 1v ", 0v=" 0v
-unref 1v 7
-say "1v got unreferenced from 0v, 1v=" 1v "but 0v=" 0v
-say "variable 0v=" 0 ref
+#debut loop
+set 0v 0
+say "0v=" 0v ", bool continue =" 0v 5 <=
+jumpif 0v 5 <= 5
+	#var[0v+1] = 0v
+	set 0v 1 + ref 0v 	
+	
+	say "VAR INDEX" 0v 1 + "=" 0v 1 + ref
+	
+	#increment
+	set 0v 0v 1 + 
+	jump -6
+say "END OF LOOP"
+say "END OF LOOP1"
+say "END OF LOOP2"

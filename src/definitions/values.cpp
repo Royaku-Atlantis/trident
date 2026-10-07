@@ -239,6 +239,8 @@ void un_variable_maintain_reference(Value & val)
 {
         while (val.val_type == VALUE_VARIABLE)
                 val = global_executer_acessor->get_var(val.val_variable);
+        
+        //std::cout << "\n un_variable_maintain_reference->val=" << val;
 }
 
 Value variable_to_reference(Value val)
@@ -246,11 +248,15 @@ Value variable_to_reference(Value val)
         switch (val.val_type)
         {
                 case VALUE_VARIABLE:
-                        say("REF VARIABLE");
-                        return Value(val.val_variable, true);
+                        //say("REF VARIABLE");
+                        val = Value(val.val_variable, true);
+                        //std::cout << " - ref returned = " << val;
+                        return val;
                 case VALUE_NUMB: //get variable index numb
-                        say("REF ALREADY REF");
-                        return Value(val.val_numb, false);
+                        //say("INT TO VAR");
+                        val = Value(val.val_numb, false);
+                        //std::cout << " - ref returned = " << val;
+                        return val;
 
                 case VALUE_VAREFERENCE: //don't change anything
                 default:
@@ -449,8 +455,7 @@ Value operator == (Value Val1, Value Val2)
                         return Val1.val_bool == Val2.val_bool ; 
                 case VALUE_STRING:
                         return (* Val1.val_string) == (* Val2.val_string); 
-                case VALUE_VARIABLE:
-                        //VARIABLE not yet Implemented
+                case VALUE_VARIABLE: //VARIABLE no need to be be Implemented (un_variable)
                 case VALUE_OPERATOR:
                 default :
                         return Value ();
@@ -476,7 +481,7 @@ Value operator >= (Value Val1, Value Val2)
                 case AND(VALUE_NUMB, VALUE_BOOL):
                 case AND(VALUE_BOOL, VALUE_NUMB):
                 case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value(Val1.get_asbool() >= Val2.get_asbool());
+                        return Value(Val1.get_asnumber() >= Val2.get_asnumber());
 
                 default:
                         //undefined
@@ -494,7 +499,7 @@ Value operator <= (Value Val1, Value Val2)
                 case AND(VALUE_NUMB, VALUE_BOOL):
                 case AND(VALUE_BOOL, VALUE_NUMB):
                 case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value(Val1.get_asbool() <= Val2.get_asbool());
+                        return Value(Val1.get_asnumber() <= Val2.get_asnumber());
 
                 default:
                         //undefined
@@ -512,7 +517,7 @@ Value operator > (Value Val1, Value Val2)
                 case AND(VALUE_NUMB, VALUE_BOOL):
                 case AND(VALUE_BOOL, VALUE_NUMB):
                 case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value(Val1.get_asbool() > Val2.get_asbool());
+                        return Value(Val1.get_asnumber() > Val2.get_asnumber());
 
                 default:
                         //undefined
@@ -530,7 +535,7 @@ Value operator < (Value Val1, Value Val2)
                 case AND(VALUE_NUMB, VALUE_BOOL):
                 case AND(VALUE_BOOL, VALUE_NUMB):
                 case AND(VALUE_BOOL, VALUE_BOOL):
-                        return Value(Val1.get_asbool() < Val2.get_asbool());
+                        return Value(Val1.get_asnumber() < Val2.get_asnumber());
 
                 default:
                         //undefined
@@ -619,10 +624,18 @@ std::string get_OperatorString(OperatorType c_operator)
                 case OPn_MOD :  return "(2)MOD";
                 case OPl_GET :  return "(2)GET";
                 case OPb_AND :  return "(2)AND";
-                case OPb_OR :   return "(2)OR";
+                case OPb_OR  :  return "(2)OR";
                 case OPb_NOT :  return "(1)NOT";
                 case OPb_XOR :  return "(2)XOR";
                 case OPb_COND : return "(3)IF_ELSE";
+                case OPc_strictINF : return "(2)strictINF"; 
+                case OPc_strictSUP : return "(2)strictSUP"; 
+                case OPc_equalINF : return "(2)equalINF"; 
+                case OPc_equalSUP : return "(2)equalSUP"; 
+                case OPc_EQUAL : return "(2)EQUAL"; 
+                case OPc_roundEQUAL : return "(2)roundEQUAL"; 
+                case OPc_UNEQUAL : return "(2)UNEQUAL"; 
+                case OPv_REF :  return "(1)REF";
                 default :       return "(0)INVALID";
         }
 } 
@@ -636,6 +649,7 @@ String get_value_color(ValueType vtype)
                 case VALUE_BOOL: return BLUE;
                 case VALUE_STRING: return YELLOW;
                 case VALUE_VARIABLE: return GREEN;
+                case VALUE_VAREFERENCE: return GREEN "ref:";
                 case VALUE_OPERATOR: return "\033[31mOPERATOR_";
                 default: return "\033[31mERROR_INVALIDVALUETYPE_";
         }

@@ -79,7 +79,10 @@ void Executer::run()
 		Index & PC = callstack_PC.back();
 		bool Call_Function = false;
 
-		//if (PC==0) say("start new func");
+		if (PC==0){
+			say("start new func");
+			current_func->debug_display_command();
+		}
 		//start execution of function
 		while (PC < current_func_size and !Call_Function)
 		{
@@ -178,12 +181,14 @@ void Executer::print_var_status()
 	for (int i=0; i<global_variables.size(); i++)
 	{
 		//if at start of scope, increment scope index
-		bool is_next_scope = (callstack_var_start[Varstart_index+1] == i);
-		if (is_next_scope)
-		{
-			Varstart_index ++;
-			//separate scopes variable by color
-			std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
+		if (callstack_var_start.size() < Varstart_index) {
+			bool is_next_scope = (callstack_var_start[Varstart_index+1] == i);
+			if (is_next_scope)
+			{
+				Varstart_index ++;
+				//separate scopes variable by color
+				std::cout<< ((Varstart_index%2)? BLUE : CYAN); 
+			}
 		}
 		//get variable index relative
 		Index local_var_index = i - callstack_var_start[Varstart_index];
