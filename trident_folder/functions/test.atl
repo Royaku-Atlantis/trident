@@ -1,2 +1,5 @@
-say "input 4v:"
-input 4v
+say "a"
+say "b"
+exit
+say "c"
+say "d"

@@ -114,7 +114,7 @@ StepData Command::run(Index PC, Index CodeSize) const
                 case CMD_RETURN:
                         run_return(argexec);
                 case CMD_EXIT:
-                        PC = CodeSize;
+                        new_PC = CodeSize+1;
                         break;
 
                 case CMD_EMPTY:

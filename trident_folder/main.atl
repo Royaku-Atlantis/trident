@@ -1,2 +1,7 @@
 #debut loop
-call "print" "Arg1" 45 2 + "and a random value :" -9 9 rand
+say "boutta call test"
+call "test"
+say "test done"
+return 0
+say "kaku kaku"
+#call "print" "Arg1" 45 2 + "and a random value :" -9 9 rand
