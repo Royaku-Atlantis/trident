@@ -10,10 +10,7 @@ Value ArgumentExecuter::pop_last_arg()
         if (arguments.size()==0) return Value();
 
         Value back_value = arguments.back();
-
         arguments.pop_back();
-
-        // VARIABLE --- change back_value into a pure Value if variable
         return back_value;
 }
 
@@ -23,8 +20,9 @@ void ArgumentExecuter::add_val(const Value & newval)
         
         if (is_an_operation)
                 do_operation(newval.val_operator);
-        else
+        else{
                 arguments.push_back(newval);
+        }
 }
 
 bool ArgumentExecuter::do_operation(OperatorType operation_type)
@@ -38,6 +36,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
         //case function (or prefix operator) with one input
         #define FUNCMONO(opvalue, funcmono) opvalue:add_val(funcmono(pop_last_arg())); break;
 
+        Value truc;
         //postfix action with operator switch
         switch (operation_type)
         {

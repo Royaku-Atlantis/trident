@@ -44,6 +44,7 @@ int main(int argc, char ** args)
         exe.add_function("main", program_name+"/main.atl");
 
         //add all functions
+        //*
         for(const auto & entry : filesystem::directory_iterator(program_name+"/functions")) 
         {
                 String function_file_path = entry.path().string();
@@ -60,9 +61,17 @@ int main(int argc, char ** args)
                         //add this function
                         exe.add_function(funcfile_name, function_file_path);
                 }
-        }//*/
+        }//
 
         exe.run();
+        /*/
+        cout<<"\n1"<<Value(1, false)<<"\n";
+        cout<<"\n1"<<variable_to_reference(Value(1, false))<<"\n";
+        cout<<"\n2"<<Value(2, true)<<"\n";
+        cout<<"\n2"<<variable_to_reference(Value(2, true))<<"\n";
+        cout<<"\n3"<<Value(3.0)<<"\n";
+        cout<<"\n3"<<variable_to_reference(Value(3.0))<<"\n";//*/
+
 
         return 0;
 }

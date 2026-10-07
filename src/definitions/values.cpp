@@ -28,13 +28,18 @@ Value::Value(const Value & val)
                         val_string = new std::string(*val.val_string);
                         return;
                 case VALUE_VARIABLE:
+                case VALUE_VAREFERENCE:
                         val_variable = val.val_variable;
                         return;
                 case VALUE_OPERATOR:
                         val_operator = val.val_operator;
                         return;
                 case VALUE_UNDEF:
+                        val_type = VALUE_UNDEF;
+                        val_bool = false;
+                        return;
                 default:
+                        error("Value::Value(const Value & val) : val_type Is Unknown");
                         val_type = VALUE_UNDEF;
                         val_bool = false;
                         return;
@@ -88,7 +93,7 @@ Value::Value (int value_variable, bool is_reference)
         if (is_reference)
         {
                 val_type = VALUE_VAREFERENCE;
-                val_variable = value_variable - global_executer_acessor->get_var_offset();
+                val_variable = value_variable + global_executer_acessor->get_var_offset();
         }
         else
         {
@@ -118,7 +123,10 @@ Value& Value::operator = (const Value & new_value)
                 delete val_string;
         }
 
-        //case variable, to get the value it itself holds                
+        //case variable, to get the value it itself holds
+        if (new_value.val_type == VALUE_UNDEF)
+        say("Value = <Undefined>");
+        
         val_type = new_value.val_type;
 
         switch (val_type)
@@ -136,6 +144,8 @@ Value& Value::operator = (const Value & new_value)
                         val_string = new String( *(new_value.val_string)); 
                         break;
                 case VALUE_VARIABLE:
+                        val_variable = new_value.val_variable;
+                        break;
                 case VALUE_VAREFERENCE:
                         val_variable = new_value.val_variable;
                         break;
@@ -225,11 +235,12 @@ void un_variable(Value & val)
 {
         //if the value is a variable, get its non variable value
         //if its STILL a variable, continue
-        if (val.val_type == VALUE_VARIABLE
+        while (val.val_type == VALUE_VARIABLE
                 or val.val_type == VALUE_VAREFERENCE)
         {
                 if (val.val_type == VALUE_VARIABLE)
                         val = global_executer_acessor->get_var(val.val_variable);
+
                 if (val.val_type == VALUE_VAREFERENCE)
                         val = global_executer_acessor->get_var_abs(val.val_variable);
         }               
@@ -238,25 +249,20 @@ void un_variable(Value & val)
 void un_variable_maintain_reference(Value & val)
 {
         while (val.val_type == VALUE_VARIABLE)
+        {
+                std::cout << "\n unvar=" << val;
                 val = global_executer_acessor->get_var(val.val_variable);
-        
-        //std::cout << "\n un_variable_maintain_reference->val=" << val;
+        }
 }
 
 Value variable_to_reference(Value val)
-{
+{        
         switch (val.val_type)
         {
                 case VALUE_VARIABLE:
-                        //say("REF VARIABLE");
-                        val = Value(val.val_variable, true);
-                        //std::cout << " - ref returned = " << val;
-                        return val;
+                        return Value(val.val_variable, true);
                 case VALUE_NUMB: //get variable index numb
-                        //say("INT TO VAR");
-                        val = Value(val.val_numb, false);
-                        //std::cout << " - ref returned = " << val;
-                        return val;
+                        return Value(val.val_numb, false);
 
                 case VALUE_VAREFERENCE: //don't change anything
                 default:
@@ -648,17 +654,23 @@ String get_value_color(ValueType vtype)
                 case VALUE_NUMB: return CYAN;
                 case VALUE_BOOL: return BLUE;
                 case VALUE_STRING: return YELLOW;
+                case VALUE_VAREFERENCE:
                 case VALUE_VARIABLE: return GREEN;
-                case VALUE_VAREFERENCE: return GREEN "ref:";
-                case VALUE_OPERATOR: return "\033[31mOPERATOR_";
-                default: return "\033[31mERROR_INVALIDVALUETYPE_";
+                case VALUE_OPERATOR: return MAGENTA "Op_";
+                default: return RED "ERROR_INVALID_VALUETYPE_";
         }
 }; //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
 
 //overload to be display with cout
 std::ostream& operator<<(std::ostream& out, const Value & thisval)
 {
-        out << get_value_color(thisval.val_type) << thisval.string() << "\033[0m" ;
+        out << get_value_color(thisval.val_type);
+        if (thisval.val_type==VALUE_VARIABLE)
+                out << "var[" << thisval.val_variable << "]=";
+        else if (thisval.val_type==VALUE_VAREFERENCE)
+                out << "ref[" << thisval.val_variable << "]=";
+
+        out << thisval.string() << "\033[0m" ;
         return out;
 }
 
