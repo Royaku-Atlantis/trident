@@ -10,10 +10,12 @@
 #include <vector>
 #include <cmath>
 #include <fstream>
+#include <map>
 
 //Redefine some things
-#define Array       std::vector //wish i could change push_back() to append(), idk if its possible
-#define String      std::string 
+#define Array	std::vector //wish i could change push_back() to append(), idk if its possible
+#define String	std::string 
+#define Map	std::map
 
 #define Index       unsigned int
 #define IndexNval   ~(unsigned int)0 //max value of uint, 0b111...11
@@ -40,15 +42,14 @@ int sign(T input)
 	return 0;
 }  
 
-
   /* ------------------------------------- */
  /* Function Related To String Management */
 /* ------------------------------------- */
 // double print as 6.900000 by default, this fix it
 String double_to_trimmed_string(double value); //TODO solve bug: 0 can be displayed as -0
 // concat the same string 'value' times
-String string_multip(const String & str, int value); 
-
+String string_multip(const String & str, int value);
+String get_last_word(const String & str);
 bool ends_with(std::string const & value, std::string const & ending);
 
 //code from https://codemia.io/knowledge-hub/path/how_to_trim_a_stdstring
@@ -67,6 +68,7 @@ unsigned int stoi2(std::string text_to_convert, int default_value);
 //then "result" is set to the value found in text_to_convert, and the function return True
 //else, the result will not be set, and the function return false
 bool get_number_from_string(String text_to_convert, double & result);
+bool is_string_number(String text_to_test);
 
   /* ----------------------------- */
  /* Functions Relating To Numbers */

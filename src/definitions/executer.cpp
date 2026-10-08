@@ -87,7 +87,7 @@ void Executer::run(int argc, char ** args)
 		Index & PC = callstack_PC.back();
 		bool Call_Function = false;
 
-		//if (PC==0) current_func->debug_display_command();
+		if (PC==0) current_func->debug_display_command();
 		
 		//start execution of function
 		while (PC < current_func_size and !Call_Function)

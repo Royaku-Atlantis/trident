@@ -21,8 +21,7 @@ Index get_word(const String & input_string, Index starthere, String & word)
 		return starthere;
 
 	//remove the space if it start with spaces
-	while (input_string[starthere] == ' ' 
-		or input_string[starthere] == '\t' 
+	while (std::isspace(input_string[starthere])
 		or input_string[starthere] == ',') //to make more lisible .atl code
 		starthere ++;
 	
@@ -199,7 +198,7 @@ Value cmd_input_to_value(const String & input)
 }
 
 // String code_line -> command object
-Command create_command(const String & code_line)
+Command create_command(const String & code_line, Index PC, Map<String, Index> balises)
 {
 	//get the command type
 	String commandname;
@@ -212,6 +211,24 @@ Command create_command(const String & code_line)
 	//define the command arguments
 	String str_value;
 	next_word = get_word(code_line, next_word, str_value);
+
+	//jump <balise_name>
+	if (command_type == CMD_JUMP)
+	{
+		str_value = get_last_word(code_line);
+		
+		//if its an actual word of a balise in this function
+		if (!is_string_number(str_value) and balises.count(str_value))
+		{
+			int jump_amount = ((int)balises[str_value] - (int)PC);
+			jump_amount -= (jump_amount>=0);//correction
+
+			//TODO make it just change the last word of the code_line
+			//to make it compatible with CMD_JUMPIF
+			newcmd.append_expression(Value((double)jump_amount));
+			return newcmd;
+		}
+	}
 
 	//loop through the "words" of the code line 
 	while (str_value != "")

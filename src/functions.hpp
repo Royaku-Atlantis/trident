@@ -10,7 +10,7 @@ private:
         Index code_size;
         
         //common procedure for constructor
-        void set_from_codelines(const CodeLines & func_code);
+        void set_from_codelines(CodeLines func_code);
 public:
         //construct from array of string
         Function (const CodeLines & func_code);

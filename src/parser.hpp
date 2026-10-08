@@ -30,6 +30,6 @@ Value cmd_input_to_value(const String & cmd_input);
 CommandType cmdtext_get_cmdtype(String cmd_firsttoken);
 
 //String code_line, (variable map, not yet though) -> Command
-Command create_command(const String & code_line);
+Command create_command(const String & code_line, Index PC, Map<String, Index> balises);
 
 

@@ -77,6 +77,17 @@ bool get_number_from_string(String text_to_convert, double & result)
         }
 }
 
+bool is_string_number(String text_to_test)
+{
+        try{
+                double test = stod(text_to_test);
+		return true;
+        }
+        catch(...){
+                return false;
+        }
+}
+
 //math type sh...
 String double_to_trimmed_string(double value)
 {
@@ -109,6 +120,26 @@ bool ends_with(std::string const & value, std::string const & ending)
 {
     if (ending.size() > value.size()) return false;
     return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+String get_last_word(const String & str)
+{
+	if (str.size() == 0) return "";
+
+	//remove space at the end of the str 
+	Index lastwordend;
+	for (lastwordend = str.size(); lastwordend>0; lastwordend--)
+	if (!std::isspace(str[lastwordend-1]))
+		break;
+
+	Index lastwordstart;
+	for (lastwordstart = lastwordend; lastwordstart>0; lastwordstart--)
+	{
+		if (std::isspace(str[lastwordstart-1]))
+			return str.substr(lastwordstart, lastwordend - lastwordstart);
+	}
+
+	return str.substr(lastwordstart, lastwordend - lastwordstart);
 }
 
 #include <algorithm>

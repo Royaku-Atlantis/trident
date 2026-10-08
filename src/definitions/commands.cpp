@@ -202,6 +202,12 @@ void run_setifundef(const ArgumentExecuter & arguments)
 
 void run_input(const ArgumentExecuter & arguments)
 {
+        //if input command has no argument
+        if (arguments.get_valnumber()==0)
+        {
+                wait_interaction();
+        }
+        else //normal input set
         repeat(arguments.get_valnumber())
         {
                 Value this_val = arguments.get_val(iterator);

@@ -2,17 +2,51 @@
 #include "../commands.hpp"
 
  //common procedure for constructor
-void Function::set_from_codelines(const CodeLines & func_code)
+void Function::set_from_codelines(CodeLines func_code)
 {
-        for (String codeline : func_code)
+        Map<String, Index> balises;
+
+        //init code
+        repeat (func_code.size())
         {
-                trim(codeline);
-                //case of ignior code line
-                if (codeline=="" or codeline[0]=='#') continue;
-                
-                code.push_back(create_command(codeline));
+                String & code_line = func_code[iterator];
+
+                trim(code_line);
+                //case of ignore code line
+                if (code_line=="" or code_line[0]=='#')
+                {
+                        func_code.erase(func_code.begin() + iterator);
+                        iterator --;
+                        continue;
+                }
+
+                //is valid command, check for Balise
+                String command_name;
+                String balise_name;
+	        Index next_word_idx = get_word(code_line, 0, command_name);
+
+                //if its not a balise line, check next
+                if (command_name != "balise") continue;
+
+                //get balise name
+                get_word(code_line, next_word_idx, balise_name);
+                if (balise_name != "")
+                {
+                        if (balises.count(balise_name) == 0)
+                                balises.insert({balise_name, iterator});
+                }
+                //erase this code line, as it's a balise (cmdmacro)  
+                func_code.erase(func_code.begin() + iterator);
+                iterator --;
         }
-        code_size = code.size();
+
+        //set fonction
+        repeat (func_code.size())
+        {
+                String & code_line = func_code[iterator];   
+                code.push_back(create_command(code_line, iterator, balises));
+        }
+        code_size = func_code.size();
 }
 
 //construct from array of string, aka CodeLines
