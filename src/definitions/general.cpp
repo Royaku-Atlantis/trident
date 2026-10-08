@@ -12,11 +12,6 @@ void print_error(const String & errortext)
     std::cout << "\n\033[31m" << errortext << "\n\033[0m\n";
 }
 
-void say(const String & text)
-{
-	std::cout<<std::endl<<text<< RESET;
-}
-
 String textFormat(int fontcolor)
 {return "\033[" + std::to_string(fontcolor) + 'm';}
 String textFormat(int info1, int info2)
@@ -104,7 +99,7 @@ String string_multip(const String & str, int number)
 	String text = "";
 	text.reserve( str.size() * number );
 
-	for (int i=0; i<number; i++)
+	repeat(number)
 		text += str;
 
 	return text;

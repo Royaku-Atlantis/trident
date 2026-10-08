@@ -79,51 +79,45 @@ StepData Command::run(Index PC, Index CodeSize) const
         ArgumentExecuter argexec;
         calculate_arguments(first_exprelement, argexec);
 
+        #define COMMAND(CMD_INDEX, run_fonction) CMD_INDEX: run_fonction(argexec); break
+
         switch (cmd_type)
         {
-                case CMD_PRINT:
-                        run_print(argexec);
-                        break;
-                case CMD_SAY:
-                        run_say(argexec);
-                        break;
-                case CMD_SET:
-                        run_set(argexec);
-                        break;
-                case CMD_SETIFUNDEF:
-                        run_setifundef(argexec);
-                        break;
-                case CMD_UNREF:
-                        run_unref(argexec);
-                        break;
-                case CMD_INPUT:
-                        run_input(argexec);
-                        break;
+                //Basic Commands 
+                case COMMAND(CMD_PRINT, run_print);
+                case COMMAND(CMD_SAY, run_say);
+                case COMMAND(CMD_SET, run_set);
+                case COMMAND(CMD_SETIFUNDEF, run_setifundef);
+                case COMMAND(CMD_UNREF, run_unref);
+                case COMMAND(CMD_INPUT, run_input);
 
-                case CMD_JUMP:
-                        new_PC = run_jump(argexec, PC);
-                        break;
-                case CMD_JUMPIF:
-                        new_PC = run_jumpif(argexec, PC);
-                        break;
-
+                //special command
                 case CMD_CALL:
-                        return run_call(argexec, new_PC);
-                        break;
+                        return run_call(argexec, new_PC); break;
 
+                //Commands that edit the Point Counter
+                case CMD_JUMP:
+                        new_PC = run_jump(argexec, PC); break;
+                case CMD_JUMPIF:
+                        new_PC = run_jumpif(argexec, PC); break;
                 case CMD_RETURN:
                         run_return(argexec);
+                        new_PC = CodeSize+1; break;
                 case CMD_EXIT:
-                        new_PC = CodeSize+1;
-                        break;
+                        new_PC = CodeSize+1; break;
+
 
                 case CMD_EMPTY:
                 default:
                         if (CMD_NUMBEROFCOMMANDS <= cmd_type)
-                                error("cmd_type have invalid index of command : [" + std::to_string(cmd_type) + ']');
+                                error("Command index[" << (int)cmd_type << "] Does not exist")
+                        else
+                                error("Command[" << (int)cmd_type << "] has no action defined in Command::run()");
                         break;
         }
         return new_PC;
+
+        #undef COMMAND
 }
 
 
@@ -132,9 +126,9 @@ StepData Command::run(Index PC, Index CodeSize) const
 void run_print(const ArgumentExecuter & arguments)
 {
         String toprint;
-        for (Index i=0; i<arguments.get_valnumber(); i++)
+        repeat(arguments.get_valnumber())
         {
-                toprint += arguments.get_val(i).string();
+                toprint += arguments.get_val(iterator).string();
         }
         std::cout << toprint ;
 }
@@ -142,9 +136,9 @@ void run_print(const ArgumentExecuter & arguments)
 void run_say(const ArgumentExecuter & arguments)
 {
         String toprint;
-        for (Index i=0; i<arguments.get_valnumber(); i++)
+        repeat(arguments.get_valnumber())
         {
-                toprint += arguments.get_val(i).string() + " ";
+                toprint += arguments.get_val(iterator).string() + " ";
         }
         std::cout << "\n" << toprint;
 }
@@ -208,9 +202,9 @@ void run_setifundef(const ArgumentExecuter & arguments)
 
 void run_input(const ArgumentExecuter & arguments)
 {
-        for (Index i=0; i<arguments.get_valnumber(); i++)
+        repeat(arguments.get_valnumber())
         {
-                Value this_val = arguments.get_val(i);
+                Value this_val = arguments.get_val(iterator);
          
                 //check if its indeed a variable
                 if (this_val.val_type != VALUE_VARIABLE)
@@ -233,26 +227,16 @@ void run_input(const ArgumentExecuter & arguments)
                 String input;
                 getline(std::cin, input);
                 
-                //can it be a number?
-                double output;
-	        if (get_number_from_string(input, output))
-                        stored_value = Value((double)output);
-
-                //can it be a bool?
-                else if (input=="True" or input=="true" or input=="TRUE")
-                        stored_value = Value(true);
-                else if (input=="False" or input=="false" or input=="FALSE")
-                        stored_value = Value(false);
-                //then make it string
-                else    stored_value = Value((String)input);
+                //string cmd input -> Value
+                stored_value = cmd_input_to_value(input);
 
                 //set variable to inputed vakue
                 if (is_var_ref)
                 {
-                        say("set var abs v[" + std::to_string(varindex) + "] <- " + stored_value.string());
+                        say("set var abs v[" << varindex << "] <- " << stored_value.string());
                         global_executer_acessor->set_var_abs(varindex, stored_value);
                 }else{
-                        say("set var abs v[" + std::to_string(varindex) + "] <- " + stored_value.string());
+                        say("set var abs v[" << varindex << "] <- " << stored_value.string());
                         global_executer_acessor->set_var(varindex, stored_value);
                 }
         }

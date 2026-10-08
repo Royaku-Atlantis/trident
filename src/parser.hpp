@@ -24,8 +24,12 @@ Index get_word(const String & input_string, Index starthere, String & word);
 
 Value string_to_value(const String & input_string);
 
+Value cmd_input_to_value(const String & cmd_input);
+
 //string cmd_firsttoken -> get command type
 CommandType cmdtext_get_cmdtype(String cmd_firsttoken);
 
 //String code_line, (variable map, not yet though) -> Command
 Command create_command(const String & code_line);
+
+

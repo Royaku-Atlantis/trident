@@ -31,7 +31,7 @@ public:
 	//arg 0 is string = function call
 
 	//quite self explenatory
-	void run();
+	void run(int argc, char ** args);
 
 	Value get_var(int var_idx) const;
 	void set_var(int var_idx, Value var_value);
@@ -51,3 +51,15 @@ public:
 };
 
 extern Executer * global_executer_acessor;
+
+    /*-----------------------------------------------*/
+   /*     ╦═╗ ═╦═ ╦      ╦═╗ ╦═╕ ╦═╗ ╦═╗ ╦═╕ ╦═╗    */
+  /*   ╔╗ ╠═╣  ║  ║      ╠═╝ ╠═  ╠═╣ ║ ║ ╠═  ╠═╝   */
+ /*    ╚╝ ╝ ╝  ╩  ╩═╛    ╝ ╚ ╩═╛ ╝ ╝ ╩═╝ ╩═╛ ╝ ╚  */
+/*-----------------------------------------------*/
+
+int filepath_atl_function_name_get_size(String path);
+String get_function_name(String path, int file_name_size);
+
+//Executer -> Executer with functions from the folder <folder_name>
+void executer_init_functions(Executer & exe, String folder_name);

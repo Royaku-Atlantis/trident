@@ -1,6 +1,10 @@
 #pragma once
-#define REGION if (true)
 //external library that might be useful
+
+
+  /* ------------------------------------------- */
+ /* Precompile Global Definitions and Constants */
+/* ------------------------------------------- */
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,33 +12,20 @@
 #include <fstream>
 
 //Redefine some things
-#define Array       std::vector
-//wish i could change push_back() to append(), idk if its possible
-#define String      std::string
+#define Array       std::vector //wish i could change push_back() to append(), idk if its possible
+#define String      std::string 
 
 #define Index       unsigned int
 #define IndexNval   ~(unsigned int)0 //max value of uint, 0b111...11
 
-// global "variable"
+// global constants
 #define DEBUG true
 //extern bool GLOBAL_ErrorTellProgrammer;
 
-// double print as 6.900000 by default, this fix it
-//TODO : 0 can be displayed as -0
-String double_to_trimmed_string(double value);
-// concat the same string 'value' times
-String string_multip(const String & str, int value);
 
-bool ends_with(std::string const & value, std::string const & ending);
-
-//code from https://codemia.io/knowledge-hub/path/how_to_trim_a_stdstring
-// Trim from the left (in place)
-void ltrim(String & s);
-// Trim from the right (in place)
-void rtrim(String & s);
-// Trim both ends (in place)
-void trim(String & s);
-
+  /* ----------------------------- */
+ /* Functions Relating To Numbers */
+/* ----------------------------- */
 //modulo but with floats, very useful, actually
 double modulo(double numb, double div);
 
@@ -48,6 +39,38 @@ int sign(T input)
 	if (input<0) return -1; 
 	return 0;
 }  
+
+
+  /* ------------------------------------- */
+ /* Function Related To String Management */
+/* ------------------------------------- */
+// double print as 6.900000 by default, this fix it
+String double_to_trimmed_string(double value); //TODO solve bug: 0 can be displayed as -0
+// concat the same string 'value' times
+String string_multip(const String & str, int value); 
+
+bool ends_with(std::string const & value, std::string const & ending);
+
+//code from https://codemia.io/knowledge-hub/path/how_to_trim_a_stdstring
+// Trim from the left (in place)
+void ltrim(String & s);
+// Trim from the right (in place)
+void rtrim(String & s);
+// Trim both ends (in place)
+void trim(String & s);
+
+//string to int, but dont crash
+unsigned int stoi2(std::string text_to_convert, int default_value);
+
+//string input -> double output, bolean Is convertible
+//if the text_to_convert is convertible to a double,
+//then "result" is set to the value found in text_to_convert, and the function return True
+//else, the result will not be set, and the function return false
+bool get_number_from_string(String text_to_convert, double & result);
+
+  /* ----------------------------- */
+ /* Functions Relating To Numbers */
+/* ----------------------------- */
 
 template<typename T>
 void flip(T & a, T & b)
@@ -72,25 +95,11 @@ void wait_interaction();//#include <conio.h> getch();
 //from a list of string, get all strings with a newline inbetween
 String to_string(const Array<String> & file_text);
 
-//string to int, but dont crash
-unsigned int stoi2(std::string text_to_convert, int default_value);
-
-//string input -> double output, bolean Is convertible
-//if the text_to_convert is convertible to a double,
-//then "result" is set to the value found in text_to_convert, and the function return True
-//else, the result will not be set, and the function return false
-bool get_number_from_string(String text_to_convert, double & result);
 
 // - PRINT FUNCTIONS - //
-//print one single txt
-void say(const String & text);
-//say with any type after
-template <class T>
-void say(const String & text, const T & txt2)
-{std::cout<<text<<txt2<<'\n';}
 //#define str(not_text) std::to_string(not_text)
-#define error(text) std::cout << std::endl << RED << (text) << RESET  ; 
-#define debug(txt,txt2) { if (DEBUG){say(RED + txt, txt2); std::cout << textFormat(0);}}
+#define error(text) std::cout << std::endl << RED << text << RESET ;
+#define say(text) std::cout << std::endl << text << RESET;
 
 //error handeling and detections
 void assert(bool condition, String error_message = "Unspecified error message");
@@ -111,4 +120,5 @@ String textFormat(int fontcolor = 0);
 String textFormat(int info1, int info2);
 String textFormat(int info1, int info2, int info3);
 
-#define repeat(n) for (int izqft = 0; izqft<n ; izqft++)
+#define repeat(n) for (int iterator = 0; iterator<n ; iterator++)
+#define repeat_start(start, n) for (int iterator = start; iterator<n ; iterator++)

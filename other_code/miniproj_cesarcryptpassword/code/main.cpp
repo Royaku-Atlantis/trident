@@ -81,7 +81,7 @@ void get_file_text(string & filedata, string filename){
 
 bool is_password_correct(const string & password,const string & filedata){
     int pslen = password.length();
-    for(int i=0; i<pslen; i++){
+    for (int i=0; i<pslen; i++){
         if (password[i] != decode(filedata[i],password[i]))
             return false;
     }

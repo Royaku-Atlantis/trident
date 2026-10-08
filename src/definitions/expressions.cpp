@@ -23,7 +23,7 @@ ExpressionElement * ExpressionElement::append_expressionelement(const Value & ne
         //check if the current expression is actually not the tail
         if (ptr_next != nullptr)
         {
-                say("ho no! this element is not the tail:", value.string());
+                say("ho no! this element is not the tail:" << value.string());
                 delete ptr_next;
         }
         //add it to the current expression element

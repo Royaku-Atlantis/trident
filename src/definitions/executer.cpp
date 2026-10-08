@@ -37,10 +37,10 @@ Function * Executer::get_function(String func_name) const
 	Index function_index = IndexNval;
 
 	//chercher l'index
-	for (Index i=0; i < funcnames.size() ; i++)
+	repeat (funcnames.size())
 	{
-		if (func_name == funcnames[i])
-			return functions[i];
+		if (func_name == funcnames[iterator])
+			return functions[iterator];
 	}
 
 	error("function not found");
@@ -63,10 +63,18 @@ void Executer::add_function(const String & func_name, const String & new_func_fi
 	//functions.back()->debug_display_command();
 }
 
-void Executer::run()
+void Executer::run(int argc, char ** args)
 {
 	//init base
 	reset();
+
+        repeat_start(2, argc)
+        {       
+                Value varappend = cmd_input_to_value(args[iterator]);
+                std::cout << "\nvar[" << iterator-2 << "] = " << varappend << " (from : '"<<args[iterator]<<"')";
+                set_var(iterator-2, varappend);
+        }
+
 	say(BLUE "Start Of Execution");
 
 	while (callstack_Func.size()>0)
@@ -198,11 +206,11 @@ void Executer::print_var_status()
 	std::cout << "] - retval=" << return_value;
 
 	int Varstart_index = -1;
-	for (int i=0; i<global_variables.size(); i++)
+	repeat(global_variables.size())
 	{
 		//if at start of scope, increment scope index
 		if (callstack_var_start.size() > (Varstart_index+1)){
-			if (callstack_var_start[Varstart_index+1] == i)
+			if (callstack_var_start[Varstart_index+1] == iterator)
 			{
 				Varstart_index ++;
 				//separate scopes variable by color
@@ -210,10 +218,10 @@ void Executer::print_var_status()
 			}
 		}
 		//get variable index relative
-		Index local_var_index = i - callstack_var_start[Varstart_index];
-		std::cout << "\n[" << i << "] -> " << local_var_index <<"v =";
+		Index local_var_index = iterator - callstack_var_start[Varstart_index];
+		std::cout << "\n[" << iterator << "] -> " << local_var_index <<"v =";
 		//print variable value :
-		global_variables[i].describe();
+		global_variables[iterator].describe();
 	}
 	//flip color one last time
 	std::cout<< ((Varstart_index%2)? CYAN : BLUE); 
@@ -225,9 +233,9 @@ void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 
 	//init var references
 	//otherwise, using reference to unset variables crash
-	for (Index i=1; i<arguments.get_valnumber(); i++)
+	repeat_start(1, arguments.get_valnumber())
         {		
-                Value value = arguments.get_val(i);
+                Value value = arguments.get_val(iterator);
 		if (value.val_type==VALUE_VAREFERENCE)
 		{
 			Index difference = value.val_variable - global_variables.size() + 1;
@@ -235,7 +243,7 @@ void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 			if (difference > 0)
 			{
                 		global_variables.resize(value.val_variable+1);
-				say("added new variable in precedent scope, diff = " + std::to_string(difference));
+				say("added new variable in precedent scope, diff = " << difference);
 			}
 		}
         }
@@ -246,9 +254,9 @@ void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 
 	//add each Values To Variables
 	//start at 1, because arg 1 = func name
-	for (Index i=1; i<arguments.get_valnumber(); i++)
+	repeat_start(1, arguments.get_valnumber())
         {		
-                Value appended_value = arguments.get_val(i);
+                Value appended_value = arguments.get_val(iterator);
 		//to add variable as the value they hold
 		//but maintain reference variable, for data/result arguments
                 un_variable_maintain_reference(appended_value);
@@ -262,7 +270,7 @@ void Executer::load_var_incoming_scope(const ArgumentExecuter & arguments)
 Executer::~Executer()
 {
 	//delete the function list
-	for (Function* one_function : functions) delete one_function;
+	for (Function* single_function : functions) delete single_function;
 	functions.clear();
 
 	//empty others lists
@@ -270,3 +278,57 @@ Executer::~Executer()
 	global_variables.clear();
 }
 
+    /*-----------------------------------------------*/
+   /*     ╦═╗ ═╦═ ╦      ╦═╗ ╦═╕ ╦═╗ ╦═╗ ╦═╕ ╦═╗    */
+  /*   ╔╗ ╠═╣  ║  ║      ╠═╝ ╠═  ╠═╣ ║ ║ ╠═  ╠═╝   */
+ /*    ╚╝ ╝ ╝  ╩  ╩═╛    ╝ ╚ ╩═╛ ╝ ╝ ╩═╝ ╩═╛ ╝ ╚  */
+/*-----------------------------------------------*/
+
+#include <filesystem>
+#define FILE_EXT_LEN 4
+#define FILE_EXT ".atl"
+int filepath_atl_function_name_get_size(String path)
+{
+        //check if it end in .atl
+        if (!ends_with(path, FILE_EXT)) return -1;
+
+        int size = 0;
+        for (int i=path.size()-FILE_EXT_LEN-1; i>=0; i--)
+        {
+                if (path[i] == '/' or path[i] == '\\') break;
+                size ++;
+        }
+        return size;
+}
+String get_function_name(String path, int file_name_size)
+{
+        return path.substr(
+                path.size()-file_name_size-FILE_EXT_LEN,
+                file_name_size);
+}
+#undef FILE_EXT_LEN
+#undef FILE_EXT
+
+void executer_init_functions(Executer & exe, String folder_name){
+	exe.add_function("main", folder_name+"/main.atl");
+
+        //add all functions
+        //*
+        for (const auto & entry : std::filesystem::directory_iterator(folder_name+"/functions")) 
+        {
+                String function_file_path = entry.path().string();
+
+                int filesize = filepath_atl_function_name_get_size(function_file_path);
+
+                if (filesize==-1)
+                {
+                        //cout << " -> not a func file";
+                }
+                else
+                {
+                        String funcfile_name = get_function_name(function_file_path, filesize);
+                        //add this function
+                        exe.add_function(funcfile_name, function_file_path);
+                }
+        }//
+}

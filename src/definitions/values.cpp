@@ -14,7 +14,7 @@ Value::Value(const Value & val)
         val_type = val.val_type;
          
         #ifdef DEBUGINFO_DEEP
-        say("create with copy value:'",std::to_string(val_variable) + '\'');
+        say("create with copy value:'" << val_variable << '\'');
         #endif
 
         switch(val_type){
@@ -51,7 +51,7 @@ Value::~Value()
 
         #ifdef DEBUGINFO_DEEP
         if (val_type==VALUE_STRING)
-                say("destroy string with value:",*val_string);
+                say("destroy string with value:" << *val_string);
         else
                 say("destroy value");
         #endif
@@ -66,7 +66,7 @@ Value::Value (double value_numb)
         val_type = VALUE_NUMB;
         val_numb = value_numb;
         #ifdef DEBUGINFO
-                say("create numb:",std::to_string(value_numb));
+                say("create numb:"<< value_numb);
         #endif
 }
 
@@ -75,7 +75,7 @@ Value::Value (bool value_bool)
         val_type = VALUE_BOOL;
         val_bool = value_bool;
         #ifdef DEBUGINFO
-                say("create bool:",std::to_string(value_bool));
+                say("create bool:" << (value_bool));
         #endif
 }
 
@@ -84,7 +84,7 @@ Value::Value (String value_string)
         val_type = VALUE_STRING;
         val_string = new std::string(value_string);
         #ifdef DEBUGINFO
-        say("create string:",value_string);
+        say("create string:" << value_string);
         #endif
 }
 
@@ -100,7 +100,7 @@ Value::Value (int value_variable, bool is_reference)
                 val_type = VALUE_VARIABLE;
                 val_variable = value_variable;
                 #ifdef DEBUGINFO 
-                say("create varid:",std::to_string(value_variable));
+                say("create varid:" << to_string(value_variable));
                 #endif
         }
 }
@@ -110,7 +110,7 @@ Value::Value (OperatorType value_operator)
         val_type = VALUE_OPERATOR;
         val_operator = value_operator;
         #ifdef DEBUGINFO
-        say("create operator:",get_OperatorString(value_operator));
+        say("create operator:" << get_OperatorString(value_operator));
         #endif
 }
 

@@ -1,5 +1,4 @@
-#include "../trident.hpp"
-
+#include "../parser.hpp"
 
 // for example, transform the text "print "caca" 3 *" into
 // command : TYPE=CMD_PRINT - string "caca" - number 3 - operator OPn_MUL
@@ -180,6 +179,23 @@ Value string_to_value(const String & input_string)
 	#undef TXT_FORMAT
 	//return undefined
 	return Value();
+}
+
+//string -> Value 
+Value cmd_input_to_value(const String & input)
+{
+	//can it be a number?
+	double output;
+	if (get_number_from_string(input, output))
+		return Value((double)output);
+
+	//can it be a bool?
+	else if (input=="True" or input=="true" or input=="TRUE")
+		return Value(true);
+	else if (input=="False" or input=="false" or input=="FALSE")
+		return Value(false);
+	//then make it string
+	else    return Value((String)input);
 }
 
 // String code_line -> command object
