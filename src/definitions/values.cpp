@@ -1,6 +1,11 @@
 #include "../trident.hpp"
 #include "../values.hpp"
 
+    /*----------------------------------------------------------*/
+   /* ╗ ╗ ╦═╗ ╦   ╗ ╗ ╦═╕ ╔═╗    ╦╦╗ ╦═╕ ═╦═ ╗ ╗ ╔═╗ ╦═╗ ╔═╗   */
+  /*  ║ ║ ╠═╣ ║   ║ ║ ╠═  ╚═╗    ║╨║ ╠═   ║  ╠═╣ ║ ║ ║ ║ ╚═╗  */
+ /*    V  ╝ ╝ ╩═╛ ╚═╝ ╩═╛ ╚═╝    ╩ ╩ ╩═╛  ╩  ╝ ╝ ╚═╝ ╩═╝ ╚═╝ */
+/*----------------------------------------------------------*/
 Value::Value() : val_bool(false)
 {
         val_type = VALUE_UNDEF;
@@ -9,6 +14,7 @@ Value::Value() : val_bool(false)
         #endif
 }
 
+//constructor by copy
 Value::Value(const Value & val)
 {
         val_type = val.val_type;
@@ -25,7 +31,10 @@ Value::Value(const Value & val)
                         val_bool = val.val_bool;
                         return;
                 case VALUE_STRING:
-                        val_string = new std::string(*val.val_string);
+                        val_string = new String(*val.val_string);
+                        return;
+                case VALUE_LIST:
+                        val_list = new Array<Value>(*val.val_list);
                         return;
                 case VALUE_VARIABLE:
                 case VALUE_VAREFERENCE:
@@ -57,7 +66,11 @@ Value::~Value()
         #endif
 
         if (val_type==VALUE_STRING)
-                val_string->~basic_string();
+                //val_string->~basic_string();
+                delete val_string;
+
+        if (val_type==VALUE_LIST)
+                delete val_list;
 }
 
 //Constructors of each type
@@ -76,15 +89,6 @@ Value::Value (bool value_bool)
         val_bool = value_bool;
         #ifdef DEBUGINFO
                 say("create bool:" << (value_bool));
-        #endif
-}
-
-Value::Value (String value_string)
-{
-        val_type = VALUE_STRING;
-        val_string = new std::string(value_string);
-        #ifdef DEBUGINFO
-        say("create string:" << value_string);
         #endif
 }
 
@@ -114,16 +118,28 @@ Value::Value (OperatorType value_operator)
         #endif
 }
 
+Value::Value (const String & value_string)
+{
+        val_type = VALUE_STRING;
+        val_string = new std::string(value_string);
+}
+
+Value::Value (const Array<Value> & value_list)
+{
+        val_type = VALUE_LIST;
+        val_list = new Array<Value>(value_list);
+}
+
 //Value affectation, fix memmory bs with strings
 Value& Value::operator = (const Value & new_value)
 {
-        //delet the local string hold by THIS value
+        //delete the local higher level value to hold the new value
         if (val_type == VALUE_STRING)
-        {
                 delete val_string;
-        }
+        else if (val_type == VALUE_LIST)
+                delete val_list;
 
-        //case variable, to get the value it itself holds
+        //DEBUG case variable, to get the value it itself holds
         if (new_value.val_type == VALUE_UNDEF)
         say("Value = <Undefined>");
         
@@ -140,14 +156,17 @@ Value& Value::operator = (const Value & new_value)
                 case VALUE_OPERATOR:
                         val_operator = new_value.val_operator;
                         break;
-                case VALUE_STRING:
-                        val_string = new String( *(new_value.val_string)); 
-                        break;
                 case VALUE_VARIABLE:
                         val_variable = new_value.val_variable;
                         break;
                 case VALUE_VAREFERENCE:
                         val_variable = new_value.val_variable;
+                        break;
+                case VALUE_STRING:
+                        val_string = new String( *(new_value.val_string)); 
+                        break;
+                case VALUE_LIST:
+                        val_list = new Array<Value>(*(new_value.val_list)); 
                         break;
                 case VALUE_UNDEF:
                 default:
@@ -157,38 +176,52 @@ Value& Value::operator = (const Value & new_value)
         //thanks compiler for telling it off ;)
         return *this;
 }
+
 //to display the Value
 String Value::string() const
 {
-        //if (val_type==VALUE_OPERATOR) return "OPERATOR";
-        switch(val_type)
+        #define IF(ValEnum) if (val_type==ValEnum)
+
+        IF (VALUE_NUMB)
+                return double_to_trimmed_string(val_numb);
+        IF (VALUE_BOOL)
+                return (val_bool)? "True" : "False";
+
+        IF (VALUE_VARIABLE)
+                //"Vindex["+std::to_string(val_variable) + "]:" +
+                return global_executer_acessor->get_var(val_variable).string();
+        IF (VALUE_VAREFERENCE)
+                //"Vindex["+std::to_string(val_variable) + "]:" +
+                return global_executer_acessor->get_var_abs(val_variable).string();
+
+        IF (VALUE_STRING)
+                return (* val_string);
+        IF (VALUE_LIST)
         {
-                case VALUE_NUMB:
-                        return double_to_trimmed_string(val_numb);
+                String list_as_string = "[";
+                bool is_first_elem = true;
+        
+                for (Value val : * val_list)
+                {
+                        if (!is_first_elem) 
+                                list_as_string += ",";
 
-                case VALUE_BOOL:
-                        if (val_bool) 
-                                return "True";
-                        else    return "False";
+                        list_as_string += val.string();
 
-                case VALUE_STRING:
-                        return (* val_string);
-
-                case VALUE_VARIABLE:
-                        //"Vindex["+std::to_string(val_variable) + "]:" +
-                        return global_executer_acessor->get_var(val_variable).string();
-                case VALUE_VAREFERENCE:
-                        //"Vindex["+std::to_string(val_variable) + "]:" +
-                        return global_executer_acessor->get_var_abs(val_variable).string();
-
-                case VALUE_OPERATOR:
-                        return get_OperatorString(val_operator);
-
-                case VALUE_UNDEF:
-                        return "Undefined";
-                default:
-                        return "Undescribable";
+                        is_first_elem = false;
+                }
+                list_as_string += "]";
+                return list_as_string;
         }
+
+        IF (VALUE_OPERATOR)
+                return get_OperatorString(val_operator);
+        IF (VALUE_UNDEF)
+                return "Undefined";
+                
+        return "Undescribable"; //if no string() defined for this Type
+
+        #undef IF
 }
 
 void Value::describe() const
@@ -221,55 +254,11 @@ bool Value::get_asbool() const
         return false;
 }
 
-Value Value::get_var_data() const
-{
-        //if its not a variable, lets not fucking care
-        Value var_data = * this;
-        un_variable(var_data);
-        return var_data;
-        //loop in case its a link to a variable, or something
-        //if (vardata.val_type == VALUE_VARIABLE) ...
-}//
-
-void un_variable(Value & val)
-{
-        //if the value is a variable, get its non variable value
-        //if its STILL a variable, continue
-        while (val.val_type == VALUE_VARIABLE
-                or val.val_type == VALUE_VAREFERENCE)
-        {
-                if (val.val_type == VALUE_VARIABLE)
-                        val = global_executer_acessor->get_var(val.val_variable);
-
-                if (val.val_type == VALUE_VAREFERENCE)
-                        val = global_executer_acessor->get_var_abs(val.val_variable);
-        }               
-}
-
-void un_variable_maintain_reference(Value & val)
-{
-        while (val.val_type == VALUE_VARIABLE)
-        {
-                std::cout << "\n unvar=" << val;
-                val = global_executer_acessor->get_var(val.val_variable);
-        }
-}
-
-Value variable_to_reference(Value val)
-{        
-        switch (val.val_type)
-        {
-                case VALUE_VARIABLE:
-                        return Value(val.val_variable, true);
-                case VALUE_NUMB: //get variable index numb
-                        return Value(val.val_numb, false);
-
-                case VALUE_VAREFERENCE: //don't change anything
-                default:
-                        return val;
-        }
-}
-
+    /*------------------------------------------------------------------*/
+   /* ╗ ╗ ╦═╗ ╦   ╗ ╗ ╦═╕ ╔═╗    ╔═╗ ╦═╗ ╦═╕ ╦═╗ ╦═╗ ═╦═ ╔═╗ ╦═╗ ╔═╗   */
+  /*  ║ ║ ╠═╣ ║   ║ ║ ╠═  ╚═╗    ║ ║ ╠═╝ ╠═  ╠═╝ ╠═╣  ║  ║ ║ ╠═╝ ╚═╗  */
+ /*    V  ╝ ╝ ╩═╛ ╚═╝ ╩═╛ ╚═╝    ╚═╝ ╝   ╩═╛ ╝ ╚ ╝ ╝  ╩  ╚═╝ ╝ ╚ ╚═╝ */
+/*------------------------------------------------------------------*/
 //operation overloading
 Value operator + (Value Val1, Value Val2)
 {
@@ -549,6 +538,7 @@ Value operator < (Value Val1, Value Val2)
         }
 }
 
+//operator functions
 Value round_equal(Value Val1, Value Val2)
 {
         un_variable(Val1); un_variable(Val2);
@@ -618,6 +608,8 @@ Value abs(Value Val1)
         }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+
 String get_OperatorString(OperatorType c_operator)
 {
         switch (c_operator)
@@ -655,11 +647,14 @@ String get_value_color(ValueType vtype)
                 case VALUE_UNDEF: return RED;
                 case VALUE_NUMB: return CYAN;
                 case VALUE_BOOL: return BLUE;
+                case VALUE_LIST:
                 case VALUE_STRING: return YELLOW;
                 case VALUE_VAREFERENCE:
                 case VALUE_VARIABLE: return GREEN;
                 case VALUE_OPERATOR: return MAGENTA "Op_";
-                default: return RED "ERROR_INVALID_VALUETYPE_";
+                default: 
+                        if (vtype>=VALUE_VALTYPECOUNT) return RED "ERROR_INVALID_VALUETYPE_";
+                        else return RED "UncoloredType_";
         }
 }; //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
 
@@ -676,3 +671,51 @@ std::ostream& operator<<(std::ostream& out, const Value & thisval)
         return out;
 }
 
+Value Value::get_var_data() const
+{
+        //if its not a variable, lets not fucking care
+        Value var_data = * this;
+        un_variable(var_data);
+        return var_data;
+        //loop in case its a link to a variable, or something
+        //if (vardata.val_type == VALUE_VARIABLE) ...
+}//
+
+void un_variable(Value & val)
+{
+        //if the value is a variable, get its non variable value
+        //if its STILL a variable, continue
+        while (val.val_type == VALUE_VARIABLE
+                or val.val_type == VALUE_VAREFERENCE)
+        {
+                if (val.val_type == VALUE_VARIABLE)
+                        val = global_executer_acessor->get_var(val.val_variable);
+
+                if (val.val_type == VALUE_VAREFERENCE)
+                        val = global_executer_acessor->get_var_abs(val.val_variable);
+        }               
+}
+
+void un_variable_maintain_reference(Value & val)
+{
+        while (val.val_type == VALUE_VARIABLE)
+        {
+                std::cout << "\n unvar=" << val;
+                val = global_executer_acessor->get_var(val.val_variable);
+        }
+}
+
+Value variable_to_reference(Value val)
+{        
+        switch (val.val_type)
+        {
+                case VALUE_VARIABLE:
+                        return Value(val.val_variable, true);
+                case VALUE_NUMB: //get variable index numb
+                        return Value(val.val_numb, false);
+
+                case VALUE_VAREFERENCE: //don't change anything
+                default:
+                        return val;
+        }
+}

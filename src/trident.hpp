@@ -12,10 +12,16 @@
 
 //enums :
 enum ValueType : unsigned int {
-        VALUE_UNDEF, VALUE_OPERATOR, //fondamentals
-        VALUE_NUMB, VALUE_BOOL, //primitives
-        VALUE_VARIABLE, VALUE_VAREFERENCE, //primitives
-        VALUE_STRING, //higher level (more then 8 byte, therfore, its with a pointer)
+        //Behavioral Value types
+        VALUE_UNDEF, VALUE_OPERATOR, 
+        //basic primitives
+        VALUE_NUMB, VALUE_BOOL, 
+        //primitives variables
+        VALUE_VARIABLE, VALUE_VAREFERENCE, 
+        
+        //higher level (more then 8 byte, therfore, its with a pointer) 
+        VALUE_STRING,
+        VALUE_LIST,
 
         VALUE_VALTYPECOUNT //get the max idx to dynamically create new object types in trident
 };

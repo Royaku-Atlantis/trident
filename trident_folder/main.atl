@@ -1,12 +1,3 @@
-say "a
-jump kaku
-jump skib
-say "b
-balise kaku
-input
-say "c
-balise skib
-say "d
-balise kaku
-say "e
-jump kaku
+set 0v "test" 3 *
+set 1v "wariotest" 0v +
+say "0v=" 0v "1v=" 1v "checkequality" "test" 3 * 0v ==

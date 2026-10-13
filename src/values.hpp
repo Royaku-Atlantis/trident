@@ -17,20 +17,24 @@ struct Value{
                 int val_variable;
                 OperatorType val_operator;
                 
+                //higher level val types
                 String * val_string;
+                Array<Value> * val_list;
         };
 
         ValueType val_type;
 
         Value (); //VALUE_UNDEF
-        Value (Value const& val);
+        Value (Value const& val); //constructor by copy
         ~Value ();
-        
+
+        //constructors by Value Type
         Value (double value_numb);
         Value (bool value_bool);
-        Value (String value_string);
+        Value (const String & value_string);
         Value (int value_variable, bool is_reference);
         Value (OperatorType value_operator);
+        Value (const Array<Value> & value_list);
 
         //Value affectation, fix memmory bs with strings
         Value& operator = (const Value & new_value);

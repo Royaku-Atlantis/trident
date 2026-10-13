@@ -1,7 +1,6 @@
 #pragma once
 //external library that might be useful
 
-
   /* ------------------------------------------- */
  /* Precompile Global Definitions and Constants */
 /* ------------------------------------------- */
@@ -24,6 +23,8 @@
 #define DEBUG true
 //extern bool GLOBAL_ErrorTellProgrammer;
 
+#define repeat(n) for (int iterator = 0; iterator<n ; iterator++)
+#define repeat_start(start, n) for (int iterator = start; iterator<n ; iterator++)
 
   /* ----------------------------- */
  /* Functions Relating To Numbers */
@@ -42,14 +43,30 @@ int sign(T input)
 	return 0;
 }  
 
+//string input -> double output, bolean Is convertible
+//if the text_to_convert is convertible to a double,
+//then "result" is set to the value found in text_to_convert, and the function return True
+//else, the result will not be set, and the function return false
+bool get_number_from_string(String text_to_convert, double & result);
+bool is_string_number(String text_to_test);
+
   /* ------------------------------------- */
  /* Function Related To String Management */
 /* ------------------------------------- */
+
+// - PRINT FUNCTIONS - //
+//#define str(not_text) std::to_string(not_text)
+#define error(text) std::cout << std::endl << RED << text << RESET ;
+#define say(text) std::cout << std::endl << text << RESET;
+
 // double print as 6.900000 by default, this fix it
 String double_to_trimmed_string(double value); //TODO solve bug: 0 can be displayed as -0
+
 // concat the same string 'value' times
 String string_multip(const String & str, int value);
+
 String get_last_word(const String & str);
+//void change_last_word(String & str, String substr); //TODO for jumpif <args> balisename
 bool ends_with(std::string const & value, std::string const & ending);
 
 //code from https://codemia.io/knowledge-hub/path/how_to_trim_a_stdstring
@@ -63,17 +80,13 @@ void trim(String & s);
 //string to int, but dont crash
 unsigned int stoi2(std::string text_to_convert, int default_value);
 
-//string input -> double output, bolean Is convertible
-//if the text_to_convert is convertible to a double,
-//then "result" is set to the value found in text_to_convert, and the function return True
-//else, the result will not be set, and the function return false
-bool get_number_from_string(String text_to_convert, double & result);
-bool is_string_number(String text_to_test);
+//from a list of string, get all strings with a newline inbetween
+String to_string(const Array<String> & file_text);
 
-  /* ----------------------------- */
- /* Functions Relating To Numbers */
-/* ----------------------------- */
 
+  /* ---------------- */
+ /* Functions Random */
+/* ---------------- */
 template<typename T>
 void flip(T & a, T & b)
 {
@@ -94,18 +107,13 @@ void get_file(const String & filepath, Array<String> & file_text);
 
 void wait_interaction();//#include <conio.h> getch();
 
-//from a list of string, get all strings with a newline inbetween
-String to_string(const Array<String> & file_text);
-
-
-// - PRINT FUNCTIONS - //
-//#define str(not_text) std::to_string(not_text)
-#define error(text) std::cout << std::endl << RED << text << RESET ;
-#define say(text) std::cout << std::endl << text << RESET;
-
 //error handeling and detections
 void assert(bool condition, String error_message = "Unspecified error message");
 
+
+  /* --------------------- */
+ /* Text Color Management */
+/* --------------------- */
 // CONSTANTS
 enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_ITALIC, TXT_UNDERLINED, TXT_BLINK, TXT_BLINK2, TXT_SETBACKGROUND, TXT_INVISIBLE, TXT_STRIKETHROUGH};
 #define RED     "\033[31m"  //red     31   41
@@ -121,6 +129,3 @@ enum textStatus {TXT_DEFAULT, TXT_BOLD, TXT_DARKER, TXT_ITALIC, TXT_UNDERLINED, 
 String textFormat(int fontcolor = 0);
 String textFormat(int info1, int info2);
 String textFormat(int info1, int info2, int info3);
-
-#define repeat(n) for (int iterator = 0; iterator<n ; iterator++)
-#define repeat_start(start, n) for (int iterator = start; iterator<n ; iterator++)
