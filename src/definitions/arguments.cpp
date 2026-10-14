@@ -14,11 +14,11 @@ Value ArgumentExecuter::pop_last_arg()
         return back_value;
 }
 
-void ArgumentExecuter::add_val(const Value & newval) 
+void ArgumentExecuter::add_val(const Value & newval, bool force_push_back) 
 {
         bool is_an_operation = newval.val_type == VALUE_OPERATOR;//check_operation(newval);
         
-        if (is_an_operation)
+        if (is_an_operation and !force_push_back)
                 do_operation(newval.val_operator);
         else{
                 arguments.push_back(newval);
@@ -71,20 +71,26 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 
                 //special
                 case OPb_COND :
-                        add_val(
-                                pop_last_arg().get_asbool() ?
-                                pop_last_arg() : 
-                                pop_last_arg()
-                        );
+                        add_val(pop_last_arg().get_asbool() ? pop_last_arg() : pop_last_arg());
                         break;
-                case OPl_GET :
+                case OPl_listGET :
                         break;
                         //for lists, does nothing yet
-                
+                case OPl_listCREATE:
+                        add_val(value_list_create(pop_last_arg().get_asnumber()));
+                        break;
+                case OPl_listfillCREATE:
+                        add_val(value_list_create(pop_last_arg().get_asnumber(), pop_last_arg()));
+                        break;
+                case OPl_listSTART:
+                        add_val(Value (operation_type), true);
+                        break;
+                case OPl_listEND:
+                        add_val(create_list());
+                        break;
                 //operator that are key word returning global variable
-                
                 case OPgk_RETURNED:
-                        add_val(global_executer_acessor->get_return());
+                        add_val(global_executer_acessor->get_return());//TODO make it actually a stack, and pop back
                         break;
                 case OPgk_VARCOUNT:
                         add_val(global_executer_acessor->get_local_varcount());
@@ -117,6 +123,24 @@ void calculate_arguments(ExpressionElement * expr_element, ArgumentExecuter & ar
         }
 }
 
+
+Array<Value> ArgumentExecuter::create_list()
+{
+        //case one ore more argument 
+        Array<Value> list_to_create;
+        Value val_append = pop_last_arg();
+
+        while ((arguments.size()>0) and
+        !(val_append.val_type == VALUE_OPERATOR and val_append.val_operator==OPl_listSTART))
+        {
+                list_to_create.insert(list_to_create.begin(), val_append);
+                val_append = pop_last_arg();//also pop '[' at the end
+                un_variable_maintain_reference(val_append);
+        }
+        return list_to_create;
+
+        //value_list_create(pop_last_arg().get_asnumber(), pop_last_arg()));
+}
  /* ---------------------------------- */
 /* ----- Debug Display Function ---- */
 
@@ -134,7 +158,6 @@ String ArgumentExecuter::string() const
         }            
         return res + "}\n";
 }
-
 
 Value ArgumentExecuter::get_val(Index index) const
 {

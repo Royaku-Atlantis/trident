@@ -1,1 +1,1 @@
-.\bin\main.exe trident_folder 67 "test lol" true
+.\bin\main.exe trident_folder

@@ -608,35 +608,49 @@ Value abs(Value Val1)
         }
 }
 
+Value value_list_create(int size, Value fillvalue)
+{
+        if (size<=0)
+        {
+                return Array<Value>(0);
+        }
+
+        return Array<Value>(size, fillvalue);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////
 
 String get_OperatorString(OperatorType c_operator)
 {
         switch (c_operator)
         {
-                case OP_EMPTY : return "(0)EMPTY";
-                case OPn_ADD :  return "(2)ADD";
-                case OPn_MUL :  return "(2)MUL";
-                case OPn_DIV :  return "(2)DIV";
-                case OPn_SUB :  return "(2)SUB";
-                case OPn_MOD :  return "(2)MOD";
-                case OPl_GET :  return "(2)GET";
-                case OPb_AND :  return "(2)AND";
-                case OPb_OR  :  return "(2)OR";
-                case OPb_NOT :  return "(1)NOT";
-                case OPb_XOR :  return "(2)XOR";
-                case OPb_COND : return "(3)IF_ELSE";
-                case OPc_strictINF : return "(2)strictINF"; 
-                case OPc_strictSUP : return "(2)strictSUP"; 
-                case OPc_equalINF : return "(2)equalINF"; 
-                case OPc_equalSUP : return "(2)equalSUP"; 
-                case OPc_EQUAL : return "(2)EQUAL"; 
-                case OPc_roundEQUAL : return "(2)roundEQUAL"; 
-                case OPc_UNEQUAL : return "(2)UNEQUAL"; 
-                case OPv_REF :  return "(1)REF";
-                case OPgk_RETURNED : return "(0)RETVAL";
-                case OPgk_VARCOUNT : return "(0)VARCOUNT";
-                default :       return "(0)INVALID";
+                case OP_EMPTY :         return "(0)EMPTY";
+                case OPn_ADD :          return "(2)ADD";
+                case OPn_MUL :          return "(2)MUL";
+                case OPn_DIV :          return "(2)DIV";
+                case OPn_SUB :          return "(2)SUB";
+                case OPn_MOD :          return "(2)MOD";
+                case OPl_listGET :          return "(2)GET";
+                case OPb_AND :          return "(2)AND";
+                case OPb_OR  :          return "(2)OR";
+                case OPb_NOT :          return "(1)NOT";
+                case OPb_XOR :          return "(2)XOR";
+                case OPb_COND :         return "(3)IF_ELSE";
+                case OPc_strictINF :    return "(2)strictINF"; 
+                case OPc_strictSUP :    return "(2)strictSUP"; 
+                case OPc_equalINF :     return "(2)equalINF"; 
+                case OPc_equalSUP :     return "(2)equalSUP"; 
+                case OPc_EQUAL :        return "(2)EQUAL"; 
+                case OPc_roundEQUAL :   return "(2)roundEQUAL"; 
+                case OPc_UNEQUAL :      return "(2)UNEQUAL"; 
+                case OPv_REF :          return "(1)REF";
+                case OPl_listCREATE :       return "(1)LIST_CREATE";
+                case OPl_listfillCREATE :   return "(2)LIST_CREATE_FILL";
+                case OPl_listSTART :        return "(0)LIST_START";
+                case OPl_listEND :          return "(N)LIST_END";
+                case OPgk_RETURNED :    return "(0)RETVAL";
+                case OPgk_VARCOUNT :    return "(0)VARCOUNT";
+                default :               return (c_operator>=OP_COUNT)? "INVALID" : "Op index undef in 'get_OperatorString()'";
         }
 } 
 
@@ -700,7 +714,6 @@ void un_variable_maintain_reference(Value & val)
 {
         while (val.val_type == VALUE_VARIABLE)
         {
-                std::cout << "\n unvar=" << val;
                 val = global_executer_acessor->get_var(val.val_variable);
         }
 }

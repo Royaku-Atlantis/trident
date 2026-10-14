@@ -5,7 +5,7 @@
 
 void print_error(const String & errortext); //GLOBAL_ErrorTellProgrammer
 
-// enum OperatorType : unsigned char {OP_EMPTY, OPn_ADD, OPn_MUL, OPn_DIV, OPn_SUB, OPn_MOD, OPl_GET, OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, OPb_COND};
+// enum OperatorType : unsigned char {OP_EMPTY, OPn_ADD, OPn_MUL, OPn_DIV, OPn_SUB, OPn_MOD, OPl_listGET, OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, OPb_COND};
 String get_OperatorString(OperatorType c_operator);
 
 String get_value_color(ValueType vtype); //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
@@ -84,8 +84,10 @@ Value operator <        (Value Val1, Value Val2);
 //random
 Value round_equal(Value Val1, Value Val2);
 Value value_random_range(Value Val1, Value Val2);
-
 Value abs(Value Val1);
+
+//list
+Value value_list_create(int size, Value fillvalue = Value());
 
 //trigo
 Value value_cos(Value Val1);

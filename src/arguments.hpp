@@ -8,8 +8,10 @@ protected:
         Value pop_last_arg();
         bool do_operation(OperatorType operation_type);
 
+        Array<Value> create_list();
+
 public:
-        void add_val(const Value & newval);
+        void add_val(const Value & newval, bool force_push_back=false);
         String string() const;
         Value get_val(Index index) const;
         Index get_valnumber() const;

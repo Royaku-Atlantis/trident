@@ -41,10 +41,15 @@ enum OperatorType : unsigned char
         //peculiar operator
         OPn_RAND, OPb_COND, OPn_ABS, 
         //object and variable management
-        OPv_REF, OPl_GET, 
+        OPv_REF, OPl_listGET, 
+        //list operators
+        OPl_listSTART, OPl_listEND,
+        OPl_listCREATE, OPl_listfillCREATE,
 
         //global variable/function/key word
-        OPgk_RETURNED, OPgk_VARCOUNT
+        OPgk_RETURNED, OPgk_VARCOUNT,
+
+        OP_COUNT
 };
 
 enum CommandType : char {

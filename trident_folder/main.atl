@@ -1,3 +1,8 @@
-set 0v "test" 3 *
-set 1v "wariotest" 0v +
-say "0v=" 0v "1v=" 1v "checkequality" "test" 3 * 0v ==
+say [ ] [ 0 ] [ "a" "b" ] [ "a" [ "b" "c" ] "d" [ "e" "f" ] "g" ]
+set 0v [ ]
+set 1v [ 0 ]
+set 2v [ 0 "test" 67 ]
+set 3v [ 0 0v 67 ]
+set 4v [ "a" [ "b" "c" ] "d" ]
+set 5v [ "a" [ "b" "c" ] "d" [ "e" "f" ] "g" ]
+say 0v 1v 2v 3v 4v 5v

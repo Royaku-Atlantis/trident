@@ -149,7 +149,7 @@ Value string_to_value(const String & input_string)
 	TEST_STR("*",	OPn_MUL		);
 	TEST_STR("/",	OPn_DIV		);
 	TEST_STR("%",	OPn_MOD		);
-	TEST_STR(".",	OPl_GET		);
+	TEST_STR(".",	OPl_listGET		);
 	TEST_STR("and",	OPb_AND		);
 	TEST_STR("&&",	OPb_AND		);
 	TEST_STR("or",	OPb_OR		);
@@ -168,8 +168,14 @@ Value string_to_value(const String & input_string)
 	TEST_STR("cos",	OPn_COS		);
 	TEST_STR("rand",OPn_RAND	);
 	TEST_STR("abs",	OPn_ABS		);
+
+	//higher level variable operators
 	TEST_STR("ref",	OPv_REF		);
-	
+	TEST_STR("list",OPl_listCREATE	);
+	TEST_STR("filledlist",OPl_listfillCREATE);
+	TEST_STR("[", OPl_listSTART		);
+	TEST_STR("]", OPl_listEND		);
+
 	//keyword global var 
 	TEST_STR("retval", OPgk_RETURNED);
 	TEST_STR("varcount", OPgk_VARCOUNT);
