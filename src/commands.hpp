@@ -49,7 +49,7 @@ void run_input(const ArgumentExecuter & arguments);
 
 //braces
 Index run_jump(const ArgumentExecuter & arguments, Index PC);
-Index run_jumpif(const ArgumentExecuter & arguments, Index PC);
+Index run_jumpif(const ArgumentExecuter & arguments, Index PC, bool unless);
 
 //functions 
 StepData run_call(const ArgumentExecuter & arguments, Index PC);

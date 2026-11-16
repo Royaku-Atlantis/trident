@@ -46,6 +46,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPERATOR(OPn_MUL, *);
                 case OPERATOR(OPn_DIV, /);
                 case OPERATOR(OPn_MOD, %);
+                case FUNCTION(OPn_POW, value_power);
 
                 //bolean operations
                 case OPERATOR(OPb_AND, and);
@@ -63,6 +64,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case FUNCTION(OPc_roundEQUAL, round_equal);
                 
                 case FUNCMONO(OPv_REF, variable_to_reference);
+                case FUNCMONO(OPl_listSIZE, value_list_getsize);
                 //trigo function
                 case FUNCMONO(OPn_SIN, value_sin);
                 case FUNCMONO(OPn_COS, value_cos);
@@ -78,8 +80,6 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPb_COND :
                         add_val(pop_last_arg().get_asbool() ? pop_last_arg() : pop_last_arg());
                         break;
-                case OPl_listGET :
-                        break;
                         //for lists, does nothing yet
                 case OPl_listCREATE:
                         add_val(value_list_create(pop_last_arg().get_asnumber()));
@@ -87,6 +87,7 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 case OPl_listfillCREATE:
                         add_val(value_list_create(pop_last_arg().get_asnumber(), pop_last_arg()));
                         break;
+                case FUNCTION(OPl_listGET, value_list_getelem);
                 case OPl_listSTART:
                         add_val(Value (operation_type), true);
                         break;

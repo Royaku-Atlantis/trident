@@ -54,9 +54,10 @@ struct Value{
         bool get_asbool() const;
 
         Value get_var_data() const;//global_variable_acessor
-};
 
-std::ostream& operator<<(std::ostream& out, const Value & thisval);
+        operator std::string() const;
+        friend std::ostream& operator<<(std::ostream& out, const Value & thisval);
+};
 
 //input : a Value
 //if the Value is a variable, it transforms it into the Value it holds
@@ -82,12 +83,15 @@ Value operator >        (Value Val1, Value Val2);
 Value operator <        (Value Val1, Value Val2);
 
 //random
+Value value_power(Value Val1, Value Val2);
 Value round_equal(Value Val1, Value Val2);
 Value value_random_range(Value Val1, Value Val2);
 Value abs(Value Val1);
 
 //list
 Value value_list_create(int size, Value fillvalue = Value());
+Value value_list_getsize(Value Val1);
+Value value_list_getelem(Value Val1, Value Val2);
 
 //trigo
 Value value_sin(Value Val1);
@@ -97,3 +101,5 @@ Value value_arcsin(Value Val1);
 Value value_arccos(Value Val1);
 Value value_arctan(Value Val1);
 //OPn_SIN, OPn_COS, OPn_TAN, OPn_ArcSIN, OPn_ArcCOS, OPn_ArcTAN,
+
+String value_array_to_string(const Array<Value> & array);

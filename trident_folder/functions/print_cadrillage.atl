@@ -1,0 +1,12 @@
+#0v is list
+#1v is width
+#----------
+#2v is 
+
+set 2v 0
+say "start of print"
+jumpif 0v size 2v >   3
+	call "print_line"   0v   2v   2v 1v +
+	set 2v  2v 1v +
+jump -3
+say "end of print"

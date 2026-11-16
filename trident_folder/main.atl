@@ -1,6 +1,2 @@
-set 0v 0
-print "|"
-    print "|repair_cost=" 2 0v ^ 1 -
-    set 0v 0v 1 +
-jumpif 0v 10 <= -2
-input 0v
+set 0v [ 0 1 2 3   4 5 6 7   8 9 10 11 ]
+call "print_cadrillage" 0v 3

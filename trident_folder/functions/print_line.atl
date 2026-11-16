@@ -1,0 +1,12 @@
+#0v is list
+#1v is start
+#2v is end
+#-----------
+#3v is iterator
+
+print endl
+set 3v 1v
+jumpunless 3v 2v <   3 #0v size 3v >=  or  3  #jump to end if beyond size of list, or at the determined end
+	print " " 0v 3v . 
+	set 3v 3v 1 +
+jump -3

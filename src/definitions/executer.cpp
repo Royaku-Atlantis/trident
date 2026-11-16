@@ -16,6 +16,7 @@ void Executer::reset()
 {
 	//reset variables to []
 	this->global_variables.clear();
+	this->returnstack_values.clear();
 	//set variable readstack start to [variable index 0]
 	this->callstack_var_start.clear();
 	this->callstack_var_start.push_back(0);
@@ -34,7 +35,7 @@ Function * Executer::get_function(String func_name) const
 	if (func_name=="")
 		return nullptr;
 	
-	Index function_index = IndexNval;
+	//Index function_index = IndexNval;
 
 	//chercher l'index
 	repeat (funcnames.size())
@@ -87,7 +88,7 @@ void Executer::run(int argc, char ** args)
 		Index & PC = callstack_PC.back();
 		bool Call_Function = false;
 
-		if (PC==0) current_func->debug_display_command();
+		//if (PC==0) current_func->debug_display_command();
 		
 		//start execution of function
 		while (PC < current_func_size and !Call_Function)
@@ -177,13 +178,16 @@ void Executer::set_var_abs(Index var_idx, Value var_value)
 	//set variable
 }
 
-Value Executer::get_return() const
+Value Executer::get_return()
 {
-	return return_value;
+	Value last_return_value = returnstack_values.back();
+	returnstack_values.pop_back();
+	return last_return_value;
 }
+
 void Executer::set_return(Value var_value)
 {
-	return_value = var_value;
+	returnstack_values.push_back(var_value);
 }
 
 Index Executer::get_var_offset()
@@ -197,13 +201,8 @@ Value Executer::get_local_varcount()
 }
 void Executer::print_var_status()
 {
-	std::cout << BLUE "\n- Var Status : - [";
-
-	for (auto i : callstack_var_start)
-	{
-		std::cout << "," << i;
-	}
-	std::cout << "] - retval=" << return_value;
+	std::cout << BLUE "\n- Var Status : -" << array_to_string(callstack_var_start);
+	std::cout << " - retval=" << value_array_to_string(returnstack_values) << RESET;
 
 	int Varstart_index = -1;
 	repeat(global_variables.size())

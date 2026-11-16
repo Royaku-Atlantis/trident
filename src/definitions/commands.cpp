@@ -99,7 +99,9 @@ StepData Command::run(Index PC, Index CodeSize) const
                 case CMD_JUMP:
                         new_PC = run_jump(argexec, PC); break;
                 case CMD_JUMPIF:
-                        new_PC = run_jumpif(argexec, PC); break;
+                        new_PC = run_jumpif(argexec, PC, false); break;
+                case CMD_JUMPUNLESS:
+                        new_PC = run_jumpif(argexec, PC, true); break;
                 case CMD_RETURN:
                         run_return(argexec);
                         new_PC = CodeSize+1; break;
@@ -268,10 +270,11 @@ Index run_jump(const ArgumentExecuter & arguments, Index PC)
 }
 
 //return the new PC
-Index run_jumpif(const ArgumentExecuter & arguments, Index PC)
+Index run_jumpif(const ArgumentExecuter & arguments, Index PC, bool unless)
 {         
         bool do_jump = !arguments.get_val(0).get_asbool();
         int jump_value = arguments.get_val(1).get_asnumber();
+        if (unless) do_jump = !do_jump;
 
         if (jump_value==0)
         {

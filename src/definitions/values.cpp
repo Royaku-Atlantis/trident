@@ -539,6 +539,24 @@ Value operator < (Value Val1, Value Val2)
 }
 
 //operator functions
+Value value_power(Value Val1, Value Val2)
+{
+        un_variable(Val1); un_variable(Val2);
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                //regular logic "or"
+                case AND(VALUE_NUMB, VALUE_NUMB):
+                case AND(VALUE_NUMB, VALUE_BOOL):
+                case AND(VALUE_BOOL, VALUE_NUMB):
+                case AND(VALUE_BOOL, VALUE_BOOL):
+                        return Value( std::pow(Val1.get_asnumber(), Val2.get_asnumber()));
+
+                default:
+                        //undefined
+                        return Value();
+        }  
+}
+
 Value round_equal(Value Val1, Value Val2)
 {
         un_variable(Val1); un_variable(Val2);
@@ -703,6 +721,7 @@ Value abs(Value Val1)
 
 Value value_list_create(int size, Value fillvalue)
 {
+        un_variable(fillvalue);
         if (size<=0)
         {
                 return Array<Value>(0);
@@ -710,7 +729,60 @@ Value value_list_create(int size, Value fillvalue)
 
         return Array<Value>(size, fillvalue);
 }
+Value value_list_getsize(Value Val1)
+{
+        un_variable(Val1);
+        switch (Val1.val_type)
+        {
+                case VALUE_LIST:
+                        return Value((double)Val1.val_list->size());
+                default:
+                        return Value();
+        }
+}
 
+Value value_list_getelem(Value Val1, Value Val2)
+{
+        un_variable(Val1);
+        un_variable(Val2);
+
+        switch (AND(Val1.val_type, Val2.val_type))
+        {
+                case AND(VALUE_LIST, VALUE_NUMB):
+                case AND(VALUE_LIST, VALUE_BOOL):
+                        if ((Val1.val_list->size()==0)
+                        or (Val1.val_list->size()<=Val2.get_asnumber())) 
+                                return Value();
+                        return Val1.val_list->at(Val2.get_asnumber());
+
+                case AND(VALUE_NUMB, VALUE_LIST):
+                case AND(VALUE_BOOL, VALUE_LIST):
+                        if ((Val2.val_list->size()==0)
+                        or (Val2.val_list->size()<=Val1.get_asnumber()))
+                                return Value();
+                        return Val2.val_list->at(Val1.get_asnumber());
+
+                case AND(VALUE_LIST, VALUE_LIST): //list_to_brows [list of indexes]
+                        if (Val1.val_list->size()==0) return Value();
+                        else
+                        {
+                                for (Value index : *Val2.val_list)
+                                {
+                                        //if we reach an element in Val1 that isnt a list, yet Val2 ask for more, return Undefined
+                                        if ((Val1.val_type != VALUE_LIST)
+                                        //if the index in the list of index is at any point beyond the size of the Val1 size, then Undefined
+                                        or (Val1.val_list->size()<=index.get_asnumber())) 
+                                                return Value();
+
+                                        //go next in data depth
+                                        Val1 = Val1.val_list->at(index.get_asnumber());
+                                }
+                                return Val1;
+                        }
+                default:
+                        return Value();
+        }
+}
 //////////////////////////////////////////////////////////////////////////////////////
 
 String get_OperatorString(OperatorType c_operator)
@@ -723,7 +795,14 @@ String get_OperatorString(OperatorType c_operator)
                 case OPn_DIV :          return "(2)DIV";
                 case OPn_SUB :          return "(2)SUB";
                 case OPn_MOD :          return "(2)MOD";
-                case OPl_listGET :          return "(2)GET";
+                case OPn_POW :          return "(2)POW";
+                case OPn_SIN :          return "(1)SIN";
+                case OPn_COS :          return "(1)COS";
+                case OPn_TAN :          return "(1)TAN";
+                case OPn_ArcSIN :       return "(1)ArcSIN";
+                case OPn_ArcCOS :       return "(1)ArcCOS";
+                case OPn_ArcTAN :       return "(1)ArcTAN";
+                case OPl_listGET :      return "(2)GET";
                 case OPb_AND :          return "(2)AND";
                 case OPb_OR  :          return "(2)OR";
                 case OPb_NOT :          return "(1)NOT";
@@ -741,6 +820,7 @@ String get_OperatorString(OperatorType c_operator)
                 case OPl_listfillCREATE :   return "(2)LIST_CREATE_FILL";
                 case OPl_listSTART :        return "(0)LIST_START";
                 case OPl_listEND :          return "(N)LIST_END";
+                case OPl_listSIZE :        return "(1)LIST_SIZE";
                 case OPgk_RETURNED :    return "(0)RETVAL";
                 case OPgk_VARCOUNT :    return "(0)VARCOUNT";
                 default :               return (c_operator>=OP_COUNT)? "INVALID" : "Op index undef in 'get_OperatorString()'";
@@ -766,6 +846,10 @@ String get_value_color(ValueType vtype)
 }; //VALUE_UNDEF, VALUE_NUMB, VALUE_BOOL, VALUE_STRING, VALUE_VARIABLE, VALUE_OPERATOR, VALUE_VALTYPECOUNT
 
 //overload to be display with cout
+Value::operator String() const
+{
+        return string();
+}
 std::ostream& operator<<(std::ostream& out, const Value & thisval)
 {
         out << get_value_color(thisval.val_type);
@@ -824,4 +908,19 @@ Value variable_to_reference(Value val)
                 default:
                         return val;
         }
+}
+
+String value_array_to_string(const Array<Value> & array)
+{
+	if (array.empty()) return "{}";
+
+	String printable = "{";
+	for (Value element : array)
+		printable += element.string() + ", ";
+
+	//replace the last ", " with '}'
+	printable.pop_back();
+	printable[printable.length()-1] = '}';
+	
+	return printable;
 }

@@ -30,7 +30,7 @@ enum ValueType : unsigned int {
 enum OperatorType : unsigned char 
 {OP_EMPTY, 
         //Basic Numbers operands
-        OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, 
+        OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, OPn_POW,
         //trigonometry
         OPn_SIN, OPn_COS, OPn_TAN, OPn_ArcSIN, OPn_ArcCOS, OPn_ArcTAN,
         //Booleans
@@ -45,6 +45,7 @@ enum OperatorType : unsigned char
         //list operators
         OPl_listSTART, OPl_listEND,
         OPl_listCREATE, OPl_listfillCREATE,
+        OPl_listSIZE,
 
         //global variable/function/key word
         OPgk_RETURNED, OPgk_VARCOUNT,
@@ -56,7 +57,7 @@ enum CommandType : char {
         CMD_EMPTY, 
         CMD_PRINT, CMD_SAY, 
         CMD_SET, CMD_INPUT, CMD_SETIFUNDEF, CMD_UNREF,
-        CMD_JUMP, CMD_JUMPIF,
+        CMD_JUMP, CMD_JUMPIF, CMD_JUMPUNLESS,
         CMD_CALL, CMD_EXIT, CMD_RETURN,
 CMD_NUMBEROFCOMMANDS
 };

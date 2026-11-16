@@ -85,6 +85,21 @@ unsigned int stoi2(std::string text_to_convert, int default_value);
 //from a list of string, get all strings with a newline inbetween
 String to_string(const Array<String> & file_text);
 
+template <typename T>
+String array_to_string(const Array<T> & array)
+{
+	if (array.empty()) return "{}";
+
+	String printable = "{";
+	for (T element : array)
+		printable += std::to_string(element) + ", ";
+
+	//replace the last ", " with '}'
+	printable.pop_back();
+	printable[printable.length()-1] = '}';
+	
+	return printable;
+}
 
   /* ---------------- */
  /* Functions Random */

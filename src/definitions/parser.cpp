@@ -85,6 +85,7 @@ CommandType cmdtext_get_cmdtype(String cmd_firsttoken)
 
 	GETCMD("jump",	CMD_JUMP);
 	GETCMD("jumpif",CMD_JUMPIF);
+	GETCMD("jumpunless",CMD_JUMPIF);
 	
 	GETCMD("call",	CMD_CALL);
 	GETCMD("return",CMD_RETURN);
@@ -149,6 +150,7 @@ Value string_to_value(const String & input_string)
 	TEST_STR("*",	OPn_MUL		);
 	TEST_STR("/",	OPn_DIV		);
 	TEST_STR("%",	OPn_MOD		);
+	TEST_STR("^",	OPn_POW		);
 	TEST_STR(".",	OPl_listGET	);
 	TEST_STR("and",	OPb_AND		);
 	TEST_STR("&&",	OPb_AND		);
@@ -177,6 +179,7 @@ Value string_to_value(const String & input_string)
 	//higher level variable operators
 	TEST_STR("ref",	OPv_REF		);
 	TEST_STR("list",OPl_listCREATE	);
+	TEST_STR("size",OPl_listSIZE	);
 	TEST_STR("filledlist",OPl_listfillCREATE);
 	TEST_STR("[", OPl_listSTART		);
 	TEST_STR("]", OPl_listEND		);
