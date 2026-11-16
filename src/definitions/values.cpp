@@ -582,14 +582,107 @@ Value value_random_range(Value Val1, Value Val2)//OPn_RAND
         }
 }
 
-Value value_cos(Value Val1)//OPn_COS
-{       
+//Value value_is_undef
+
+//operator trig functions
+Value value_sin(Value Val1){ //OPn_SIN  
         un_variable(Val1);
+        
+        //if angle mode is in degree, convert the degree input to radian
+        double angle = Val1.get_asnumber();
+        if (global_executer_acessor->mode_angle == MODE_ANGLE_DEG)
+               angle*=ToRadians; 
+
         switch (Val1.val_type)
         {
                 case VALUE_NUMB:
-                case VALUE_BOOL:
-                        return Value((double)cosf(Val1.get_asnumber()));
+                //case VALUE_BOOL:
+                        return Value((double)sinh(angle));
+                default:
+                        return Value();
+        }
+}
+Value value_cos(Value Val1){ //OPn_COS
+        un_variable(Val1);
+        
+        //if angle mode is in degree, convert the degree input to radian
+        double angle = Val1.get_asnumber();
+        if (global_executer_acessor->mode_angle == MODE_ANGLE_DEG)
+               angle*=ToRadians; 
+
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                //case VALUE_BOOL:
+                        return Value((double)cosh(angle));
+                default:
+                        return Value();
+        }
+}
+Value value_tan(Value Val1){       
+        un_variable(Val1);
+        
+        //if angle mode is in degree, convert the degree input to radian
+        double angle = Val1.get_asnumber();
+        if (global_executer_acessor->mode_angle == MODE_ANGLE_DEG)
+               angle*=ToRadians; 
+
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                //case VALUE_BOOL:
+                        return Value((double)tanh(angle));
+                default:
+                        return Value();
+        }
+}
+Value value_arcsin(Value Val1){//OPn_ArcSIN
+        un_variable(Val1);
+        
+        //if angle mode is in degree, convert the degree input to radian
+        double angle = Val1.get_asnumber();
+        if (global_executer_acessor->mode_angle == MODE_ANGLE_DEG)
+               angle*=ToRadians; 
+
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                //case VALUE_BOOL:
+                        return Value((double)asinh(angle));
+                default:
+                        return Value();
+        }
+}
+Value value_arccos(Value Val1){//OPn_ArcCOS    
+        un_variable(Val1);
+        
+        //if angle mode is in degree, convert the degree input to radian
+        double angle = Val1.get_asnumber();
+        if (global_executer_acessor->mode_angle == MODE_ANGLE_DEG)
+               angle*=ToRadians; 
+
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                //case VALUE_BOOL:
+                        return Value((double)acosh(angle));
+                default:
+                        return Value();
+        }
+}
+Value value_arctan(Value Val1){//OPn_ArcTAN  
+        un_variable(Val1);
+        
+        //if angle mode is in degree, convert the degree input to radian
+        double angle = Val1.get_asnumber();
+        if (global_executer_acessor->mode_angle == MODE_ANGLE_DEG)
+               angle*=ToRadians; 
+
+        switch (Val1.val_type)
+        {
+                case VALUE_NUMB:
+                //case VALUE_BOOL:
+                        return Value((double)atanh(angle));
                 default:
                         return Value();
         }

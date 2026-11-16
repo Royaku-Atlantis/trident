@@ -32,7 +32,7 @@ enum OperatorType : unsigned char
         //Basic Numbers operands
         OPn_ADD, OPn_SUB, OPn_MUL, OPn_DIV, OPn_MOD, 
         //trigonometry
-        OPn_COS, 
+        OPn_SIN, OPn_COS, OPn_TAN, OPn_ArcSIN, OPn_ArcCOS, OPn_ArcTAN,
         //Booleans
         OPb_AND, OPb_OR, OPb_NOT, OPb_XOR, 
         //Comparator

@@ -1,6 +1,9 @@
 #pragma once
 #include "trident.hpp"
 
+enum MODE_ANGLE : bool {MODE_ANGLE_RAD, MODE_ANGLE_DEG};
+enum MODE_UNDEF : char {MODE_UNDEF_WEAK, MODE_UNDEF_STRONG, MODE_UNDEF_ERROR};
+
 class Executer
 {
 private:
@@ -26,6 +29,10 @@ public:
 	//append functions and funcnames
 	//will be switch to private, after the creation of constructor(folderpath)
 	void add_function(const String & func_name, const String & new_func_file_path);
+
+	//mods :
+	MODE_ANGLE mode_angle = MODE_ANGLE_DEG;
+	MODE_UNDEF mode_undef = MODE_UNDEF_WEAK;
 
     	/*// interactions with scope*/
 	//arg 0 is string = function call

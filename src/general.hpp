@@ -15,6 +15,8 @@
 #define Array	std::vector //wish i could change push_back() to append(), idk if its possible
 #define String	std::string 
 #define Map	std::map
+#define PI 3.14159265358979323846264 
+#define ToRadians PI / 180.0
 
 #define Index       unsigned int
 #define IndexNval   ~(unsigned int)0 //max value of uint, 0b111...11

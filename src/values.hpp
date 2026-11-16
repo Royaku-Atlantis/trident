@@ -90,4 +90,10 @@ Value abs(Value Val1);
 Value value_list_create(int size, Value fillvalue = Value());
 
 //trigo
+Value value_sin(Value Val1);
 Value value_cos(Value Val1);
+Value value_tan(Value Val1);
+Value value_arcsin(Value Val1);
+Value value_arccos(Value Val1);
+Value value_arctan(Value Val1);
+//OPn_SIN, OPn_COS, OPn_TAN, OPn_ArcSIN, OPn_ArcCOS, OPn_ArcTAN,

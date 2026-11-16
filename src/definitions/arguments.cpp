@@ -64,7 +64,12 @@ bool ArgumentExecuter::do_operation(OperatorType operation_type)
                 
                 case FUNCMONO(OPv_REF, variable_to_reference);
                 //trigo function
+                case FUNCMONO(OPn_SIN, value_sin);
                 case FUNCMONO(OPn_COS, value_cos);
+                case FUNCMONO(OPn_TAN, value_tan);
+                case FUNCMONO(OPn_ArcSIN, value_arcsin);
+                case FUNCMONO(OPn_ArcCOS, value_arccos);
+                case FUNCMONO(OPn_ArcTAN, value_arctan);
 
                 //functions-operators
                 case FUNCTION(OPn_RAND,value_random_range);

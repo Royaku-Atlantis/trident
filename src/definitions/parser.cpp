@@ -149,7 +149,7 @@ Value string_to_value(const String & input_string)
 	TEST_STR("*",	OPn_MUL		);
 	TEST_STR("/",	OPn_DIV		);
 	TEST_STR("%",	OPn_MOD		);
-	TEST_STR(".",	OPl_listGET		);
+	TEST_STR(".",	OPl_listGET	);
 	TEST_STR("and",	OPb_AND		);
 	TEST_STR("&&",	OPb_AND		);
 	TEST_STR("or",	OPb_OR		);
@@ -165,7 +165,12 @@ Value string_to_value(const String & input_string)
 	TEST_STR("==",	OPc_EQUAL	);
 	TEST_STR("~=",	OPc_roundEQUAL	);
 	TEST_STR("!=",	OPc_UNEQUAL	);
+	TEST_STR("sin",	OPn_COS		);
 	TEST_STR("cos",	OPn_COS		);
+	TEST_STR("tan",	OPn_COS		);
+	TEST_STR("arcsin", OPn_COS	);
+	TEST_STR("arccos", OPn_COS	);
+	TEST_STR("arctan", OPn_COS	);
 	TEST_STR("rand",OPn_RAND	);
 	TEST_STR("abs",	OPn_ABS		);
 
